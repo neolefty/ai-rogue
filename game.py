@@ -239,6 +239,9 @@ class Game:
 
         # Handle combat
         self.handle_combat()
+        
+        # Handle loot pickup
+        self.handle_loot_pickup()
 
     def handle_combat(self):
         """Handle player-monster interactions"""
@@ -275,6 +278,18 @@ class Game:
                 'x': item_x,
                 'y': item_y
             })
+
+    def handle_loot_pickup(self):
+        """Handle player picking up loot items"""
+        for loot_item in self.loot_items[:]:  # Use slice copy to avoid modification during iteration
+            # Check if player is close enough to pick up item
+            dx = abs(self.player.x - loot_item['x'])
+            dy = abs(self.player.y - loot_item['y'])
+            if dx <= TILE_SIZE and dy <= TILE_SIZE:
+                # Add to inventory and remove from ground
+                self.player.inventory.append(loot_item)
+                self.loot_items.remove(loot_item)
+                print("Picked up item!")
 
     def draw(self):
         screen.fill((0, 0, 0))
