@@ -63,6 +63,16 @@ TILE_SIZE = 32
 LEVELS = 5
 MONSTER_COUNT = 5
 
+# Game balance constants
+PLAYER_BASE_HEALTH = 100
+PLAYER_BASE_ATTACK = 10
+PLAYER_SPEED = 5
+MONSTER_HEALTH_MULTIPLIER = 100
+MONSTER_DAMAGE_MULTIPLIER = 10
+HEALTH_BAR_WIDTH = 32
+HEALTH_BAR_HEIGHT = 4
+LOOT_DROP_CHANCE = 0.3
+
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -132,12 +142,31 @@ def generate_item():
     item_path = f"cache/items/item_{item_type}.png"
     return generate_sprite(prompt, item_path)
 
+class GameEntity:
+    """Base class for game entities with position and sprite"""
+    def __init__(self, sprite, x, y):
+        self.sprite = sprite
+        self.x = x
+        self.y = y
+
+class MonsterEntity(GameEntity):
+    """Monster entity combining Monster logic with position/sprite"""
+    def __init__(self, monster, sprite, x, y):
+        super().__init__(sprite, x, y)
+        self.monster = monster
+
+class LootItem(GameEntity):
+    """Loot item entity"""
+    def __init__(self, item_type, sprite, x, y):
+        super().__init__(sprite, x, y)
+        self.item_type = item_type
+
 class Monster:
     def __init__(self, level, stats):
         self.level = level
-        self.health = 100 * level  # Default health is 100 * level
+        self.health = MONSTER_HEALTH_MULTIPLIER * level
         self.max_health = self.health  # Track max health for health bar
-        self.damage = 10 * level
+        self.damage = MONSTER_DAMAGE_MULTIPLIER * level
         self.stats = stats
         self.is_alive = True
         
@@ -152,16 +181,16 @@ class Monster:
             for line in lines:
                 if 'Health' in line:
                     health = int(line.split(':')[1].strip())
-                    # Ensure health is at least 100 * level
-                    self.health = max(100 * self.level, health)
+                    # Ensure health is at least base * level
+                    self.health = max(MONSTER_HEALTH_MULTIPLIER * self.level, health)
                     self.max_health = self.health  # Update max health
                 elif 'Damage' in line:
                     self.damage = int(line.split(':')[1].strip())
         except:
             # Fallback values if parsing fails
-            self.health = 100 * self.level
+            self.health = MONSTER_HEALTH_MULTIPLIER * self.level
             self.max_health = self.health
-            self.damage = 10 * self.level
+            self.damage = MONSTER_DAMAGE_MULTIPLIER * self.level
     
     def take_damage(self, amount):
         self.health -= amount
@@ -176,10 +205,10 @@ class Player:
     def __init__(self):
         self.x = WINDOW_WIDTH // 2
         self.y = WINDOW_HEIGHT // 2
-        self.health = 100
+        self.health = PLAYER_BASE_HEALTH
         self.level = 1
         self.inventory = []
-        self.attack_power = 10
+        self.attack_power = PLAYER_BASE_ATTACK
         self.attack_range = 32  # Same as TILE_SIZE
         
         # Generate player sprite
@@ -205,12 +234,8 @@ class Game:
             x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
             y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
             monster = Monster(self.level, monster_stats)
-            self.monsters.append({
-                'monster': monster,
-                'sprite': monster_sprite,
-                'x': x,
-                'y': y
-            })
+            monster_entity = MonsterEntity(monster, monster_sprite, x, y)
+            self.monsters.append(monster_entity)
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -222,7 +247,7 @@ class Game:
 
     def update(self):
         keys = pygame.key.get_pressed()
-        speed = 5
+        speed = PLAYER_SPEED
         
         if keys[pygame.K_LEFT]:
             self.player.x -= speed
@@ -243,49 +268,57 @@ class Game:
         # Handle loot pickup
         self.handle_loot_pickup()
 
+    def is_within_range(self, x1, y1, x2, y2, max_range):
+        """Check if two positions are within a given range"""
+        dx = abs(x1 - x2)
+        dy = abs(y1 - y2)
+        return dx <= max_range and dy <= max_range
+
     def handle_combat(self):
         """Handle player-monster interactions"""
-        # Check for monsters in attack range
-        for monster_data in self.monsters:
-            monster = monster_data['monster']
-            if not monster.is_alive:
+        for monster_entity in self.monsters[:]:
+            if not monster_entity.monster.is_alive:
                 continue
                 
-            # Check if monster is within attack range
-            dx = abs(self.player.x - monster_data['x'])
-            dy = abs(self.player.y - monster_data['y'])
-            if dx <= self.player.attack_range and dy <= self.player.attack_range:
-                # Monster takes damage
-                monster.take_damage(self.player.attack_power)
-                print(f"Hit monster! Remaining health: {monster.health}")
+            if self._is_monster_in_attack_range(monster_entity):
+                self._attack_monster(monster_entity)
                 
-                # If monster dies, remove it
-                if not monster.is_alive:
-                    self.monsters.remove(monster_data)
-                    print("Monster defeated!")
-                    
-                    # Generate loot
-                    self.generate_loot()
+                if not monster_entity.monster.is_alive:
+                    self._remove_defeated_monster(monster_entity)
+
+    def _is_monster_in_attack_range(self, monster_entity):
+        """Check if monster is within player's attack range"""
+        return self.is_within_range(self.player.x, self.player.y, 
+                                  monster_entity.x, monster_entity.y,
+                                  self.player.attack_range)
+
+    def _attack_monster(self, monster_entity):
+        """Attack a monster and deal damage"""
+        monster_entity.monster.take_damage(self.player.attack_power)
+        print(f"Hit monster! Remaining health: {monster_entity.monster.health}")
+
+    def _remove_defeated_monster(self, monster_entity):
+        """Remove defeated monster and generate loot"""
+        self.monsters.remove(monster_entity)
+        print("Monster defeated!")
+        self.generate_loot()
 
     def generate_loot(self):
         """Generate random loot after defeating a monster"""
-        if random.random() < 0.3:  # 30% chance to drop loot
+        if random.random() < LOOT_DROP_CHANCE:
             item_sprite = generate_item()
             item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
             item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
-            self.loot_items.append({
-                'sprite': item_sprite,
-                'x': item_x,
-                'y': item_y
-            })
+            item_type = random.choice(['weapon', 'armor', 'potion'])
+            loot_item = LootItem(item_type, item_sprite, item_x, item_y)
+            self.loot_items.append(loot_item)
 
     def handle_loot_pickup(self):
         """Handle player picking up loot items"""
         for loot_item in self.loot_items[:]:  # Use slice copy to avoid modification during iteration
             # Check if player is close enough to pick up item
-            dx = abs(self.player.x - loot_item['x'])
-            dy = abs(self.player.y - loot_item['y'])
-            if dx <= TILE_SIZE and dy <= TILE_SIZE:
+            if self.is_within_range(self.player.x, self.player.y,
+                                  loot_item.x, loot_item.y, TILE_SIZE):
                 # Add to inventory and remove from ground
                 self.player.inventory.append(loot_item)
                 self.loot_items.remove(loot_item)
@@ -293,42 +326,49 @@ class Game:
 
     def draw(self):
         screen.fill((0, 0, 0))
-        
-        # Draw player
+        self._draw_player()
+        self._draw_monsters()
+        self._draw_loot()
+        self._draw_ui()
+        pygame.display.flip()
+
+    def _draw_player(self):
+        """Draw the player sprite"""
         screen.blit(self.player.sprite, (self.player.x, self.player.y))
-        
-        # Draw monsters
-        for monster_data in self.monsters:
-            screen.blit(monster_data['sprite'], (monster_data['x'], monster_data['y']))
+
+    def _draw_monsters(self):
+        """Draw all monsters and their health bars"""
+        for monster_entity in self.monsters:
+            screen.blit(monster_entity.sprite, (monster_entity.x, monster_entity.y))
             
             # Draw health bars for living monsters
-            if not monster_data['monster'].is_alive:
-                continue
-                
-            monster = monster_data['monster']
-            health_bar_width = 32  # Same as sprite width
-            health_bar_height = 4
-            health_ratio = monster.health / (100 * monster.level)
-            
-            # Draw background (red)
-            pygame.draw.rect(screen, (255, 0, 0), 
-                           (monster_data['x'], monster_data['y'] - 10, 
-                            health_bar_width, health_bar_height))
-            # Draw health (green)
-            pygame.draw.rect(screen, (0, 255, 0), 
-                           (monster_data['x'], monster_data['y'] - 10, 
-                            health_bar_width * monster.get_health_ratio(), health_bar_height))
+            if monster_entity.monster.is_alive:
+                self._draw_health_bar(monster_entity)
+
+    def _draw_health_bar(self, monster_entity):
+        """Draw health bar for a monster"""
+        monster = monster_entity.monster
+        x, y = monster_entity.x, monster_entity.y
         
-        # Draw loot items
+        # Draw background (red)
+        pygame.draw.rect(screen, (255, 0, 0), 
+                       (x, y - 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT))
+        # Draw health (green)
+        pygame.draw.rect(screen, (0, 255, 0), 
+                       (x, y - 10, 
+                        HEALTH_BAR_WIDTH * monster.get_health_ratio(), 
+                        HEALTH_BAR_HEIGHT))
+
+    def _draw_loot(self):
+        """Draw all loot items"""
         for loot_item in self.loot_items:
-            screen.blit(loot_item['sprite'], (loot_item['x'], loot_item['y']))
-        
-        # Draw UI
+            screen.blit(loot_item.sprite, (loot_item.x, loot_item.y))
+
+    def _draw_ui(self):
+        """Draw user interface elements"""
         font = pygame.font.Font(None, 36)
         level_text = font.render(f"Level: {self.level}", True, (255, 255, 255))
         screen.blit(level_text, (10, 10))
-        
-        pygame.display.flip()
 
 def main():
     game = Game()
