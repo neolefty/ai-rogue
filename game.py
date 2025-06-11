@@ -120,18 +120,41 @@ def generate_monster(level):
     """Generate a monster with AI"""
     prompt = f"Create a fantasy monster sprite for level {level}"
     monster_path = f"cache/monsters/monster_level_{level}.png"
+    stats_path = f"cache/monsters/monster_level_{level}_stats.txt"
+    
+    # Check if both sprite and stats are cached
+    if os.path.exists(monster_path) and os.path.exists(stats_path):
+        monster_sprite = pygame.image.load(monster_path)
+        with open(stats_path, 'r') as f:
+            monster_stats = f.read()
+        return monster_sprite, monster_stats
+    
+    # Generate sprite
     monster_sprite = generate_sprite(prompt, monster_path)
     
-    # Generate monster stats using OpenAI
-    try:
-        response = client.generate_chat_completion([
-            {"role": "system", "content": "You are a dungeon monster generator."},
-            {"role": "user", "content": f"Generate stats for a level {level} monster."}
-        ])
-        monster_stats = response['choices'][0]['message']['content']
-    except Exception as e:
-        print(f"Error generating monster stats: {str(e)}")
-        monster_stats = f"Level {level} monster"
+    # Generate or load monster stats
+    if os.path.exists(stats_path):
+        with open(stats_path, 'r') as f:
+            monster_stats = f.read()
+    else:
+        # Generate monster stats using OpenAI
+        try:
+            response = client.generate_chat_completion([
+                {"role": "system", "content": "You are a dungeon monster generator."},
+                {"role": "user", "content": f"Generate stats for a level {level} monster."}
+            ])
+            monster_stats = response['choices'][0]['message']['content']
+            
+            # Cache the stats
+            with open(stats_path, 'w') as f:
+                f.write(monster_stats)
+        except Exception as e:
+            print(f"Error generating monster stats: {str(e)}")
+            monster_stats = f"Level {level} monster"
+            
+            # Cache the fallback stats
+            with open(stats_path, 'w') as f:
+                f.write(monster_stats)
     
     return monster_sprite, monster_stats
 
