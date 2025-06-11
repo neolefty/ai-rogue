@@ -76,6 +76,7 @@ LOOT_DROP_CHANCE = 0.3
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption("Dungeon Crawler")
 clock = pygame.time.Clock()
 
 # Cache directories
@@ -83,16 +84,22 @@ os.makedirs('cache/sprites', exist_ok=True)
 os.makedirs('cache/monsters', exist_ok=True)
 os.makedirs('cache/items', exist_ok=True)
 
-def generate_sprite(prompt, cache_path):
+def generate_sprite(prompt, cache_path, game=None):
     """Generate and cache a sprite using DALL-E"""
     if os.path.exists(cache_path):
         return pygame.image.load(cache_path)
     
+    if game:
+        game.loading = True
+        game.loading_message = "Generating sprite..."
+        game._draw_loading_screen()
+        pygame.event.pump()  # Process events to keep window responsive
+    
     try:
         # Generate image using DALL-E
-        # Request 1024x1024 but specify 16x16 pixel art style
+        # Request 1024x1024 but specify very simple pixel art style
         response = client.generate_image(
-            prompt=f"{prompt}. Style: pixel art, 16x16 pixels, 8-bit colors",
+            prompt=f"{prompt}. Style: simple 8-bit pixel art, very low detail, blocky shapes, retro game sprite, minimal colors",
             size="1024x1024",
             quality="standard"
         )
@@ -110,13 +117,18 @@ def generate_sprite(prompt, cache_path):
         
         img.save(cache_path)
         
-        return pygame.image.load(cache_path)
+        sprite = pygame.image.load(cache_path)
+        if game:
+            game.loading = False
+        return sprite
     except Exception as e:
         print(f"Error generating sprite: {str(e)}")
+        if game:
+            game.loading = False
         # Fallback to a default sprite if generation fails
         return pygame.Surface((32, 32))
 
-def generate_monster(level):
+def generate_monster(level, game=None):
     """Generate a monster with AI"""
     prompt = f"Create a fantasy monster sprite for level {level}"
     monster_path = f"cache/monsters/monster_level_{level}.png"
@@ -130,7 +142,7 @@ def generate_monster(level):
         return monster_sprite, monster_stats
     
     # Generate sprite
-    monster_sprite = generate_sprite(prompt, monster_path)
+    monster_sprite = generate_sprite(prompt, monster_path, game)
     
     # Generate or load monster stats
     if os.path.exists(stats_path):
@@ -158,12 +170,13 @@ def generate_monster(level):
     
     return monster_sprite, monster_stats
 
-def generate_item():
+def generate_item(game=None):
     """Generate a random item with AI"""
     item_type = random.choice(['weapon', 'armor', 'potion'])
     prompt = f"Create a {item_type} sprite"
     item_path = f"cache/items/item_{item_type}.png"
-    return generate_sprite(prompt, item_path)
+    sprite = generate_sprite(prompt, item_path, game)
+    return sprite, item_type
 
 class GameEntity:
     """Base class for game entities with position and sprite"""
@@ -234,31 +247,55 @@ class Player:
         self.attack_power = PLAYER_BASE_ATTACK
         self.attack_range = 32  # Same as TILE_SIZE
         
-        # Generate player sprite
-        self.sprite = generate_sprite(
-            "Create a fantasy hero sprite",
-            "cache/sprites/player.png"
-        )
+        # Player sprite will be generated in Game.__init__ with loading screen
+        self.sprite = None
 
 class Game:
     def __init__(self):
-        self.player = Player()
         self.running = True
         self.level = 1
         self.monsters = []
         self.loot_items = []
+        self.message = ""
+        self.message_timer = 0
+        self.loading = False
+        self.loading_message = ""
+        
+        # Initialize player without sprite first
+        self.player = Player()
+        
+        # Show initial loading screen
+        self.loading = True
+        self.loading_message = "Generating hero sprite..."
+        self._draw_loading_screen()
+        pygame.event.pump()  # Process events to keep window responsive
+        
+        # Generate player sprite
+        self.player.sprite = generate_sprite(
+            "Create a fantasy hero sprite",
+            "cache/sprites/player.png",
+            self
+        )
+        
         self.generate_level()
 
     def generate_level(self):
         """Generate a new level with AI-generated monsters"""
         self.monsters = []
-        for _ in range(self.level * MONSTER_COUNT):
-            monster_sprite, monster_stats = generate_monster(self.level)
+        for i in range(self.level * MONSTER_COUNT):
+            self.loading = True
+            self.loading_message = f"Generating monsters... ({i+1}/{self.level * MONSTER_COUNT})"
+            self._draw_loading_screen()
+            pygame.event.pump()  # Process events to keep window responsive
+            
+            monster_sprite, monster_stats = generate_monster(self.level, self)
             x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
             y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
             monster = Monster(self.level, monster_stats)
             monster_entity = MonsterEntity(monster, monster_sprite, x, y)
             self.monsters.append(monster_entity)
+        
+        self.loading = False
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -285,17 +322,44 @@ class Game:
         self.player.x = max(0, min(WINDOW_WIDTH - TILE_SIZE, self.player.x))
         self.player.y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, self.player.y))
 
+        # Update monsters
+        self.update_monsters()
+        
         # Handle combat
         self.handle_combat()
         
         # Handle loot pickup
         self.handle_loot_pickup()
+        
+        # Update message timer
+        if self.message_timer > 0:
+            self.message_timer -= 1
 
     def is_within_range(self, x1, y1, x2, y2, max_range):
         """Check if two positions are within a given range"""
         dx = abs(x1 - x2)
         dy = abs(y1 - y2)
         return dx <= max_range and dy <= max_range
+
+    def update_monsters(self):
+        """Update monster positions and behavior"""
+        for monster_entity in self.monsters:
+            if not monster_entity.monster.is_alive:
+                continue
+                
+            # Move towards player
+            dx = self.player.x - monster_entity.x
+            dy = self.player.y - monster_entity.y
+            
+            # Normalize movement (simple approach)
+            if dx != 0:
+                monster_entity.x += 1 if dx > 0 else -1
+            if dy != 0:
+                monster_entity.y += 1 if dy > 0 else -1
+                
+            # Keep monsters within bounds
+            monster_entity.x = max(0, min(WINDOW_WIDTH - TILE_SIZE, monster_entity.x))
+            monster_entity.y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, monster_entity.y))
 
     def handle_combat(self):
         """Handle player-monster interactions"""
@@ -308,6 +372,10 @@ class Game:
                 
                 if not monster_entity.monster.is_alive:
                     self._remove_defeated_monster(monster_entity)
+            
+            # Check if monster can attack player
+            elif self._is_monster_in_attack_range(monster_entity):
+                self._monster_attack_player(monster_entity)
 
     def _is_monster_in_attack_range(self, monster_entity):
         """Check if monster is within player's attack range"""
@@ -326,13 +394,24 @@ class Game:
         print("Monster defeated!")
         self.generate_loot()
 
+    def _monster_attack_player(self, monster_entity):
+        """Monster attacks the player"""
+        damage = monster_entity.monster.damage
+        self.player.health -= damage
+        self.message = f"Monster hits for {damage} damage!"
+        self.message_timer = 120
+        print(f"Player takes {damage} damage! Health: {self.player.health}")
+        
+        if self.player.health <= 0:
+            print("Game Over!")
+            self.running = False
+
     def generate_loot(self):
         """Generate random loot after defeating a monster"""
         if random.random() < LOOT_DROP_CHANCE:
-            item_sprite = generate_item()
+            item_sprite, item_type = generate_item(self)
             item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
             item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
-            item_type = random.choice(['weapon', 'armor', 'potion'])
             loot_item = LootItem(item_type, item_sprite, item_x, item_y)
             self.loot_items.append(loot_item)
 
@@ -345,19 +424,28 @@ class Game:
                 # Add to inventory and remove from ground
                 self.player.inventory.append(loot_item)
                 self.loot_items.remove(loot_item)
-                print("Picked up item!")
+                
+                # Show pickup message
+                self.message = f"Picked up {loot_item.item_type}!"
+                self.message_timer = 120  # 2 seconds at 60 FPS
+                print(f"Picked up {loot_item.item_type}!")
 
     def draw(self):
-        screen.fill((0, 0, 0))
-        self._draw_player()
-        self._draw_monsters()
-        self._draw_loot()
-        self._draw_ui()
-        pygame.display.flip()
+        if self.loading:
+            self._draw_loading_screen()
+        else:
+            screen.fill((32, 32, 48))  # Dark blue-gray background instead of pure black
+            self._draw_player()
+            self._draw_monsters()
+            self._draw_loot()
+            self._draw_ui()
+            pygame.display.flip()
 
     def _draw_player(self):
-        """Draw the player sprite"""
-        screen.blit(self.player.sprite, (self.player.x, self.player.y))
+        """Draw the player sprite and health bar"""
+        if self.player.sprite:  # Only draw if sprite exists
+            screen.blit(self.player.sprite, (self.player.x, self.player.y))
+            self._draw_player_health_bar()
 
     def _draw_monsters(self):
         """Draw all monsters and their health bars"""
@@ -382,6 +470,21 @@ class Game:
                         HEALTH_BAR_WIDTH * monster.get_health_ratio(), 
                         HEALTH_BAR_HEIGHT))
 
+    def _draw_player_health_bar(self):
+        """Draw health bar for the player"""
+        if self.player.sprite:  # Only draw if sprite exists
+            x, y = self.player.x, self.player.y
+            health_ratio = self.player.health / PLAYER_BASE_HEALTH
+            
+            # Draw background (red)
+            pygame.draw.rect(screen, (255, 0, 0), 
+                           (x, y - 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT))
+            # Draw health (green)
+            pygame.draw.rect(screen, (0, 255, 0), 
+                           (x, y - 10, 
+                            HEALTH_BAR_WIDTH * health_ratio, 
+                            HEALTH_BAR_HEIGHT))
+
     def _draw_loot(self):
         """Draw all loot items"""
         for loot_item in self.loot_items:
@@ -390,8 +493,43 @@ class Game:
     def _draw_ui(self):
         """Draw user interface elements"""
         font = pygame.font.Font(None, 36)
+        small_font = pygame.font.Font(None, 24)
+        
+        # Level display
         level_text = font.render(f"Level: {self.level}", True, (255, 255, 255))
         screen.blit(level_text, (10, 10))
+        
+        # Inventory count
+        inventory_text = small_font.render(f"Inventory: {len(self.player.inventory)} items", True, (200, 200, 200))
+        screen.blit(inventory_text, (10, 50))
+        
+        # Player stats
+        health_text = small_font.render(f"Health: {self.player.health}", True, (255, 100, 100))
+        screen.blit(health_text, (10, 75))
+        
+        attack_text = small_font.render(f"Attack: {self.player.attack_power}", True, (100, 255, 100))
+        screen.blit(attack_text, (10, 100))
+        
+        # Message display
+        if self.message_timer > 0:
+            message_text = font.render(self.message, True, (255, 255, 100))
+            screen.blit(message_text, (WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 - 50))
+
+    def _draw_loading_screen(self):
+        """Draw loading screen when generating sprites"""
+        screen.fill((32, 32, 48))  # Same background color
+        font = pygame.font.Font(None, 48)
+        loading_text = font.render(self.loading_message, True, (255, 255, 255))
+        text_rect = loading_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+        screen.blit(loading_text, text_rect)
+        
+        # Draw a simple animated indicator
+        dots = "." * ((pygame.time.get_ticks() // 500) % 4)
+        dots_text = font.render(dots, True, (255, 255, 255))
+        dots_rect = dots_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 50))
+        screen.blit(dots_text, dots_rect)
+        
+        pygame.display.flip()
 
 def main():
     game = Game()
