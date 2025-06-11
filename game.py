@@ -73,6 +73,16 @@ HEALTH_BAR_WIDTH = 32
 HEALTH_BAR_HEIGHT = 4
 LOOT_DROP_CHANCE = 0.3
 
+# Combat timing constants
+PLAYER_ATTACK_COOLDOWN = 90  # 1.5 seconds at 60 FPS
+MONSTER_ATTACK_COOLDOWN = 180  # 3 seconds at 60 FPS
+
+# Monster AI constants
+MONSTER_FOLLOW_DISTANCE = 150  # Pixels - monsters closer than this follow player
+MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
+MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
+MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
+
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -190,6 +200,13 @@ def generate_item(game=None):
     sprite = generate_sprite(prompt, item_path, game)
     return sprite, item_type
 
+def generate_stairway(game=None):
+    """Generate a stairway sprite"""
+    prompt = "Create a stone stairway going down sprite"
+    stairway_path = "cache/sprites/stairway.png"
+    sprite = generate_sprite(prompt, stairway_path, game)
+    return sprite
+
 class GameEntity:
     """Base class for game entities with position and sprite"""
     def __init__(self, sprite, x, y):
@@ -217,6 +234,12 @@ class Monster:
         self.damage = MONSTER_DAMAGE_MULTIPLIER * level
         self.stats = stats
         self.is_alive = True
+        self.last_attack_time = 0  # Track when monster last attacked
+        
+        # AI behavior variables
+        self.wander_direction_x = random.choice([-1, 0, 1])
+        self.wander_direction_y = random.choice([-1, 0, 1])
+        self.direction_change_timer = 0
         
         # Parse stats from AI-generated string
         self.parse_stats(stats)
@@ -257,10 +280,16 @@ class Player:
         self.level = 1
         self.inventory = []
         self.attack_power = PLAYER_BASE_ATTACK
-        self.attack_range = 32  # Same as TILE_SIZE
+        self.attack_range = TILE_SIZE * 2.5  # 2.5 tiles range for hit-and-run tactics
+        self.last_attack_time = 0  # Track when player last attacked
         
         # Player sprite will be generated in Game.__init__ with loading screen
         self.sprite = None
+
+    def get_max_health(self):
+        """Calculate player's current max health based on armor"""
+        armor_count = len([item for item in self.inventory if item.item_type == 'armor'])
+        return PLAYER_BASE_HEALTH + (armor_count * 25)
 
 class Game:
     def __init__(self):
@@ -268,6 +297,7 @@ class Game:
         self.level = 1
         self.monsters = []
         self.loot_items = []
+        self.stairway = None
         self.message = ""
         self.message_timer = 0
         self.loading = False
@@ -292,22 +322,56 @@ class Game:
         self.generate_level()
 
     def generate_level(self):
-        """Generate a new level with AI-generated monsters"""
+        """Generate a new level with AI-generated monsters of mixed levels"""
         self.monsters = []
-        for i in range(self.level * MONSTER_COUNT):
+        total_monsters = min(self.level * MONSTER_COUNT, 10)  # Cap at 10 monsters max
+        
+        # Create a mix of monster levels for variety and manageable difficulty
+        monster_levels = self._generate_monster_level_mix(total_monsters)
+        
+        for i, monster_level in enumerate(monster_levels):
             self.loading = True
-            self.loading_message = f"Generating monsters... ({i+1}/{self.level * MONSTER_COUNT})"
+            self.loading_message = f"Generating monsters... ({i+1}/{total_monsters})"
             self._draw_loading_screen()
             pygame.event.pump()  # Process events to keep window responsive
             
-            monster_sprite, monster_stats = generate_monster(self.level, self)
-            x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
-            y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
-            monster = Monster(self.level, monster_stats)
+            monster_sprite, monster_stats = generate_monster(monster_level, self)
+            x, y = self._find_safe_monster_spawn_position()
+            monster = Monster(monster_level, monster_stats)
             monster_entity = MonsterEntity(monster, monster_sprite, x, y)
             self.monsters.append(monster_entity)
         
         self.loading = False
+
+    def _generate_monster_level_mix(self, total_monsters):
+        """Generate a mix of monster levels for the current dungeon level"""
+        monster_levels = []
+        
+        if self.level == 1:
+            # Level 1: All level 1 monsters
+            monster_levels = [1] * total_monsters
+        else:
+            # Higher levels: Mix of current level and previous levels
+            # 40% current level, 35% previous level, 25% older levels
+            current_level_count = max(1, int(total_monsters * 0.4))
+            previous_level_count = max(1, int(total_monsters * 0.35))
+            older_levels_count = total_monsters - current_level_count - previous_level_count
+            
+            # Add current level monsters (strongest)
+            monster_levels.extend([self.level] * current_level_count)
+            
+            # Add previous level monsters
+            if self.level > 1:
+                monster_levels.extend([self.level - 1] * previous_level_count)
+            
+            # Add mix of older level monsters
+            for _ in range(older_levels_count):
+                older_level = random.randint(1, max(1, self.level - 1))
+                monster_levels.append(older_level)
+        
+        # Shuffle the list so monsters aren't grouped by level
+        random.shuffle(monster_levels)
+        return monster_levels
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -343,6 +407,9 @@ class Game:
         # Handle loot pickup
         self.handle_loot_pickup()
         
+        # Handle stairway interaction
+        self.handle_stairway_interaction()
+        
         # Update message timer
         if self.message_timer > 0:
             self.message_timer -= 1
@@ -358,20 +425,75 @@ class Game:
         for monster_entity in self.monsters:
             if not monster_entity.monster.is_alive:
                 continue
-                
-            # Move towards player
-            dx = self.player.x - monster_entity.x
-            dy = self.player.y - monster_entity.y
             
-            # Normalize movement (simple approach)
-            if dx != 0:
-                monster_entity.x += 1 if dx > 0 else -1
-            if dy != 0:
-                monster_entity.y += 1 if dy > 0 else -1
+            # Calculate distance to player
+            dx_to_player = self.player.x - monster_entity.x
+            dy_to_player = self.player.y - monster_entity.y
+            distance_to_player = (dx_to_player ** 2 + dy_to_player ** 2) ** 0.5
+            
+            if distance_to_player <= MONSTER_FOLLOW_DISTANCE:
+                # Close monsters follow the player directly
+                self._move_monster_toward_player(monster_entity, dx_to_player, dy_to_player)
+            else:
+                # Distant monsters wander randomly
+                self._wander_monster(monster_entity)
                 
             # Keep monsters within bounds
             monster_entity.x = max(0, min(WINDOW_WIDTH - TILE_SIZE, monster_entity.x))
             monster_entity.y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, monster_entity.y))
+
+    def _move_monster_toward_player(self, monster_entity, dx, dy):
+        """Move monster directly toward player"""
+        # Normalize movement
+        if dx != 0:
+            monster_entity.x += 1 if dx > 0 else -1
+        if dy != 0:
+            monster_entity.y += 1 if dy > 0 else -1
+
+    def _wander_monster(self, monster_entity):
+        """Make monster wander randomly, avoiding walls and other monsters"""
+        monster = monster_entity.monster
+        
+        # Occasionally change direction
+        if random.random() < MONSTER_DIRECTION_CHANGE_CHANCE:
+            monster.wander_direction_x = random.choice([-1, 0, 1])
+            monster.wander_direction_y = random.choice([-1, 0, 1])
+        
+        # Calculate new position
+        new_x = monster_entity.x + (monster.wander_direction_x * MONSTER_WANDER_SPEED)
+        new_y = monster_entity.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
+        
+        # Check for wall collisions and change direction if needed
+        if new_x <= 0 or new_x >= WINDOW_WIDTH - TILE_SIZE:
+            monster.wander_direction_x *= -1
+            new_x = monster_entity.x + (monster.wander_direction_x * MONSTER_WANDER_SPEED)
+        
+        if new_y <= 0 or new_y >= WINDOW_HEIGHT - TILE_SIZE:
+            monster.wander_direction_y *= -1
+            new_y = monster_entity.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
+        
+        # Check for collisions with other monsters
+        if self._check_monster_collision(monster_entity, new_x, new_y):
+            # Change direction if collision detected
+            monster.wander_direction_x = random.choice([-1, 0, 1])
+            monster.wander_direction_y = random.choice([-1, 0, 1])
+        else:
+            # Move to new position
+            monster_entity.x = new_x
+            monster_entity.y = new_y
+
+    def _check_monster_collision(self, current_monster, new_x, new_y):
+        """Check if monster would collide with another monster at new position"""
+        for other_monster in self.monsters:
+            if other_monster == current_monster or not other_monster.monster.is_alive:
+                continue
+                
+            # Check if too close to other monster
+            dx = abs(new_x - other_monster.x)
+            dy = abs(new_y - other_monster.y)
+            if dx < TILE_SIZE and dy < TILE_SIZE:
+                return True
+        return False
 
     def handle_combat(self):
         """Handle player-monster interactions"""
@@ -380,20 +502,36 @@ class Game:
                 continue
                 
             if self._is_monster_in_attack_range(monster_entity):
-                self._attack_monster(monster_entity)
+                # Check if player can attack (cooldown check)
+                current_time = pygame.time.get_ticks()
+                if current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
+                    self._attack_monster(monster_entity)
+                    self.player.last_attack_time = current_time
+                    
+                    if not monster_entity.monster.is_alive:
+                        self._remove_defeated_monster(monster_entity)
+                        
+                        # Check if level is complete
+                        self._check_level_completion()
+                        continue  # Skip to next monster since this one is dead
                 
-                if not monster_entity.monster.is_alive:
-                    self._remove_defeated_monster(monster_entity)
-            
-            # Check if monster can attack player
-            elif self._is_monster_in_attack_range(monster_entity):
-                self._monster_attack_player(monster_entity)
+                # Check if monster can attack back (cooldown check and range check)
+                if (current_time - monster_entity.monster.last_attack_time >= MONSTER_ATTACK_COOLDOWN and
+                    self._is_monster_in_melee_range(monster_entity)):
+                    self._monster_attack_player(monster_entity)
+                    monster_entity.monster.last_attack_time = current_time
 
     def _is_monster_in_attack_range(self, monster_entity):
         """Check if monster is within player's attack range"""
         return self.is_within_range(self.player.x, self.player.y, 
                                   monster_entity.x, monster_entity.y,
                                   self.player.attack_range)
+
+    def _is_monster_in_melee_range(self, monster_entity):
+        """Check if monster is close enough to attack player (melee range only)"""
+        return self.is_within_range(self.player.x, self.player.y,
+                                  monster_entity.x, monster_entity.y,
+                                  MONSTER_ATTACK_RANGE)
 
     def _attack_monster(self, monster_entity):
         """Attack a monster and deal damage"""
@@ -418,6 +556,77 @@ class Game:
             print("Game Over!")
             self.running = False
 
+    def _check_level_completion(self):
+        """Check if all monsters are defeated and spawn stairway"""
+        if len(self.monsters) == 0 and self.stairway is None:
+            # All monsters defeated, spawn stairway
+            self.loading = True
+            self.loading_message = "Generating stairway..."
+            self._draw_loading_screen()
+            pygame.event.pump()
+            
+            stairway_sprite = generate_stairway(self)
+            
+            # Find a position away from player and loot
+            stairway_x, stairway_y = self._find_safe_stairway_position()
+            self.stairway = GameEntity(stairway_sprite, stairway_x, stairway_y)
+            
+            self.message = "Level cleared! Collect loot, then find the stairway!"
+            self.message_timer = 240  # 4 seconds
+            self.loading = False
+
+    def _find_safe_stairway_position(self):
+        """Find a position for stairway that doesn't conflict with player or loot"""
+        attempts = 0
+        max_attempts = 20
+        
+        while attempts < max_attempts:
+            # Try random positions
+            x = random.randint(TILE_SIZE * 2, WINDOW_WIDTH - TILE_SIZE * 3)
+            y = random.randint(TILE_SIZE * 2, WINDOW_HEIGHT - TILE_SIZE * 3)
+            
+            # Check distance from player (at least 3 tiles away)
+            if self.is_within_range(self.player.x, self.player.y, x, y, TILE_SIZE * 3):
+                attempts += 1
+                continue
+                
+            # Check distance from any loot items (at least 2 tiles away)
+            too_close_to_loot = False
+            for loot_item in self.loot_items:
+                if self.is_within_range(loot_item.x, loot_item.y, x, y, TILE_SIZE * 2):
+                    too_close_to_loot = True
+                    break
+            
+            if not too_close_to_loot:
+                return x, y
+            
+            attempts += 1
+        
+        # Fallback: top-right corner if no good position found
+        return WINDOW_WIDTH - TILE_SIZE * 2, TILE_SIZE * 2
+
+    def _find_safe_monster_spawn_position(self):
+        """Find a position for monster that's not too close to player"""
+        attempts = 0
+        max_attempts = 20
+        min_distance = TILE_SIZE * 4  # At least 4 tiles away from player
+        
+        while attempts < max_attempts:
+            x = random.randint(TILE_SIZE, WINDOW_WIDTH - TILE_SIZE * 2)
+            y = random.randint(TILE_SIZE, WINDOW_HEIGHT - TILE_SIZE * 2)
+            
+            # Check distance from player
+            if not self.is_within_range(self.player.x, self.player.y, x, y, min_distance):
+                return x, y
+            
+            attempts += 1
+        
+        # Fallback: corner far from player
+        if self.player.x < WINDOW_WIDTH // 2:
+            return WINDOW_WIDTH - TILE_SIZE * 2, TILE_SIZE * 2
+        else:
+            return TILE_SIZE * 2, TILE_SIZE * 2
+
     def generate_loot(self):
         """Generate random loot after defeating a monster"""
         if random.random() < LOOT_DROP_CHANCE:
@@ -433,14 +642,63 @@ class Game:
             # Check if player is close enough to pick up item
             if self.is_within_range(self.player.x, self.player.y,
                                   loot_item.x, loot_item.y, TILE_SIZE):
-                # Add to inventory and remove from ground
+                # Apply loot effects and add to inventory
+                self._apply_loot_effects(loot_item)
                 self.player.inventory.append(loot_item)
                 self.loot_items.remove(loot_item)
                 
-                # Show pickup message
-                self.message = f"Picked up {loot_item.item_type}!"
-                self.message_timer = 120  # 2 seconds at 60 FPS
-                print(f"Picked up {loot_item.item_type}!")
+                # Show pickup message with effect
+                effect_msg = self._get_loot_effect_message(loot_item)
+                self.message = f"Picked up {loot_item.item_type}! {effect_msg}"
+                self.message_timer = 180  # 3 seconds at 60 FPS
+                print(f"Picked up {loot_item.item_type}! {effect_msg}")
+
+    def handle_stairway_interaction(self):
+        """Handle player interacting with stairway to advance level"""
+        if self.stairway and self.is_within_range(
+            self.player.x, self.player.y, 
+            self.stairway.x, self.stairway.y, TILE_SIZE):
+            
+            # Advance to next level
+            self.level += 1
+            self.stairway = None  # Remove stairway
+            
+            self.message = f"Entering Level {self.level}!"
+            self.message_timer = 120
+            print(f"Advanced to Level {self.level}!")
+            
+            # Generate new level
+            self.generate_level()
+
+    def _apply_loot_effects(self, loot_item):
+        """Apply the effects of picked up loot to the player"""
+        if loot_item.item_type == 'weapon':
+            # Weapons increase attack power
+            self.player.attack_power += 5
+        elif loot_item.item_type == 'armor':
+            # Armor increases max health and heals
+            # Add temporary armor to calculate new max health (this item will be added to inventory after)
+            self.player.inventory.append(loot_item)  # Temporarily add to get correct count
+            new_max_health = self.player.get_max_health()
+            self.player.inventory.pop()  # Remove it since it gets added again after this function
+            
+            heal_amount = 25
+            self.player.health = min(new_max_health, self.player.health + heal_amount)
+        elif loot_item.item_type == 'potion':
+            # Potions heal the player
+            heal_amount = 30
+            max_health = self.player.get_max_health()
+            self.player.health = min(max_health, self.player.health + heal_amount)
+
+    def _get_loot_effect_message(self, loot_item):
+        """Get the message describing what the loot item does"""
+        if loot_item.item_type == 'weapon':
+            return "Attack +5"
+        elif loot_item.item_type == 'armor':
+            return "Max Health +25, Healed +25"
+        elif loot_item.item_type == 'potion':
+            return "Healed +30"
+        return ""
 
     def draw(self):
         if self.loading:
@@ -450,6 +708,7 @@ class Game:
             self._draw_player()
             self._draw_monsters()
             self._draw_loot()
+            self._draw_stairway()
             self._draw_ui()
             pygame.display.flip()
 
@@ -458,15 +717,19 @@ class Game:
         if self.player.sprite:  # Only draw if sprite exists
             screen.blit(self.player.sprite, (self.player.x, self.player.y))
             self._draw_player_health_bar()
+            self._draw_player_attack_indicator()
+            self._draw_attack_range_indicator()
 
     def _draw_monsters(self):
         """Draw all monsters and their health bars"""
         for monster_entity in self.monsters:
             screen.blit(monster_entity.sprite, (monster_entity.x, monster_entity.y))
             
-            # Draw health bars for living monsters
+            # Draw health bars, attack indicators, and level indicators for living monsters
             if monster_entity.monster.is_alive:
                 self._draw_health_bar(monster_entity)
+                self._draw_monster_attack_indicator(monster_entity)
+                self._draw_monster_level_indicator(monster_entity)
 
     def _draw_health_bar(self, monster_entity):
         """Draw health bar for a monster"""
@@ -486,7 +749,7 @@ class Game:
         """Draw health bar for the player"""
         if self.player.sprite:  # Only draw if sprite exists
             x, y = self.player.x, self.player.y
-            health_ratio = self.player.health / PLAYER_BASE_HEALTH
+            health_ratio = self.player.health / self.player.get_max_health()
             
             # Draw background (red)
             pygame.draw.rect(screen, (255, 0, 0), 
@@ -497,10 +760,94 @@ class Game:
                             HEALTH_BAR_WIDTH * health_ratio, 
                             HEALTH_BAR_HEIGHT))
 
+    def _draw_player_attack_indicator(self):
+        """Draw attack readiness indicator for player"""
+        if self.player.sprite:
+            current_time = pygame.time.get_ticks()
+            time_since_attack = current_time - self.player.last_attack_time
+            can_attack = time_since_attack >= PLAYER_ATTACK_COOLDOWN
+            
+            x, y = self.player.x, self.player.y
+            indicator_size = 6
+            
+            if can_attack:
+                # Green circle = ready to attack
+                pygame.draw.circle(screen, (0, 255, 0), 
+                                 (x + TILE_SIZE + 5, y + TILE_SIZE // 2), indicator_size)
+            else:
+                # Red circle = on cooldown
+                pygame.draw.circle(screen, (255, 0, 0), 
+                                 (x + TILE_SIZE + 5, y + TILE_SIZE // 2), indicator_size)
+
+    def _draw_monster_attack_indicator(self, monster_entity):
+        """Draw attack readiness indicator for monster"""
+        current_time = pygame.time.get_ticks()
+        time_since_attack = current_time - monster_entity.monster.last_attack_time
+        can_attack = time_since_attack >= MONSTER_ATTACK_COOLDOWN
+        
+        x, y = monster_entity.x, monster_entity.y
+        indicator_size = 4
+        
+        if can_attack:
+            # Orange triangle = ready to attack (danger!)
+            points = [(x - 8, y + TILE_SIZE // 2 - 4), 
+                     (x - 8, y + TILE_SIZE // 2 + 4),
+                     (x - 2, y + TILE_SIZE // 2)]
+            pygame.draw.polygon(screen, (255, 165, 0), points)
+        else:
+            # Gray circle = on cooldown (safe)
+            pygame.draw.circle(screen, (128, 128, 128), 
+                             (x - 5, y + TILE_SIZE // 2), indicator_size)
+
+    def _draw_monster_level_indicator(self, monster_entity):
+        """Draw level number on monster to show difficulty"""
+        font = pygame.font.Font(None, 20)
+        level_text = font.render(str(monster_entity.monster.level), True, (255, 255, 255))
+        
+        # Position in top-right corner of monster
+        text_x = monster_entity.x + TILE_SIZE - 15
+        text_y = monster_entity.y - 5
+        
+        # Draw small dark background circle for readability
+        pygame.draw.circle(screen, (0, 0, 0), (text_x + 8, text_y + 8), 10)
+        pygame.draw.circle(screen, (64, 64, 64), (text_x + 8, text_y + 8), 9)
+        
+        screen.blit(level_text, (text_x, text_y))
+
+    def _draw_attack_range_indicator(self):
+        """Draw a subtle circle showing player's attack range"""
+        if self.player.sprite:
+            current_time = pygame.time.get_ticks()
+            time_since_attack = current_time - self.player.last_attack_time
+            can_attack = time_since_attack >= PLAYER_ATTACK_COOLDOWN
+            
+            # Only show range when player can attack
+            if can_attack:
+                center_x = self.player.x + TILE_SIZE // 2
+                center_y = self.player.y + TILE_SIZE // 2
+                
+                # Draw a subtle transparent circle showing attack range
+                range_surface = pygame.Surface((int(self.player.attack_range * 2), int(self.player.attack_range * 2)))
+                range_surface.set_alpha(30)  # Very transparent
+                range_surface.fill((0, 255, 0))  # Green tint
+                
+                # Draw circle outline
+                pygame.draw.circle(range_surface, (0, 255, 0, 60), 
+                                 (int(self.player.attack_range), int(self.player.attack_range)), 
+                                 int(self.player.attack_range), 2)
+                
+                range_rect = range_surface.get_rect(center=(center_x, center_y))
+                screen.blit(range_surface, range_rect)
+
     def _draw_loot(self):
         """Draw all loot items"""
         for loot_item in self.loot_items:
             screen.blit(loot_item.sprite, (loot_item.x, loot_item.y))
+
+    def _draw_stairway(self):
+        """Draw the stairway if it exists"""
+        if self.stairway:
+            screen.blit(self.stairway.sprite, (self.stairway.x, self.stairway.y))
 
     def _draw_ui(self):
         """Draw user interface elements"""
@@ -516,7 +863,7 @@ class Game:
         screen.blit(inventory_text, (10, 50))
         
         # Player stats
-        health_text = small_font.render(f"Health: {self.player.health}", True, (255, 100, 100))
+        health_text = small_font.render(f"Health: {self.player.health}/{self.player.get_max_health()}", True, (255, 100, 100))
         screen.blit(health_text, (10, 75))
         
         attack_text = small_font.render(f"Attack: {self.player.attack_power}", True, (100, 255, 100))
