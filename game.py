@@ -99,8 +99,8 @@ def generate_sprite(prompt, cache_path, game=None):
         # Generate image using DALL-E
         # Request 1024x1024 but specify very simple pixel art style
         response = client.generate_image(
-            prompt=f"{prompt}. Style: simple 8-bit pixel art, very low detail, blocky shapes, retro game sprite, minimal colors",
-            size="1024x1024",
+            prompt=f"{prompt}. Style: extremely simple pixel art sprite, solid colors only, no gradients, no details, 16x16 retro game style, minimal shapes, transparent background",
+            size="1024x1024", 
             quality="standard"
         )
         image_url = response['data'][0]['url']
@@ -109,13 +109,25 @@ def generate_sprite(prompt, cache_path, game=None):
         img_response = requests.get(image_url)
         img = Image.open(BytesIO(img_response.content))
         
+        # Convert to RGBA to preserve transparency
+        img = img.convert("RGBA")
+        
         # Resize to 32x32 while maintaining pixel art style
         img = img.resize((32, 32), Image.Resampling.NEAREST)
         
-        # Convert to 8-bit palette to enhance pixel art style
-        img = img.quantize(colors=256)
+        # Make white/light backgrounds transparent
+        # Convert very light pixels to transparent
+        data = img.getdata()
+        new_data = []
+        for item in data:
+            # If pixel is very light (close to white), make it transparent
+            if item[:3] == (255, 255, 255) or (item[0] > 240 and item[1] > 240 and item[2] > 240):
+                new_data.append((255, 255, 255, 0))  # Transparent
+            else:
+                new_data.append(item)
         
-        img.save(cache_path)
+        img.putdata(new_data)
+        img.save(cache_path, "PNG")
         
         sprite = pygame.image.load(cache_path)
         if game:
