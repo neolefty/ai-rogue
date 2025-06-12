@@ -126,13 +126,12 @@ def generate_sprite(prompt, cache_path, game=None):
         # Resize to 32x32 while maintaining pixel art style
         img = img.resize((32, 32), Image.Resampling.NEAREST)
         
-        # Make white/light backgrounds transparent
-        # Convert very light pixels to transparent
+        # Convert dark background pixels to transparent
         data = img.getdata()
         new_data = []
         for item in data:
             # If pixel is very dark (close to black), make it transparent
-            if item[0] + item[1] + item[3] < 30:
+            if item[0] + item[1] + item[2] < 30:
                 new_data.append((255, 255, 255, 0))  # Transparent
             else:
                 new_data.append(item)
