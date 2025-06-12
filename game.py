@@ -216,9 +216,10 @@ class GameEntity:
 
 class MonsterEntity(GameEntity):
     """Monster entity combining Monster logic with position/sprite"""
-    def __init__(self, monster, sprite, x, y):
+    def __init__(self, monster, sprite, x, y, is_miniboss=False):
         super().__init__(sprite, x, y)
         self.monster = monster
+        self.is_miniboss = is_miniboss
 
 class LootItem(GameEntity):
     """Loot item entity"""
@@ -342,7 +343,13 @@ class Game:
             monster_sprite, monster_stats = generate_monster(monster_level, self)
             x, y = self._find_safe_monster_spawn_position()
             monster = Monster(monster_level, monster_stats)
-            monster_entity = MonsterEntity(monster, monster_sprite, x, y)
+
+            is_miniboss = monster_level >= self.level + 2
+            if is_miniboss:
+                scaled_size = int(TILE_SIZE * 1.5)
+                monster_sprite = pygame.transform.scale(monster_sprite, (scaled_size, scaled_size))
+
+            monster_entity = MonsterEntity(monster, monster_sprite, x, y, is_miniboss=is_miniboss)
             self.monsters.append(monster_entity)
         
         self.loading = False
@@ -457,8 +464,10 @@ class Game:
                 self._wander_monster(monster_entity)
                 
             # Keep monsters within bounds
-            monster_entity.x = max(0, min(WINDOW_WIDTH - TILE_SIZE, monster_entity.x))
-            monster_entity.y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, monster_entity.y))
+            sprite_w = monster_entity.sprite.get_width()
+            sprite_h = monster_entity.sprite.get_height()
+            monster_entity.x = max(0, min(WINDOW_WIDTH - sprite_w, monster_entity.x))
+            monster_entity.y = max(0, min(WINDOW_HEIGHT - sprite_h, monster_entity.y))
 
     def _move_monster_toward_player(self, monster_entity, dx, dy):
         """Move monster directly toward player"""
@@ -482,11 +491,14 @@ class Game:
         new_y = monster_entity.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
         
         # Check for wall collisions and change direction if needed
-        if new_x <= 0 or new_x >= WINDOW_WIDTH - TILE_SIZE:
+        sprite_w = monster_entity.sprite.get_width()
+        sprite_h = monster_entity.sprite.get_height()
+
+        if new_x <= 0 or new_x >= WINDOW_WIDTH - sprite_w:
             monster.wander_direction_x *= -1
             new_x = monster_entity.x + (monster.wander_direction_x * MONSTER_WANDER_SPEED)
-        
-        if new_y <= 0 or new_y >= WINDOW_HEIGHT - TILE_SIZE:
+
+        if new_y <= 0 or new_y >= WINDOW_HEIGHT - sprite_h:
             monster.wander_direction_y *= -1
             new_y = monster_entity.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
         
@@ -509,7 +521,9 @@ class Game:
             # Check if too close to other monster
             dx = abs(new_x - other_monster.x)
             dy = abs(new_y - other_monster.y)
-            if dx < TILE_SIZE and dy < TILE_SIZE:
+            max_w = max(current_monster.sprite.get_width(), other_monster.sprite.get_width())
+            max_h = max(current_monster.sprite.get_height(), other_monster.sprite.get_height())
+            if dx < max_w and dy < max_h:
                 return True
         return False
 
@@ -779,14 +793,15 @@ class Game:
         """Draw health bar for a monster"""
         monster = monster_entity.monster
         x, y = monster_entity.x, monster_entity.y
-        
+        bar_width = monster_entity.sprite.get_width()
+
         # Draw background (red)
-        pygame.draw.rect(screen, (255, 0, 0), 
-                       (x, y - 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT))
+        pygame.draw.rect(screen, (255, 0, 0),
+                       (x, y - 10, bar_width, HEALTH_BAR_HEIGHT))
         # Draw health (green)
-        pygame.draw.rect(screen, (0, 255, 0), 
-                       (x, y - 10, 
-                        HEALTH_BAR_WIDTH * monster.get_health_ratio(), 
+        pygame.draw.rect(screen, (0, 255, 0),
+                       (x, y - 10,
+                        bar_width * monster.get_health_ratio(),
                         HEALTH_BAR_HEIGHT))
 
     def _draw_player_health_bar(self):
@@ -828,34 +843,40 @@ class Game:
         current_time = pygame.time.get_ticks()
         time_since_attack = current_time - monster_entity.monster.last_attack_time
         can_attack = time_since_attack >= MONSTER_ATTACK_COOLDOWN
-        
+
         x, y = monster_entity.x, monster_entity.y
+        sprite_h = monster_entity.sprite.get_height()
         indicator_size = 4
-        
+
         if can_attack:
             # Orange triangle = ready to attack (danger!)
-            points = [(x - 8, y + TILE_SIZE // 2 - 4), 
-                     (x - 8, y + TILE_SIZE // 2 + 4),
-                     (x - 2, y + TILE_SIZE // 2)]
+            points = [(x - 8, y + sprite_h // 2 - 4),
+                     (x - 8, y + sprite_h // 2 + 4),
+                     (x - 2, y + sprite_h // 2)]
             pygame.draw.polygon(screen, (255, 165, 0), points)
         else:
             # Gray circle = on cooldown (safe)
-            pygame.draw.circle(screen, (128, 128, 128), 
-                             (x - 5, y + TILE_SIZE // 2), indicator_size)
+            pygame.draw.circle(screen, (128, 128, 128),
+                             (x - 5, y + sprite_h // 2), indicator_size)
 
     def _draw_monster_level_indicator(self, monster_entity):
         """Draw level number on monster to show difficulty"""
-        font = pygame.font.Font(None, 20)
-        level_text = font.render(str(monster_entity.monster.level), True, (255, 255, 255))
-        
+        color = (255, 215, 0) if getattr(monster_entity, "is_miniboss", False) else (255, 255, 255)
+        font_size = 24 if getattr(monster_entity, "is_miniboss", False) else 20
+        font = pygame.font.Font(None, font_size)
+        level_text = font.render(str(monster_entity.monster.level), True, color)
+
         # Position in top-right corner of monster
-        text_x = monster_entity.x + TILE_SIZE - 15
+        sprite_w = monster_entity.sprite.get_width()
+        text_x = monster_entity.x + sprite_w - 15
         text_y = monster_entity.y - 5
-        
+
         # Draw small dark background circle for readability
-        pygame.draw.circle(screen, (0, 0, 0), (text_x + 8, text_y + 8), 10)
-        pygame.draw.circle(screen, (64, 64, 64), (text_x + 8, text_y + 8), 9)
-        
+        bg_color_outer = (100, 80, 0) if getattr(monster_entity, "is_miniboss", False) else (0, 0, 0)
+        bg_color_inner = (150, 120, 0) if getattr(monster_entity, "is_miniboss", False) else (64, 64, 64)
+        pygame.draw.circle(screen, bg_color_outer, (text_x + 8, text_y + 8), 10)
+        pygame.draw.circle(screen, bg_color_inner, (text_x + 8, text_y + 8), 9)
+
         screen.blit(level_text, (text_x, text_y))
 
     def _draw_attack_range_indicator(self):
