@@ -5,6 +5,7 @@ import random
 import numpy as np
 from PIL import Image
 from dotenv import load_dotenv
+from prompts import DUNGEON_MONSTER_DESCRIPTION_PROMPT
 import openai
 
 # Load environment variables
@@ -141,7 +142,7 @@ class Dungeon:
 
     def generate_monster(self):
         # Generate monster description using AI
-        prompt = f"Generate a unique monster name and description for level {self.level}"
+        prompt = DUNGEON_MONSTER_DESCRIPTION_PROMPT.format(level=self.level)
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]

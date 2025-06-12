@@ -6,6 +6,15 @@ import openai
 import requests
 from io import BytesIO
 from PIL import Image
+from prompts import (
+    PLAYER_SPRITE_PROMPT,
+    MONSTER_SPRITE_PROMPT,
+    ITEM_SPRITE_PROMPT,
+    STAIRWAY_SPRITE_PROMPT,
+    SPRITE_STYLE,
+    MONSTER_STATS_SYSTEM_PROMPT,
+    MONSTER_STATS_USER_PROMPT,
+)
 
 # Game constants
 WINDOW_WIDTH = 1200
@@ -110,7 +119,7 @@ def generate_sprite(prompt, cache_path, game=None):
         # Generate image using DALL-E
         # Request 1024x1024 but specify very simple pixel art style
         response = client.generate_image(
-            prompt=f"{prompt}. Style: 16x16 retro pixel art sprite with minimal shapes and light solid colors. Background must be solid pure black (#000000) with no gradients, no scenery, no frames, and no captions.",
+            prompt=f"{prompt}. {SPRITE_STYLE}",
             size="1024x1024",
             quality="standard"
         )
@@ -152,7 +161,7 @@ def generate_sprite(prompt, cache_path, game=None):
 
 def generate_monster(level, game=None):
     """Generate a monster with AI"""
-    prompt = f"Create a fantasy monster sprite for level {level}"
+    prompt = MONSTER_SPRITE_PROMPT.format(level=level)
     monster_path = f"cache/monsters/monster_level_{level}.png"
     stats_path = f"cache/monsters/monster_level_{level}_stats.txt"
     
@@ -174,8 +183,8 @@ def generate_monster(level, game=None):
         # Generate monster stats using OpenAI
         try:
             response = client.generate_chat_completion([
-                {"role": "system", "content": "You are a dungeon monster generator."},
-                {"role": "user", "content": f"Generate stats for a level {level} monster."}
+                {"role": "system", "content": MONSTER_STATS_SYSTEM_PROMPT},
+                {"role": "user", "content": MONSTER_STATS_USER_PROMPT.format(level=level)}
             ])
             monster_stats = response['choices'][0]['message']['content']
             
@@ -195,14 +204,14 @@ def generate_monster(level, game=None):
 def generate_item(game=None):
     """Generate a random item with AI"""
     item_type = random.choice(['weapon', 'armor', 'potion'])
-    prompt = f"Create a {item_type} sprite"
+    prompt = ITEM_SPRITE_PROMPT.format(item_type=item_type)
     item_path = f"cache/items/item_{item_type}.png"
     sprite = generate_sprite(prompt, item_path, game)
     return sprite, item_type
 
 def generate_stairway(game=None):
     """Generate a stairway sprite"""
-    prompt = "Create a stone stairway going down sprite"
+    prompt = STAIRWAY_SPRITE_PROMPT
     stairway_path = "cache/sprites/stairway.png"
     sprite = generate_sprite(prompt, stairway_path, game)
     return sprite
@@ -315,7 +324,7 @@ class Game:
         
         # Generate player sprite
         self.player.sprite = generate_sprite(
-            "Create a fantasy hero sprite",
+            PLAYER_SPRITE_PROMPT,
             "cache/sprites/player.png",
             self
         )

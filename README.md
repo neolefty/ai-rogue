@@ -61,6 +61,11 @@ Note: When running in Docker, you may need to configure X11 forwarding or use a 
 - OpenAI API key
 - Internet connection for first-time sprite generation
 
+ 
 ## Note
 
 The first time you run the game, it will generate all sprites using DALL-E, which may take some time. Subsequent runs will be faster as sprites are cached locally.
+
+## Prompt Configuration
+The text prompts used for generating sprites and descriptions are stored in `prompts.py`.
+You can edit this file to customize the AI output.
