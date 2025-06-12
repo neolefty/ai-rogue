@@ -351,28 +351,34 @@ class Game:
         """Generate a mix of monster levels for the current dungeon level"""
         monster_levels = []
         
-        if self.level == 1:
-            # Level 1: All level 1 monsters
-            monster_levels = [1] * total_monsters
-        else:
-            # Higher levels: Mix of current level and previous levels
-            # 40% current level, 35% previous level, 25% older levels
-            current_level_count = max(1, int(total_monsters * 0.4))
-            previous_level_count = max(1, int(total_monsters * 0.35))
-            older_levels_count = total_monsters - current_level_count - previous_level_count
-            
-            # Add current level monsters (strongest)
-            monster_levels.extend([self.level] * current_level_count)
-            
-            # Add previous level monsters
-            if self.level > 1:
-                monster_levels.extend([self.level - 1] * previous_level_count)
-            
-            # Add mix of older level monsters
-            for _ in range(older_levels_count):
-                older_level = random.randint(1, max(1, self.level - 1))
-                monster_levels.append(older_level)
-        
+        # Higher levels: Mix of current level and previous levels
+        # 5% higher level, 35% current level, 15% previous level, 45% older levels
+        higher_level_count = max(1, int(total_monsters * 0.05))
+        current_level_count = max(1, int(total_monsters * 0.35))
+        previous_level_count = max(0, int(total_monsters * 0.15))
+        older_levels_count = total_monsters - current_level_count - previous_level_count - higher_level_count
+
+        # Add higher level monsters (minibosses)
+        for _ in range(higher_level_count):
+            # level 1: miniboss is level 3
+            # level 10: miniboss is level 12-22
+            # level 20: miniboss is level 22-62
+            # level 30: miniboss is level 32-122
+            higher_level = random.randint(self.level + 2, self.level + 2 + int(self.level * self.level * 0.1))
+            monster_levels.append(higher_level)
+
+        # Add current level monsters
+        monster_levels.extend([self.level] * current_level_count)
+
+        # Add previous level monsters
+        if self.level > 1:
+            monster_levels.extend([self.level - 1] * previous_level_count)
+
+        # Add mix of older level monsters
+        for _ in range(older_levels_count):
+            older_level = random.randint(1, max(1, self.level - 1))
+            monster_levels.append(older_level)
+
         # Shuffle the list so monsters aren't grouped by level
         random.shuffle(monster_levels)
         return monster_levels
@@ -501,17 +507,20 @@ class Game:
 
     def handle_combat(self):
         """Handle player-monster interactions"""
+        attacked = False  # Track if player attacked this frame
+        current_time = pygame.time.get_ticks()
+
+        # Deal with combat for all monsters in range
         for monster_entity in self.monsters[:]:
             if not monster_entity.monster.is_alive:
                 continue
                 
             if self._is_monster_in_attack_range(monster_entity):
                 # Check if player can attack (cooldown check)
-                current_time = pygame.time.get_ticks()
                 if current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
                     self._attack_monster(monster_entity)
-                    self.player.last_attack_time = current_time
-                    
+                    attacked = True
+
                     if not monster_entity.monster.is_alive:
                         self._remove_defeated_monster(monster_entity)
                         
@@ -519,11 +528,15 @@ class Game:
                         self._check_level_completion()
                         continue  # Skip to next monster since this one is dead
                 
-                # Check if monster can attack back (cooldown check and range check)
-                if (current_time - monster_entity.monster.last_attack_time >= MONSTER_ATTACK_COOLDOWN and
-                    self._is_monster_in_melee_range(monster_entity)):
-                    self._monster_attack_player(monster_entity)
-                    monster_entity.monster.last_attack_time = current_time
+            # Check if monster can attack back (cooldown check and range check)
+            if (current_time - monster_entity.monster.last_attack_time >= MONSTER_ATTACK_COOLDOWN and
+                self._is_monster_in_melee_range(monster_entity)):
+                self._monster_attack_player(monster_entity)
+                monster_entity.monster.last_attack_time = current_time
+
+        if attacked:
+            self.player.last_attack_time = current_time
+
 
     def _is_monster_in_attack_range(self, monster_entity):
         """Check if monster is within player's attack range"""
@@ -540,13 +553,17 @@ class Game:
     def _attack_monster(self, monster_entity):
         """Attack a monster and deal damage"""
         monster_entity.monster.take_damage(self.player.attack_power)
-        print(f"Hit monster! Remaining health: {monster_entity.monster.health}")
+        # print(f"Hit monster! Remaining health: {monster_entity.monster.health}")
 
     def _remove_defeated_monster(self, monster_entity):
         """Remove defeated monster and generate loot"""
+        higher_level = monster_entity.monster.level > self.level
+        lower_level = monster_entity.monster.level < self.level - 1
+        # higher level monsters drop 3; current level drops fractionally; lower levels drop less
+        count = 3 if higher_level else LOOT_DROP_CHANCE * 0.5 if lower_level else LOOT_DROP_CHANCE
         self.monsters.remove(monster_entity)
-        print("Monster defeated!")
-        self.generate_loot()
+        # print("Monster defeated!")
+        self.generate_loot(count)
 
     def _monster_attack_player(self, monster_entity):
         """Monster attacks the player"""
@@ -613,7 +630,7 @@ class Game:
         """Find a position for monster that's not too close to player"""
         attempts = 0
         max_attempts = 20
-        min_distance = TILE_SIZE * 4  # At least 4 tiles away from player
+        min_distance = TILE_SIZE * 5  # At least 5 tiles away from player
         
         while attempts < max_attempts:
             x = random.randint(TILE_SIZE, WINDOW_WIDTH - TILE_SIZE * 2)
@@ -631,14 +648,17 @@ class Game:
         else:
             return TILE_SIZE * 2, TILE_SIZE * 2
 
-    def generate_loot(self):
+    def generate_loot(self, count = LOOT_DROP_CHANCE):
         """Generate random loot after defeating a monster"""
-        if random.random() < LOOT_DROP_CHANCE:
-            item_sprite, item_type = generate_item(self)
-            item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
-            item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
-            loot_item = LootItem(item_type, item_sprite, item_x, item_y)
-            self.loot_items.append(loot_item)
+        remaining = count
+        while remaining > 0:
+            if random.random() < count:
+                item_sprite, item_type = generate_item(self)
+                item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
+                item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
+                loot_item = LootItem(item_type, item_sprite, item_x, item_y)
+                self.loot_items.append(loot_item)
+            remaining -= 1
 
     def handle_loot_pickup(self):
         """Handle player picking up loot items"""
@@ -686,13 +706,20 @@ class Game:
             new_max_health = self.player.get_max_health()
             self.player.inventory.pop()  # Remove it since it gets added again after this function
             
-            heal_amount = 25
-            self.player.health = min(new_max_health, self.player.health + heal_amount)
+            heal_amount = 20
+            self.player.health = max(
+                min(new_max_health, self.player.health + heal_amount),
+                self.player.health,  # don't take away temp health if already above max
+            )
         elif loot_item.item_type == 'potion':
             # Potions heal the player
-            heal_amount = 30
+            heal_amount = 50
+            temp_heal_amount = 5
             max_health = self.player.get_max_health()
-            self.player.health = min(max_health, self.player.health + heal_amount)
+            self.player.health = max(
+                min(max_health, self.player.health + heal_amount),
+                self.player.health + temp_heal_amount,
+            )
 
     def _get_loot_effect_message(self, loot_item):
         """Get the message describing what the loot item does"""
@@ -701,7 +728,10 @@ class Game:
         elif loot_item.item_type == 'armor':
             return "Max Health +25, Healed +25"
         elif loot_item.item_type == 'potion':
-            return "Healed +30"
+            if self.player.health > self.player.get_max_health():
+                return "+5 Temporary Health"
+            else:
+                return "Healed +50"
         return ""
 
     def draw(self):
