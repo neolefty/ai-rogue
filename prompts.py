@@ -2,11 +2,11 @@
 
 PLAYER_SPRITE_PROMPT = "Create a fantasy hero sprite"
 MONSTER_SPRITE_PROMPT = "Create a fantasy monster sprite for level {level}"
-ITEM_SPRITE_PROMPT = "Create a {item_type} sprite"
+ITEM_SPRITE_PROMPT = "Create a fantasy {item_type} sprite"
 STAIRWAY_SPRITE_PROMPT = "Create a stone stairway going down sprite"
 
 SPRITE_STYLE = (
-    "Style: 16x16 retro pixel art sprite with minimal shapes and light solid colors. "
+    "Style: 16x16 retro pixel art sprite with minimal shapes, drawn with light colors on a dark background. "
     "Background must be solid pure black (#000000) with no gradients, no scenery, "
     "no frames, and no captions."
 )
