@@ -294,6 +294,7 @@ class Player:
 class Game:
     def __init__(self):
         self.running = True
+        self.paused = False
         self.level = 1
         self.monsters = []
         self.loot_items = []
@@ -389,6 +390,14 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
+            elif event.type == pygame.ACTIVEEVENT:
+                if event.state in (1, 2):
+                    self.paused = event.gain == 0
+
+        if not pygame.display.get_active():
+            self.paused = True
+        elif self.paused and pygame.display.get_active():
+            self.paused = False
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -743,6 +752,8 @@ class Game:
             self._draw_loot()
             self._draw_stairway()
             self._draw_ui()
+            if self.paused:
+                self._draw_paused_overlay()
             pygame.display.flip()
 
     def _draw_player(self):
@@ -920,15 +931,26 @@ class Game:
         dots_text = font.render(dots, True, (255, 255, 255))
         dots_rect = dots_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 50))
         screen.blit(dots_text, dots_rect)
-        
+
         pygame.display.flip()
+
+    def _draw_paused_overlay(self):
+        """Draw a transparent overlay indicating the game is paused"""
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 100))  # Semi-transparent black
+        font = pygame.font.Font(None, 72)
+        pause_text = font.render("Paused", True, (255, 255, 255))
+        text_rect = pause_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+        overlay.blit(pause_text, text_rect)
+        screen.blit(overlay, (0, 0))
 
 def main():
     game = Game()
     
     while game.running:
         game.handle_events()
-        game.update()
+        if not game.paused:
+            game.update()
         game.draw()
         clock.tick(60)
     
