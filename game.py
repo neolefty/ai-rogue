@@ -725,7 +725,7 @@ class Game:
         if loot_item.item_type == 'weapon':
             return "Attack +5"
         elif loot_item.item_type == 'armor':
-            return "Max Health +25, Healed +25"
+            return "Max Health +25, Healed +20"
         elif loot_item.item_type == 'potion':
             if self.player.health > self.player.get_max_health():
                 return "+5 Temporary Health"
