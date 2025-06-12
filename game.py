@@ -110,8 +110,8 @@ def generate_sprite(prompt, cache_path, game=None):
         # Generate image using DALL-E
         # Request 1024x1024 but specify very simple pixel art style
         response = client.generate_image(
-            prompt=f"{prompt}. Style: extremely simple pixel art sprite, light solid colors only, no gradients, no details, no captions, no frame or added scenery; 16x16 retro game style, minimal shapes, black background",
-            size="1024x1024", 
+            prompt=f"{prompt}. Style: 16x16 retro pixel art sprite with minimal shapes and light solid colors. Background must be solid pure black (#000000) with no gradients, no scenery, no frames, and no captions.",
+            size="1024x1024",
             quality="standard"
         )
         image_url = response['data'][0]['url']
