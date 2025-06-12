@@ -14,17 +14,24 @@ A roguelike dungeon crawler where all sprites, monsters, items, and effects are 
 
 ### Local Setup
 
-1. Install dependencies:
+1. Create a virtual environment (recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On macOS/Linux
+# or on Windows: venv\Scripts\activate
+```
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Create a `.env` file with your OpenAI API key:
+3. Create a `.env` file with your OpenAI API key:
 ```
 OPENAI_API_KEY=your_api_key_here
 ```
 
-3. Run the game:
+4. Run the game:
 ```bash
 python game.py
 ```
