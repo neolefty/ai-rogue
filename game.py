@@ -7,6 +7,34 @@ import requests
 from io import BytesIO
 from PIL import Image
 
+# Game constants
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 800
+TILE_SIZE = 32
+INITIAL_MONSTER_COUNT = 3
+MONSTER_INCREMENT = 2
+MAX_MONSTER_COUNT = 50
+
+# Game balance constants
+PLAYER_BASE_HEALTH = 100
+PLAYER_BASE_ATTACK = 10
+PLAYER_SPEED = 5
+MONSTER_HEALTH_MULTIPLIER = 100
+MONSTER_DAMAGE_MULTIPLIER = 10
+HEALTH_BAR_WIDTH = 32
+HEALTH_BAR_HEIGHT = 4
+LOOT_DROP_CHANCE = 0.3
+
+# Combat timing constants
+PLAYER_ATTACK_COOLDOWN = 90  # 1.5 seconds at 60 FPS
+MONSTER_ATTACK_COOLDOWN = 180  # 3 seconds at 60 FPS
+
+# Monster AI constants
+MONSTER_FOLLOW_DISTANCE = 150  # Pixels - monsters closer than this follow player
+MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
+MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
+MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
+
 # Load environment variables
 load_dotenv()
 
@@ -56,33 +84,6 @@ class OpenAIClient:
 
 client = OpenAIClient()
 
-# Game constants
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
-TILE_SIZE = 32
-LEVELS = 5
-MONSTER_COUNT = 5
-
-# Game balance constants
-PLAYER_BASE_HEALTH = 100
-PLAYER_BASE_ATTACK = 10
-PLAYER_SPEED = 5
-MONSTER_HEALTH_MULTIPLIER = 100
-MONSTER_DAMAGE_MULTIPLIER = 10
-HEALTH_BAR_WIDTH = 32
-HEALTH_BAR_HEIGHT = 4
-LOOT_DROP_CHANCE = 0.3
-
-# Combat timing constants
-PLAYER_ATTACK_COOLDOWN = 90  # 1.5 seconds at 60 FPS
-MONSTER_ATTACK_COOLDOWN = 180  # 3 seconds at 60 FPS
-
-# Monster AI constants
-MONSTER_FOLLOW_DISTANCE = 150  # Pixels - monsters closer than this follow player
-MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
-MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
-MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
-
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -109,7 +110,7 @@ def generate_sprite(prompt, cache_path, game=None):
         # Generate image using DALL-E
         # Request 1024x1024 but specify very simple pixel art style
         response = client.generate_image(
-            prompt=f"{prompt}. Style: extremely simple pixel art sprite, solid colors only, no gradients, no details, 16x16 retro game style, minimal shapes, transparent background",
+            prompt=f"{prompt}. Style: extremely simple pixel art sprite, light solid colors only, no gradients, no details, no captions, no frame or added scenery; 16x16 retro game style, minimal shapes, black background",
             size="1024x1024", 
             quality="standard"
         )
@@ -130,8 +131,8 @@ def generate_sprite(prompt, cache_path, game=None):
         data = img.getdata()
         new_data = []
         for item in data:
-            # If pixel is very light (close to white), make it transparent
-            if item[:3] == (255, 255, 255) or (item[0] > 240 and item[1] > 240 and item[2] > 240):
+            # If pixel is very dark (close to black), make it transparent
+            if item[0] + item[1] + item[3] < 30:
                 new_data.append((255, 255, 255, 0))  # Transparent
             else:
                 new_data.append(item)
@@ -324,7 +325,10 @@ class Game:
     def generate_level(self):
         """Generate a new level with AI-generated monsters of mixed levels"""
         self.monsters = []
-        total_monsters = min(self.level * MONSTER_COUNT, 10)  # Cap at 10 monsters max
+        total_monsters = min(
+            INITIAL_MONSTER_COUNT + (self.level - 1) * MONSTER_INCREMENT,
+            MAX_MONSTER_COUNT
+        )
         
         # Create a mix of monster levels for variety and manageable difficulty
         monster_levels = self._generate_monster_level_mix(total_monsters)
