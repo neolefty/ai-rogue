@@ -407,7 +407,13 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
             elif event.type == pygame.ACTIVEEVENT:
-                if event.state in (1, 2):
+                # event.state is a bitmask, so check any relevant focus flags
+                focus_mask = (
+                    pygame.APPMOUSEFOCUS
+                    | pygame.APPINPUTFOCUS
+                    | pygame.APPACTIVE
+                )
+                if event.state & focus_mask:
                     self.paused = event.gain == 0
 
         if not pygame.display.get_active():
