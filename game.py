@@ -1,20 +1,16 @@
 import pygame
 import random
 import os
-from dotenv import load_dotenv
-import openai
-import requests
-from io import BytesIO
-from PIL import Image
-from prompts import (
-    PLAYER_SPRITE_PROMPT,
-    MONSTER_SPRITE_PROMPT,
-    ITEM_SPRITE_PROMPT,
-    STAIRWAY_SPRITE_PROMPT,
-    SPRITE_STYLE,
-    MONSTER_STATS_SYSTEM_PROMPT,
-    MONSTER_STATS_USER_PROMPT,
+from prompts import PLAYER_SPRITE_PROMPT
+
+from openai_client import client
+from sprites import (
+    generate_sprite,
+    generate_monster,
+    generate_item,
+    generate_stairway,
 )
+from entities import GameEntity, MonsterEntity, LootItem, Monster, Player
 
 # Game constants
 WINDOW_WIDTH = 1200
@@ -44,55 +40,6 @@ MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
 MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
 MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
 
-# Load environment variables
-load_dotenv()
-
-# Initialize OpenAI
-class OpenAIClient:
-    def __init__(self):
-        self.api_key = os.getenv('OPENAI_API_KEY')
-        self.base_url = "https://api.openai.com/v1"
-        self.headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
-
-    def generate_image(self, prompt, size="256x256", quality="standard"):
-        try:
-            response = requests.post(
-                f"{self.base_url}/images/generations",
-                headers=self.headers,
-                json={
-                    "model": "dall-e-3",
-                    "prompt": prompt,
-                    "n": 1,
-                    "size": size,
-                    "quality": quality,
-                    "response_format": "url"
-                }
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            print(f"API Error: {str(e)}")
-            print(f"Status Code: {response.status_code}")
-            print(f"Response Text: {response.text}")
-            raise
-
-    def generate_chat_completion(self, messages):
-        response = requests.post(
-            f"{self.base_url}/chat/completions",
-            headers=self.headers,
-            json={
-                "model": "gpt-3.5-turbo",
-                "messages": messages
-            }
-        )
-        response.raise_for_status()
-        return response.json()
-
-client = OpenAIClient()
-
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -103,203 +50,6 @@ clock = pygame.time.Clock()
 os.makedirs('cache/sprites', exist_ok=True)
 os.makedirs('cache/monsters', exist_ok=True)
 os.makedirs('cache/items', exist_ok=True)
-
-def generate_sprite(prompt, cache_path, game=None):
-    """Generate and cache a sprite using DALL-E"""
-    if os.path.exists(cache_path):
-        return pygame.image.load(cache_path)
-    
-    if game:
-        game.loading = True
-        game.loading_message = "Generating sprite..."
-        game._draw_loading_screen()
-        pygame.event.pump()  # Process events to keep window responsive
-    
-    try:
-        # Generate image using DALL-E
-        # Request 1024x1024 but specify very simple pixel art style
-        response = client.generate_image(
-            prompt=f"{prompt}. {SPRITE_STYLE}",
-            size="1024x1024",
-            quality="standard"
-        )
-        image_url = response['data'][0]['url']
-        
-        # Download and save image
-        img_response = requests.get(image_url)
-        img = Image.open(BytesIO(img_response.content))
-        
-        # Convert to RGBA to preserve transparency
-        img = img.convert("RGBA")
-        
-        # Resize to 32x32 while maintaining pixel art style
-        img = img.resize((32, 32), Image.Resampling.NEAREST)
-        
-        # Convert dark background pixels to transparent
-        data = img.getdata()
-        new_data = []
-        for item in data:
-            # If pixel is very dark (close to black), make it transparent
-            if item[0] + item[1] + item[2] < 30:
-                new_data.append((255, 255, 255, 0))  # Transparent
-            else:
-                new_data.append(item)
-        
-        img.putdata(new_data)
-        img.save(cache_path, "PNG")
-        
-        sprite = pygame.image.load(cache_path)
-        if game:
-            game.loading = False
-        return sprite
-    except Exception as e:
-        print(f"Error generating sprite: {str(e)}")
-        if game:
-            game.loading = False
-        # Fallback to a default sprite if generation fails
-        return pygame.Surface((32, 32))
-
-def generate_monster(level, game=None):
-    """Generate a monster with AI"""
-    prompt = MONSTER_SPRITE_PROMPT.format(level=level)
-    monster_path = f"cache/monsters/monster_level_{level}.png"
-    stats_path = f"cache/monsters/monster_level_{level}_stats.txt"
-    
-    # Check if both sprite and stats are cached
-    if os.path.exists(monster_path) and os.path.exists(stats_path):
-        monster_sprite = pygame.image.load(monster_path)
-        with open(stats_path, 'r') as f:
-            monster_stats = f.read()
-        return monster_sprite, monster_stats
-    
-    # Generate sprite
-    monster_sprite = generate_sprite(prompt, monster_path, game)
-    
-    # Generate or load monster stats
-    if os.path.exists(stats_path):
-        with open(stats_path, 'r') as f:
-            monster_stats = f.read()
-    else:
-        # Generate monster stats using OpenAI
-        try:
-            response = client.generate_chat_completion([
-                {"role": "system", "content": MONSTER_STATS_SYSTEM_PROMPT},
-                {"role": "user", "content": MONSTER_STATS_USER_PROMPT.format(level=level)}
-            ])
-            monster_stats = response['choices'][0]['message']['content']
-            
-            # Cache the stats
-            with open(stats_path, 'w') as f:
-                f.write(monster_stats)
-        except Exception as e:
-            print(f"Error generating monster stats: {str(e)}")
-            monster_stats = f"Level {level} monster"
-            
-            # Cache the fallback stats
-            with open(stats_path, 'w') as f:
-                f.write(monster_stats)
-    
-    return monster_sprite, monster_stats
-
-def generate_item(game=None):
-    """Generate a random item with AI"""
-    item_type = random.choice(['weapon', 'armor', 'potion'])
-    prompt = ITEM_SPRITE_PROMPT.format(item_type=item_type)
-    item_path = f"cache/items/item_{item_type}.png"
-    sprite = generate_sprite(prompt, item_path, game)
-    return sprite, item_type
-
-def generate_stairway(game=None):
-    """Generate a stairway sprite"""
-    prompt = STAIRWAY_SPRITE_PROMPT
-    stairway_path = "cache/sprites/stairway.png"
-    sprite = generate_sprite(prompt, stairway_path, game)
-    return sprite
-
-class GameEntity:
-    """Base class for game entities with position and sprite"""
-    def __init__(self, sprite, x, y):
-        self.sprite = sprite
-        self.x = x
-        self.y = y
-
-class MonsterEntity(GameEntity):
-    """Monster entity combining Monster logic with position/sprite"""
-    def __init__(self, monster, sprite, x, y, is_miniboss=False):
-        super().__init__(sprite, x, y)
-        self.monster = monster
-        self.is_miniboss = is_miniboss
-
-class LootItem(GameEntity):
-    """Loot item entity"""
-    def __init__(self, item_type, sprite, x, y):
-        super().__init__(sprite, x, y)
-        self.item_type = item_type
-
-class Monster:
-    def __init__(self, level, stats):
-        self.level = level
-        self.health = MONSTER_HEALTH_MULTIPLIER * level
-        self.max_health = self.health  # Track max health for health bar
-        self.damage = MONSTER_DAMAGE_MULTIPLIER * level
-        self.stats = stats
-        self.is_alive = True
-        self.last_attack_time = 0  # Track when monster last attacked
-        
-        # AI behavior variables
-        self.wander_direction_x = random.choice([-1, 0, 1])
-        self.wander_direction_y = random.choice([-1, 0, 1])
-        self.direction_change_timer = 0
-        
-        # Parse stats from AI-generated string
-        self.parse_stats(stats)
-    
-    def parse_stats(self, stats):
-        """Parse monster stats from AI-generated string"""
-        try:
-            # Split stats into lines and parse them
-            lines = stats.split('\n')
-            for line in lines:
-                if 'Health' in line:
-                    health = int(line.split(':')[1].strip())
-                    # Ensure health is at least base * level
-                    self.health = max(MONSTER_HEALTH_MULTIPLIER * self.level, health)
-                    self.max_health = self.health  # Update max health
-                elif 'Damage' in line:
-                    self.damage = int(line.split(':')[1].strip())
-        except:
-            # Fallback values if parsing fails
-            self.health = MONSTER_HEALTH_MULTIPLIER * self.level
-            self.max_health = self.health
-            self.damage = MONSTER_DAMAGE_MULTIPLIER * self.level
-    
-    def take_damage(self, amount):
-        self.health -= amount
-        if self.health <= 0:
-            self.is_alive = False
-    
-    def get_health_ratio(self):
-        """Get current health as a ratio of max health"""
-        return self.health / self.max_health
-
-class Player:
-    def __init__(self):
-        self.x = WINDOW_WIDTH // 2
-        self.y = WINDOW_HEIGHT // 2
-        self.health = PLAYER_BASE_HEALTH
-        self.level = 1
-        self.inventory = []
-        self.attack_power = PLAYER_BASE_ATTACK
-        self.attack_range = TILE_SIZE * 2.5  # 2.5 tiles range for hit-and-run tactics
-        self.last_attack_time = 0  # Track when player last attacked
-        
-        # Player sprite will be generated in Game.__init__ with loading screen
-        self.sprite = None
-
-    def get_max_health(self):
-        """Calculate player's current max health based on armor"""
-        armor_count = len([item for item in self.inventory if item.item_type == 'armor'])
-        return PLAYER_BASE_HEALTH + (armor_count * 25)
 
 class Game:
     def __init__(self):
@@ -316,6 +66,11 @@ class Game:
         
         # Initialize player without sprite first
         self.player = Player()
+        self.player.x = WINDOW_WIDTH // 2
+        self.player.y = WINDOW_HEIGHT // 2
+        self.player.attack_power = PLAYER_BASE_ATTACK
+        self.player.health = PLAYER_BASE_HEALTH
+        self.player.attack_range = TILE_SIZE * 2.5
         
         # Show initial loading screen
         self.loading = True
