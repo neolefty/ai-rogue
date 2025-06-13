@@ -1,8 +1,10 @@
+import base64
+
 import pygame
 import random
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 import requests
 from io import BytesIO
 from PIL import Image
@@ -56,23 +58,21 @@ class OpenAIClient:
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
+        self.client = OpenAI()
 
-    def generate_image(self, prompt, size="256x256", quality="standard"):
+    def generate_image(self, prompt):
         try:
-            response = requests.post(
-                f"{self.base_url}/images/generations",
-                headers=self.headers,
-                json={
-                    "model": "dall-e-3",
-                    "prompt": prompt,
-                    "n": 1,
-                    "size": size,
-                    "quality": quality,
-                    "response_format": "url"
-                }
+            response = self.client.images.generate(
+                model="dall-e-3",
+                prompt=prompt,
+                size="1024x1024",
+                quality="standard",
+                response_format="b64_json"
             )
-            response.raise_for_status()
-            return response.json()
+            image_base64 = response.data[0].b64_json
+            image_bytes = base64.b64decode(image_base64)
+            return image_bytes
+
         except requests.exceptions.RequestException as e:
             print(f"API Error: {str(e)}")
             print(f"Status Code: {response.status_code}")
@@ -118,17 +118,11 @@ def generate_sprite(prompt, cache_path, game=None):
     try:
         # Generate image using DALL-E
         # Request 1024x1024 but specify very simple pixel art style
-        response = client.generate_image(
+        image_bytes = client.generate_image(
             prompt=f"{prompt}. {SPRITE_STYLE}",
-            size="1024x1024",
-            quality="standard"
         )
-        image_url = response['data'][0]['url']
-        
-        # Download and save image
-        img_response = requests.get(image_url)
-        img = Image.open(BytesIO(img_response.content))
-        
+        img = Image.open(BytesIO(image_bytes))
+
         # Convert to RGBA to preserve transparency
         img = img.convert("RGBA")
         
