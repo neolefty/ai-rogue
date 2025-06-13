@@ -400,14 +400,15 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
-            elif event.type == pygame.ACTIVEEVENT:
-                if event.state in (1, 2):
-                    self.paused = event.gain == 0
+            # Window focus events
+            elif event.type == pygame.WINDOWFOCUSLOST:
+                print("Window focus lost - pausing game")
+                self.paused = True
+            elif event.type == pygame.WINDOWFOCUSGAINED:
+                print("Window focus gained - resuming game")
+                self.paused = False
 
-        if not pygame.display.get_active():
-            self.paused = True
-        elif self.paused and pygame.display.get_active():
-            self.paused = False
+        # Note: Window focus is now handled by WINDOWFOCUSLOST/GAINED events above
 
     def update(self):
         keys = pygame.key.get_pressed()
