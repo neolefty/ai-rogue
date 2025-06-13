@@ -1,14 +1,15 @@
 # Prompt constants for AI generation
 
-PLAYER_SPRITE_PROMPT = "Create a fantasy hero sprite"
-MONSTER_SPRITE_PROMPT = "Create a fantasy monster sprite for level {level}"
-ITEM_SPRITE_PROMPT = "Create a fantasy {item_type} sprite"
-STAIRWAY_SPRITE_PROMPT = "Create a stone stairway going down sprite"
+PLAYER_SPRITE_PROMPT = "Basic human figure with sword"
+MONSTER_SPRITE_PROMPT = "Simple monster creature, basic shape"
+ITEM_SPRITE_PROMPT = "Simple {item_type} object, basic item"
+STAIRWAY_SPRITE_PROMPT = "Simple stone steps going down"
 
 SPRITE_STYLE = (
-    "Style: 16x16 retro pixel art sprite with minimal shapes, drawn with light colors on a dark background. "
-    "Background must be solid pure black (#000000) with no gradients, no scenery, "
-    "no frames, and no captions."
+    "Style: Extremely simple 8-bit pixel art from 1980s video games. "
+    "Maximum 4 colors total, very chunky pixels, no fine details whatsoever. "
+    "Pure black background (#000000), no gradients, no shading, no outlines, no text. "
+    "Must be recognizable in under 16x16 pixels, minimal and iconic only."
 )
 
 MONSTER_STATS_SYSTEM_PROMPT = "You are a dungeon monster generator."
