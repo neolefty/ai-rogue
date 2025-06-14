@@ -27,21 +27,23 @@ MONSTER_INCREMENT = 2
 MAX_MONSTER_COUNT = 50
 
 # Game balance constants
-PLAYER_BASE_HEALTH = 100
-PLAYER_BASE_ATTACK = 10
+PLAYER_BASE_HEALTH = 5
+PLAYER_BASE_ATTACK = 0.5
 PLAYER_SPEED = 5
-MONSTER_HEALTH_MULTIPLIER = 100
-MONSTER_DAMAGE_MULTIPLIER = 10
+MONSTER_HEALTH_MULTIPLIER = 1  # Monster HP = level * multiplier
+MONSTER_DAMAGE_MULTIPLIER = 1  # Monster damage = level * multiplier
 HEALTH_BAR_WIDTH = 32
 HEALTH_BAR_HEIGHT = 4
 LOOT_DROP_CHANCE = 0.3
 
-# Combat timing constants
-PLAYER_ATTACK_COOLDOWN = 90  # 1.5 seconds at 60 FPS
-MONSTER_ATTACK_COOLDOWN = 180  # 3 seconds at 60 FPS
+# Combat timing constants (in milliseconds)
+PLAYER_ATTACK_COOLDOWN = 500  # 0.5 seconds
+MONSTER_ATTACK_COOLDOWN = 1000  # 1 second
 
 # Monster AI constants
-MONSTER_FOLLOW_DISTANCE = 150  # Pixels - monsters closer than this follow player
+MONSTER_AGGRESSIVE_DISTANCE = 150  # Pixels - monsters always chase within this range
+MONSTER_ALERT_DISTANCE = 300  # Pixels - monsters sometimes chase within this range
+MONSTER_ALERT_CHASE_CHANCE = 0.7  # 70% chance to chase when in alert zone
 MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
 MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
 MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
@@ -244,28 +246,17 @@ class Monster:
         self.wander_direction_x = random.choice([-1, 0, 1])
         self.wander_direction_y = random.choice([-1, 0, 1])
         self.direction_change_timer = 0
+        self.alert_behavior = None  # 'chase' or 'wander' when in alert zone
+        self.alert_behavior_timer = 0  # Frames until behavior change
         
         # Parse stats from AI-generated string
         self.parse_stats(stats)
     
     def parse_stats(self, stats):
         """Parse monster stats from AI-generated string"""
-        try:
-            # Split stats into lines and parse them
-            lines = stats.split('\n')
-            for line in lines:
-                if 'Health' in line:
-                    health = int(line.split(':')[1].strip())
-                    # Ensure health is at least base * level
-                    self.health = max(MONSTER_HEALTH_MULTIPLIER * self.level, health)
-                    self.max_health = self.health  # Update max health
-                elif 'Damage' in line:
-                    self.damage = int(line.split(':')[1].strip())
-        except:
-            # Fallback values if parsing fails
-            self.health = MONSTER_HEALTH_MULTIPLIER * self.level
-            self.max_health = self.health
-            self.damage = MONSTER_DAMAGE_MULTIPLIER * self.level
+        # For now, ignore AI-generated stats and use our balanced formulas
+        # The AI stats are still stored in self.stats for flavor text/display
+        pass
     
     def take_damage(self, amount):
         self.health -= amount
@@ -293,7 +284,7 @@ class Player:
     def get_max_health(self):
         """Calculate player's current max health based on armor"""
         armor_count = len([item for item in self.inventory if item.item_type == 'armor'])
-        return PLAYER_BASE_HEALTH + (armor_count * 25)
+        return PLAYER_BASE_HEALTH + (armor_count * 1)
 
 class Game:
     def __init__(self):
@@ -460,9 +451,29 @@ class Game:
             dy_to_player = self.player.y - monster_entity.y
             distance_to_player = (dx_to_player ** 2 + dy_to_player ** 2) ** 0.5
             
-            if distance_to_player <= MONSTER_FOLLOW_DISTANCE:
-                # Close monsters follow the player directly
+            if distance_to_player <= MONSTER_AGGRESSIVE_DISTANCE:
+                # Close monsters always follow the player directly
                 self._move_monster_toward_player(monster_entity, dx_to_player, dy_to_player)
+            elif distance_to_player <= MONSTER_ALERT_DISTANCE:
+                # Alert zone - commit to a behavior for a period of time
+                monster = monster_entity.monster
+                
+                # Choose new behavior if timer expired or no behavior set
+                if monster.alert_behavior_timer <= 0 or monster.alert_behavior is None:
+                    if random.random() < MONSTER_ALERT_CHASE_CHANCE:
+                        monster.alert_behavior = 'chase'
+                    else:
+                        monster.alert_behavior = 'wander'
+                    # Commit to this behavior for 60-120 frames (1-2 seconds)
+                    monster.alert_behavior_timer = random.randint(60, 120)
+                
+                # Execute chosen behavior
+                if monster.alert_behavior == 'chase':
+                    self._move_monster_toward_player(monster_entity, dx_to_player, dy_to_player)
+                else:
+                    self._wander_monster(monster_entity)
+                
+                monster.alert_behavior_timer -= 1
             else:
                 # Distant monsters wander randomly
                 self._wander_monster(monster_entity)
@@ -536,25 +547,40 @@ class Game:
         attacked = False  # Track if player attacked this frame
         current_time = pygame.time.get_ticks()
 
-        # Deal with combat for all monsters in range
-        for monster_entity in self.monsters[:]:
+        # First, find all monsters in range and sort by distance
+        monsters_in_range = []
+        for monster_entity in self.monsters:
             if not monster_entity.monster.is_alive:
                 continue
-                
             if self._is_monster_in_attack_range(monster_entity):
-                # Check if player can attack (cooldown check)
-                if current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
-                    self._attack_monster(monster_entity)
-                    attacked = True
-
-                    if not monster_entity.monster.is_alive:
-                        self._remove_defeated_monster(monster_entity)
-                        
-                        # Check if level is complete
-                        self._check_level_completion()
-                        continue  # Skip to next monster since this one is dead
+                # Calculate distance to player
+                dx = self.player.x - monster_entity.x
+                dy = self.player.y - monster_entity.y
+                distance = (dx ** 2 + dy ** 2) ** 0.5
+                monsters_in_range.append((distance, monster_entity))
+        
+        # Sort by distance (closest first)
+        monsters_in_range.sort(key=lambda x: x[0])
+        
+        # Attack monsters with damage falloff based on order
+        if monsters_in_range and current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
+            attacked = True
+            for i, (distance, monster_entity) in enumerate(monsters_in_range):
+                # Damage falloff: 1st gets full, 2nd gets 1/2, 3rd gets 1/3, etc.
+                damage_multiplier = 1.0 / (i + 1)
+                damage = self.player.attack_power * damage_multiplier
+                monster_entity.monster.take_damage(damage)
                 
-            # Check if monster can attack back (cooldown check and range check)
+                if not monster_entity.monster.is_alive:
+                    self._remove_defeated_monster(monster_entity)
+                    # Check if level is complete
+                    self._check_level_completion()
+        
+        # Handle monster attacks separately
+        for monster_entity in self.monsters:
+            if not monster_entity.monster.is_alive:
+                continue
+            # Check if monster can attack (cooldown check and range check)
             if (current_time - monster_entity.monster.last_attack_time >= MONSTER_ATTACK_COOLDOWN and
                 self._is_monster_in_melee_range(monster_entity)):
                 self._monster_attack_player(monster_entity)
@@ -724,7 +750,7 @@ class Game:
         """Apply the effects of picked up loot to the player"""
         if loot_item.item_type == 'weapon':
             # Weapons increase attack power
-            self.player.attack_power += 5
+            self.player.attack_power += 0.05
         elif loot_item.item_type == 'armor':
             # Armor increases max health and heals
             # Add temporary armor to calculate new max health (this item will be added to inventory after)
@@ -732,15 +758,15 @@ class Game:
             new_max_health = self.player.get_max_health()
             self.player.inventory.pop()  # Remove it since it gets added again after this function
             
-            heal_amount = 20
+            heal_amount = 1
             self.player.health = max(
                 min(new_max_health, self.player.health + heal_amount),
                 self.player.health,  # don't take away temp health if already above max
             )
         elif loot_item.item_type == 'potion':
             # Potions heal the player
-            heal_amount = 50
-            temp_heal_amount = 5
+            heal_amount = 5
+            temp_heal_amount = 1
             max_health = self.player.get_max_health()
             self.player.health = max(
                 min(max_health, self.player.health + heal_amount),
@@ -750,14 +776,14 @@ class Game:
     def _get_loot_effect_message(self, loot_item):
         """Get the message describing what the loot item does"""
         if loot_item.item_type == 'weapon':
-            return "Attack +5"
+            return "Attack +0.05"
         elif loot_item.item_type == 'armor':
-            return "Max Health +25, Healed +20"
+            return "Max Health +1, Healed +1"
         elif loot_item.item_type == 'potion':
             if self.player.health > self.player.get_max_health():
-                return "+5 Temporary Health"
+                return "+1 Temporary Health"
             else:
-                return "Healed +50"
+                return "Healed +5"
         return ""
 
     def draw(self):
@@ -890,23 +916,27 @@ class Game:
             time_since_attack = current_time - self.player.last_attack_time
             can_attack = time_since_attack >= PLAYER_ATTACK_COOLDOWN
             
-            # Only show range when player can attack
-            if can_attack:
-                center_x = self.player.x + TILE_SIZE // 2
-                center_y = self.player.y + TILE_SIZE // 2
-                
-                # Draw a subtle transparent circle showing attack range
-                range_surface = pygame.Surface((int(self.player.attack_range * 2), int(self.player.attack_range * 2)))
-                range_surface.set_alpha(30)  # Very transparent
-                range_surface.fill((0, 255, 0))  # Green tint
-                
-                # Draw circle outline
-                pygame.draw.circle(range_surface, (0, 255, 0, 60), 
-                                 (int(self.player.attack_range), int(self.player.attack_range)), 
-                                 int(self.player.attack_range), 2)
-                
-                range_rect = range_surface.get_rect(center=(center_x, center_y))
-                screen.blit(range_surface, range_rect)
+            center_x = self.player.x + TILE_SIZE // 2
+            center_y = self.player.y + TILE_SIZE // 2
+            
+            # Draw a subtle transparent circle showing attack range
+            range_surface = pygame.Surface((int(self.player.attack_range * 2), int(self.player.attack_range * 2)), pygame.SRCALPHA)
+            
+            # Choose color based on attack state
+            if time_since_attack < 200:  # Flash red for ~200ms after attack
+                color = (255, 0, 0, 60)  # Red flash
+            elif can_attack:
+                color = (0, 255, 0, 40)  # Green when ready
+            else:
+                color = (128, 128, 128, 20)  # Gray during cooldown
+            
+            # Draw filled circle
+            pygame.draw.circle(range_surface, color, 
+                             (int(self.player.attack_range), int(self.player.attack_range)), 
+                             int(self.player.attack_range))
+            
+            range_rect = range_surface.get_rect(center=(center_x, center_y))
+            screen.blit(range_surface, range_rect)
 
     def _draw_loot(self):
         """Draw all loot items"""
