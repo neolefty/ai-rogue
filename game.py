@@ -582,7 +582,7 @@ class Game:
         # Attack monsters with damage falloff based on order
         if monsters_in_range and current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
             attacked = True
-            self.player.attack_flash_timer = 20  # Player dealt damage
+            self.player.attack_flash_timer = 10  # Player dealt damage
             for i, (distance, monster_entity) in enumerate(monsters_in_range):
                 # Damage falloff: 1st gets full, 2nd gets 1/2, 3rd gets 1/3, etc.
                 damage_multiplier = 1.0 / (i + 1)
@@ -640,7 +640,7 @@ class Game:
         damage = monster_entity.monster.damage
         self.player.health -= damage
         self.player.damage_flash_timer = 20  # Player took damage
-        monster_entity.monster.attack_flash_timer = 20  # Monster dealt damage
+        monster_entity.monster.attack_flash_timer = 10  # Monster dealt damage
         self.message = f"Monster hits for {damage} damage!"
         self.message_timer = 120
         print(f"Player takes {damage} damage! Health: {self.player.health}")
