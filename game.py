@@ -248,6 +248,8 @@ class Monster:
         self.direction_change_timer = 0
         self.alert_behavior = None  # 'chase' or 'wander' when in alert zone
         self.alert_behavior_timer = 0  # Frames until behavior change
+        self.damage_flash_timer = 0  # Visual feedback when taking damage
+        self.attack_flash_timer = 0  # Visual feedback when dealing damage
         
         # Parse stats from AI-generated string
         self.parse_stats(stats)
@@ -260,6 +262,7 @@ class Monster:
     
     def take_damage(self, amount):
         self.health -= amount
+        self.damage_flash_timer = 20  # Flash for ~1/3 second
         if self.health <= 0:
             self.is_alive = False
     
@@ -277,6 +280,8 @@ class Player:
         self.attack_power = PLAYER_BASE_ATTACK
         self.attack_range = TILE_SIZE * 2.5  # 2.5 tiles range for hit-and-run tactics
         self.last_attack_time = 0  # Track when player last attacked
+        self.damage_flash_timer = 0  # Visual feedback when taking damage
+        self.attack_flash_timer = 0  # Visual feedback when dealing damage
         
         # Player sprite will be generated in Game.__init__ with loading screen
         self.sprite = None
@@ -433,6 +438,12 @@ class Game:
         # Update message timer
         if self.message_timer > 0:
             self.message_timer -= 1
+        
+        # Update player flash timers
+        if self.player.damage_flash_timer > 0:
+            self.player.damage_flash_timer -= 1
+        if self.player.attack_flash_timer > 0:
+            self.player.attack_flash_timer -= 1
 
     def is_within_range(self, x1, y1, x2, y2, max_range):
         """Check if two positions are within a given range"""
@@ -477,6 +488,12 @@ class Game:
             else:
                 # Distant monsters wander randomly
                 self._wander_monster(monster_entity)
+            
+            # Update flash timers
+            if monster_entity.monster.damage_flash_timer > 0:
+                monster_entity.monster.damage_flash_timer -= 1
+            if monster_entity.monster.attack_flash_timer > 0:
+                monster_entity.monster.attack_flash_timer -= 1
                 
             # Keep monsters within bounds
             sprite_w = monster_entity.sprite.get_width()
@@ -565,6 +582,7 @@ class Game:
         # Attack monsters with damage falloff based on order
         if monsters_in_range and current_time - self.player.last_attack_time >= PLAYER_ATTACK_COOLDOWN:
             attacked = True
+            self.player.attack_flash_timer = 20  # Player dealt damage
             for i, (distance, monster_entity) in enumerate(monsters_in_range):
                 # Damage falloff: 1st gets full, 2nd gets 1/2, 3rd gets 1/3, etc.
                 damage_multiplier = 1.0 / (i + 1)
@@ -621,6 +639,8 @@ class Game:
         """Monster attacks the player"""
         damage = monster_entity.monster.damage
         self.player.health -= damage
+        self.player.damage_flash_timer = 20  # Player took damage
+        monster_entity.monster.attack_flash_timer = 20  # Monster dealt damage
         self.message = f"Monster hits for {damage} damage!"
         self.message_timer = 120
         print(f"Player takes {damage} damage! Health: {self.player.health}")
@@ -803,21 +823,79 @@ class Game:
     def _draw_player(self):
         """Draw the player sprite and health bar"""
         if self.player.sprite:  # Only draw if sprite exists
+            # Draw effect circle behind sprite
+            self._draw_entity_effect_circle(self.player, self.player.x, self.player.y, self.player.sprite)
+            
             screen.blit(self.player.sprite, (self.player.x, self.player.y))
             self._draw_player_health_bar()
-            self._draw_player_attack_indicator()
-            self._draw_attack_range_indicator()
 
     def _draw_monsters(self):
         """Draw all monsters and their health bars"""
         for monster_entity in self.monsters:
+            # Draw effect circle behind sprite
+            self._draw_entity_effect_circle(monster_entity.monster, monster_entity.x, monster_entity.y, monster_entity.sprite)
+            
             screen.blit(monster_entity.sprite, (monster_entity.x, monster_entity.y))
             
-            # Draw health bars, attack indicators, and level indicators for living monsters
+            # Draw health bars and level indicators for living monsters
             if monster_entity.monster.is_alive:
                 self._draw_health_bar(monster_entity)
-                self._draw_monster_attack_indicator(monster_entity)
                 self._draw_monster_level_indicator(monster_entity)
+
+    def _draw_entity_effect_circle(self, entity, x, y, sprite):
+        """Draw standardized effect circle for any entity"""
+        sprite_w = sprite.get_width()
+        sprite_h = sprite.get_height()
+        center_x = x + sprite_w // 2
+        center_y = y + sprite_h // 2
+        
+        # Circle radius based on entity's attack range
+        if hasattr(entity, 'attack_range'):  # Player
+            radius = int(entity.attack_range)
+        else:  # Monster
+            radius = int(MONSTER_ATTACK_RANGE)
+        
+        circle_size = radius * 2
+        
+        # Determine effect color and alpha based on entity state (prioritize damage taken)
+        color = None
+        alpha = 0
+        
+        if entity.damage_flash_timer > 0:
+            # Red: Entity took damage (highest priority)
+            color = (255, 0, 0)
+            alpha = 100
+        elif entity.attack_flash_timer > 0:
+            # Cyan: Entity just dealt damage
+            color = (0, 255, 255)
+            alpha = 100
+        else:
+            # Check attack readiness
+            current_time = pygame.time.get_ticks()
+            if hasattr(entity, 'last_attack_time'):  # Player or monster
+                if hasattr(entity, 'attack_power'):  # Player
+                    cooldown = PLAYER_ATTACK_COOLDOWN
+                else:  # Monster
+                    cooldown = MONSTER_ATTACK_COOLDOWN
+                
+                time_since_attack = current_time - entity.last_attack_time
+                can_attack = time_since_attack >= cooldown
+                
+                if can_attack:
+                    # Light green: Ready to attack (subtle)
+                    color = (0, 255, 0)
+                    alpha = 35
+                else:
+                    # Dark gray: Attack cooldown
+                    color = (64, 64, 64)
+                    alpha = 60
+        
+        # Draw the circle if we have a color
+        if color and alpha > 0:
+            flash_surface = pygame.Surface((circle_size, circle_size), pygame.SRCALPHA)
+            pygame.draw.circle(flash_surface, (*color, alpha), (radius, radius), radius)
+            flash_rect = flash_surface.get_rect(center=(center_x, center_y))
+            screen.blit(flash_surface, flash_rect)
 
     def _draw_health_bar(self, monster_entity):
         """Draw health bar for a monster"""
@@ -849,45 +927,6 @@ class Game:
                             HEALTH_BAR_WIDTH * health_ratio, 
                             HEALTH_BAR_HEIGHT))
 
-    def _draw_player_attack_indicator(self):
-        """Draw attack readiness indicator for player"""
-        if self.player.sprite:
-            current_time = pygame.time.get_ticks()
-            time_since_attack = current_time - self.player.last_attack_time
-            can_attack = time_since_attack >= PLAYER_ATTACK_COOLDOWN
-            
-            x, y = self.player.x, self.player.y
-            indicator_size = 6
-            
-            if can_attack:
-                # Green circle = ready to attack
-                pygame.draw.circle(screen, (0, 255, 0), 
-                                 (x + TILE_SIZE + 5, y + TILE_SIZE // 2), indicator_size)
-            else:
-                # Red circle = on cooldown
-                pygame.draw.circle(screen, (255, 0, 0), 
-                                 (x + TILE_SIZE + 5, y + TILE_SIZE // 2), indicator_size)
-
-    def _draw_monster_attack_indicator(self, monster_entity):
-        """Draw attack readiness indicator for monster"""
-        current_time = pygame.time.get_ticks()
-        time_since_attack = current_time - monster_entity.monster.last_attack_time
-        can_attack = time_since_attack >= MONSTER_ATTACK_COOLDOWN
-
-        x, y = monster_entity.x, monster_entity.y
-        sprite_h = monster_entity.sprite.get_height()
-        indicator_size = 4
-
-        if can_attack:
-            # Orange triangle = ready to attack (danger!)
-            points = [(x - 8, y + sprite_h // 2 - 4),
-                     (x - 8, y + sprite_h // 2 + 4),
-                     (x - 2, y + sprite_h // 2)]
-            pygame.draw.polygon(screen, (255, 165, 0), points)
-        else:
-            # Gray circle = on cooldown (safe)
-            pygame.draw.circle(screen, (128, 128, 128),
-                             (x - 5, y + sprite_h // 2), indicator_size)
 
     def _draw_monster_level_indicator(self, monster_entity):
         """Draw level number on monster to show difficulty"""
@@ -909,34 +948,6 @@ class Game:
 
         screen.blit(level_text, (text_x, text_y))
 
-    def _draw_attack_range_indicator(self):
-        """Draw a subtle circle showing player's attack range"""
-        if self.player.sprite:
-            current_time = pygame.time.get_ticks()
-            time_since_attack = current_time - self.player.last_attack_time
-            can_attack = time_since_attack >= PLAYER_ATTACK_COOLDOWN
-            
-            center_x = self.player.x + TILE_SIZE // 2
-            center_y = self.player.y + TILE_SIZE // 2
-            
-            # Draw a subtle transparent circle showing attack range
-            range_surface = pygame.Surface((int(self.player.attack_range * 2), int(self.player.attack_range * 2)), pygame.SRCALPHA)
-            
-            # Choose color based on attack state
-            if time_since_attack < 200:  # Flash red for ~200ms after attack
-                color = (255, 0, 0, 60)  # Red flash
-            elif can_attack:
-                color = (0, 255, 0, 40)  # Green when ready
-            else:
-                color = (128, 128, 128, 20)  # Gray during cooldown
-            
-            # Draw filled circle
-            pygame.draw.circle(range_surface, color, 
-                             (int(self.player.attack_range), int(self.player.attack_range)), 
-                             int(self.player.attack_range))
-            
-            range_rect = range_surface.get_rect(center=(center_x, center_y))
-            screen.blit(range_surface, range_rect)
 
     def _draw_loot(self):
         """Draw all loot items"""
@@ -965,7 +976,7 @@ class Game:
         health_text = small_font.render(f"Health: {self.player.health}/{self.player.get_max_health()}", True, (255, 100, 100))
         screen.blit(health_text, (10, 75))
         
-        attack_text = small_font.render(f"Attack: {self.player.attack_power}", True, (100, 255, 100))
+        attack_text = small_font.render(f"Attack: {self.player.attack_power:.2f}", True, (100, 255, 100))
         screen.blit(attack_text, (10, 100))
         
         # Message display
