@@ -17,14 +17,20 @@ class RenderSystem:
         if game_state.loading:
             self._render_loading_screen(game_state.loading_message)
         else:
+            # Always render the game world
             self.screen.fill(BACKGROUND_COLOR)
             self._render_player(game_state.player)
             self._render_monsters(game_state.monsters)
             self._render_loot(game_state.loot_items)
             self._render_stairway(game_state.stairway)
             self._render_ui(game_state)
+            
+            # Render overlays on top
             if game_state.paused:
                 self._render_paused_overlay()
+            elif game_state.game_over:
+                self._render_game_over_overlay(game_state)
+                
             pygame.display.flip()
     
     def _render_player(self, player):
@@ -220,4 +226,44 @@ class RenderSystem:
         pause_text = font.render("Paused", True, WHITE)
         text_rect = pause_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
         overlay.blit(pause_text, text_rect)
+        self.screen.blit(overlay, (0, 0))
+    
+    def _render_game_over_overlay(self, game_state):
+        """Render the game over overlay with stats and restart option."""
+        # Create translucent overlay
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))  # Semi-transparent black
+        
+        # Title
+        title_font = pygame.font.Font(None, 72)
+        title_text = title_font.render("GAME OVER", True, RED)
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 150))
+        overlay.blit(title_text, title_rect)
+        
+        # Statistics
+        stats_y = 250
+        line_height = 40
+        
+        stats = [
+            f"Level Reached: {game_state.level}",
+            f"Levels Completed: {game_state.levels_completed}",
+            f"Monsters Defeated: {game_state.monsters_defeated}",
+            f"Items Collected: {game_state.items_collected}",
+            f"Final Attack Power: {game_state.player.attack_power:.2f}" if game_state.player else "",
+            f"Inventory Items: {len(game_state.player.inventory)}" if game_state.player else ""
+        ]
+        
+        for i, stat in enumerate(stats):
+            if stat:  # Skip empty strings
+                stat_text = self.font.render(stat, True, WHITE)
+                stat_rect = stat_text.get_rect(center=(WINDOW_WIDTH // 2, stats_y + i * line_height))
+                overlay.blit(stat_text, stat_rect)
+        
+        # Instructions
+        instructions_y = stats_y + len([s for s in stats if s]) * line_height + 60
+        instruction_text = self.font.render("Press SPACE to play again or ESC to quit", True, YELLOW)
+        instruction_rect = instruction_text.get_rect(center=(WINDOW_WIDTH // 2, instructions_y))
+        overlay.blit(instruction_text, instruction_rect)
+        
+        # Blit the overlay to the screen
         self.screen.blit(overlay, (0, 0))

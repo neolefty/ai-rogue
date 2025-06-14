@@ -48,6 +48,9 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.game_state.running = False
+                elif event.key == pygame.K_SPACE and self.game_state.game_over:
+                    # Restart the game
+                    self.game_state.restart_game()
             elif event.type == pygame.WINDOWFOCUSLOST:
                 print("Window focus lost - pausing game")
                 self.game_state.paused = True

@@ -18,6 +18,11 @@ class GameState:
         self.game_over = False
         self.level = 1
         
+        # Game statistics
+        self.monsters_defeated = 0
+        self.items_collected = 0
+        self.levels_completed = 0
+        
         # Entities
         self.player = None
         self.monsters = []
@@ -43,7 +48,7 @@ class GameState:
     def generate_level(self):
         """Generate a new level with monsters."""
         self.monsters = []
-        self.loot_items = []
+        # Keep loot_items - they persist between levels
         self.stairway = None
         
         total_monsters = min(
@@ -126,14 +131,28 @@ class GameState:
         else:
             return TILE_SIZE * 2, TILE_SIZE * 2
     
-    def generate_loot(self, count=LOOT_DROP_CHANCE):
-        """Generate random loot items."""
+    def generate_loot(self, count=LOOT_DROP_CHANCE, monster_x=None, monster_y=None):
+        """Generate random loot items near a monster's death location."""
         remaining = count
         while remaining > 0:
             if random.random() < count:
                 item_sprite, item_type = self.sprite_generator.generate_item_sprite(self)
-                item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
-                item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
+                
+                # If monster position provided, scatter loot nearby
+                if monster_x is not None and monster_y is not None:
+                    # Scatter within 2-3 tiles of monster position
+                    scatter_radius = TILE_SIZE * 3
+                    item_x = monster_x + random.randint(-scatter_radius, scatter_radius)
+                    item_y = monster_y + random.randint(-scatter_radius, scatter_radius)
+                    
+                    # Keep within screen bounds
+                    item_x = max(0, min(WINDOW_WIDTH - TILE_SIZE, item_x))
+                    item_y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, item_y))
+                else:
+                    # Fallback to random position (for edge cases)
+                    item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
+                    item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
+                
                 loot_item = LootItem(item_type, item_x, item_y, item_sprite)
                 self.loot_items.append(loot_item)
             remaining -= 1
@@ -189,6 +208,7 @@ class GameState:
     
     def advance_level(self):
         """Advance to the next level."""
+        self.levels_completed += 1
         self.level += 1
         self.stairway = None
         self.set_message(f"Entering Level {self.level}!", 120)
@@ -199,11 +219,13 @@ class GameState:
         """Remove a monster from the game."""
         if monster in self.monsters:
             self.monsters.remove(monster)
+            self.monsters_defeated += 1
     
     def remove_loot_item(self, loot_item):
         """Remove a loot item from the game."""
         if loot_item in self.loot_items:
             self.loot_items.remove(loot_item)
+            self.items_collected += 1
     
     def set_message(self, message, duration):
         """Set a temporary message to display."""
@@ -236,3 +258,30 @@ class GameState:
     def hide_loading(self):
         """Hide loading screen."""
         self.loading = False
+    
+    def restart_game(self):
+        """Restart the game with a fresh state."""
+        # Reset core game state
+        self.game_over = False
+        self.paused = False
+        self.level = 1
+        
+        # Reset statistics
+        self.monsters_defeated = 0
+        self.items_collected = 0
+        self.levels_completed = 0
+        
+        # Clear entities (but keep loot_items for "ghost of runs past" effect)
+        self.monsters = []
+        # Keep loot_items - they persist through restarts!
+        self.stairway = None
+        
+        # Reset UI state
+        self.message = ""
+        self.message_timer = 0
+        
+        # Reinitialize player
+        self._initialize_player()
+        
+        # Generate first level
+        self.generate_level()

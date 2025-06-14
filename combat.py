@@ -86,9 +86,12 @@ class CombatSystem:
         else:
             loot_count = LOOT_DROP_CHANCE  # Current level monsters drop normal amount
         
-        # Remove monster and generate loot
+        # Store monster position before removing it
+        monster_x, monster_y = monster.x, monster.y
+        
+        # Remove monster and generate loot near its death location
         self.game_state.remove_monster(monster)
-        self.game_state.generate_loot(loot_count)
+        self.game_state.generate_loot(loot_count, monster_x, monster_y)
         
         # Check if level is complete
         if len(self.game_state.monsters) == 0:
