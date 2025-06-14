@@ -73,12 +73,24 @@ class AIBehaviorSystem:
             self._wander_monster(monster)
     
     def _move_toward_target(self, monster, dx, dy):
-        """Move monster toward a target direction (normalized)."""
-        # Normalize movement
-        if dx != 0:
-            monster.x += 1 if dx > 0 else -1
-        if dy != 0:
-            monster.y += 1 if dy > 0 else -1
+        """Move monster toward target using 8-directional movement with normalized diagonal speed."""
+        if dx == 0 and dy == 0:
+            return
+        
+        # Convert to 8-directional movement
+        move_x = 1 if dx > 0 else -1 if dx < 0 else 0
+        move_y = 1 if dy > 0 else -1 if dy < 0 else 0
+        
+        # Normalize diagonal movement to maintain consistent speed
+        if move_x != 0 and move_y != 0:
+            # Diagonal movement: scale by 1/√2 to maintain speed
+            diagonal_factor = 1.0 / (2 ** 0.5)  # ≈ 0.707
+            move_x *= diagonal_factor
+            move_y *= diagonal_factor
+        
+        # Apply movement
+        monster.x += move_x
+        monster.y += move_y
     
     def _wander_monster(self, monster):
         """Make monster wander randomly, avoiding walls and other monsters."""

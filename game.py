@@ -75,18 +75,33 @@ class Game:
         self.game_state.update_timers()
     
     def _update_player_movement(self):
-        """Update player position based on input."""
+        """Update player position based on input with normalized diagonal movement."""
         keys = pygame.key.get_pressed()
         player = self.game_state.player
         
+        # Calculate movement direction
+        move_x = 0
+        move_y = 0
+        
         if keys[pygame.K_LEFT]:
-            player.x -= PLAYER_SPEED
+            move_x -= 1
         if keys[pygame.K_RIGHT]:
-            player.x += PLAYER_SPEED
+            move_x += 1
         if keys[pygame.K_UP]:
-            player.y -= PLAYER_SPEED
+            move_y -= 1
         if keys[pygame.K_DOWN]:
-            player.y += PLAYER_SPEED
+            move_y += 1
+        
+        # Normalize diagonal movement to maintain consistent speed
+        if move_x != 0 or move_y != 0:
+            # Calculate magnitude and normalize
+            magnitude = (move_x * move_x + move_y * move_y) ** 0.5
+            move_x = (move_x / magnitude) * PLAYER_SPEED
+            move_y = (move_y / magnitude) * PLAYER_SPEED
+            
+            # Apply movement
+            player.x += move_x
+            player.y += move_y
 
         # Keep player within bounds
         player.x = max(0, min(WINDOW_WIDTH - TILE_SIZE, player.x))
