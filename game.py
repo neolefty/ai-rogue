@@ -48,6 +48,10 @@ MONSTER_WANDER_SPEED = 0.5  # Slower movement for wandering monsters
 MONSTER_DIRECTION_CHANGE_CHANCE = 0.02  # 2% chance per frame to change direction
 MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (melee only)
 
+# Mini-boss clustering constants
+MINIBOSS_INFLUENCE_RADIUS = 200  # Pixels - monsters within this range are influenced by mini-boss
+MINIBOSS_BIAS_CHANCE = 0.3  # 30% chance to move toward mini-boss when in range (similar to alert zone)
+
 # Load environment variables
 load_dotenv()
 
@@ -471,16 +475,30 @@ class Game:
                 
                 # Choose new behavior if timer expired or no behavior set
                 if monster.alert_behavior_timer <= 0 or monster.alert_behavior is None:
-                    if random.random() < MONSTER_ALERT_CHASE_CHANCE:
+                    # Check if there's a nearby mini-boss to bias toward (only for regular monsters)
+                    nearby_miniboss = self._find_nearby_miniboss(monster_entity) if not monster_entity.is_miniboss else None
+                    
+                    # Determine behavior with mini-boss bias
+                    rand = random.random()
+                    if nearby_miniboss and rand < MINIBOSS_BIAS_CHANCE:
+                        monster.alert_behavior = 'approach_miniboss'
+                        monster.target_miniboss = nearby_miniboss
+                    elif rand < MINIBOSS_BIAS_CHANCE + MONSTER_ALERT_CHASE_CHANCE:
                         monster.alert_behavior = 'chase'
                     else:
                         monster.alert_behavior = 'wander'
+                    
                     # Commit to this behavior for 60-120 frames (1-2 seconds)
                     monster.alert_behavior_timer = random.randint(60, 120)
                 
                 # Execute chosen behavior
                 if monster.alert_behavior == 'chase':
                     self._move_monster_toward_player(monster_entity, dx_to_player, dy_to_player)
+                elif monster.alert_behavior == 'approach_miniboss' and hasattr(monster, 'target_miniboss'):
+                    # Move toward the targeted mini-boss
+                    dx_to_miniboss = monster.target_miniboss.x - monster_entity.x
+                    dy_to_miniboss = monster.target_miniboss.y - monster_entity.y
+                    self._move_monster_toward_target(monster_entity, dx_to_miniboss, dy_to_miniboss)
                 else:
                     self._wander_monster(monster_entity)
                 
@@ -503,6 +521,10 @@ class Game:
 
     def _move_monster_toward_player(self, monster_entity, dx, dy):
         """Move monster directly toward player"""
+        self._move_monster_toward_target(monster_entity, dx, dy)
+    
+    def _move_monster_toward_target(self, monster_entity, dx, dy):
+        """Move monster toward a target direction (normalized)"""
         # Normalize movement
         if dx != 0:
             monster_entity.x += 1 if dx > 0 else -1
@@ -558,6 +580,28 @@ class Game:
             if dx < max_w and dy < max_h:
                 return True
         return False
+
+    def _find_nearby_miniboss(self, monster_entity):
+        """Find the nearest mini-boss within influence radius"""
+        nearest_miniboss = None
+        nearest_distance = float('inf')
+        
+        for other_monster in self.monsters:
+            if (not other_monster.is_miniboss or 
+                not other_monster.monster.is_alive or 
+                other_monster == monster_entity):
+                continue
+            
+            # Calculate distance to mini-boss
+            dx = other_monster.x - monster_entity.x
+            dy = other_monster.y - monster_entity.y
+            distance = (dx ** 2 + dy ** 2) ** 0.5
+            
+            if distance <= MINIBOSS_INFLUENCE_RADIUS and distance < nearest_distance:
+                nearest_miniboss = other_monster
+                nearest_distance = distance
+        
+        return nearest_miniboss
 
     def handle_combat(self):
         """Handle player-monster interactions"""
