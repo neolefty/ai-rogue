@@ -77,8 +77,9 @@ class Game:
         self._handle_loot_pickup()
         self._handle_stairway_interaction()
         
-        # Update timers
+        # Update timers and sprites
         self.game_state.update_timers()
+        self.game_state.update_sprites()
     
     def _update_player_movement(self):
         """Update player position based on input with normalized diagonal movement."""

@@ -220,6 +220,13 @@ class RenderSystem:
         if game_state.message_timer > 0:
             message_text = self.font.render(game_state.message, True, YELLOW)
             self.screen.blit(message_text, (WINDOW_WIDTH // 2 - 100, WINDOW_HEIGHT // 2 - 50))
+        
+        # Sprite generation status (if any pending)
+        sprite_status = game_state.sprite_manager.get_status()
+        if sprite_status['pending'] > 0 or sprite_status['active'] > 0:
+            status_text = f"Generating sprites: {sprite_status['active']} active, {sprite_status['pending']} pending"
+            status_surface = self.small_font.render(status_text, True, (150, 150, 255))
+            self.screen.blit(status_surface, (10, WINDOW_HEIGHT - 25))
     
     def _render_loading_screen(self, loading_message):
         """Render loading screen when generating sprites."""

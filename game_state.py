@@ -4,6 +4,7 @@ import random
 import pygame
 from constants import *
 from entities import Monster, Player, LootItem, Stairway
+from sprite_manager import SpriteManager
 
 
 class GameState:
@@ -11,6 +12,7 @@ class GameState:
     
     def __init__(self, sprite_generator, render_callback=None):
         self.sprite_generator = sprite_generator
+        self.sprite_manager = SpriteManager(sprite_generator)
         self.render_callback = render_callback
         
         # Core game state
@@ -40,17 +42,19 @@ class GameState:
         self._initialize_player()
     
     def _initialize_player(self):
-        """Initialize the player with generated sprite."""
-        self.show_loading("Generating hero sprite...")
-        player_sprite = self.sprite_generator.generate_player_sprite(self)
+        """Initialize the player with sprite manager."""
+        # Get sprite (placeholder initially, real sprite loads in background)
+        player_sprite = self.sprite_manager.get_sprite('player', 'player', priority=1)
         self.player = Player(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, player_sprite)
-        self.hide_loading()
     
     def generate_level(self):
         """Generate a new level with monsters."""
         self.monsters = []
         # Keep loot_items - they persist between levels
         self.stairway = None
+        
+        # Update sprite manager with current level for mini-boss scaling
+        self.sprite_manager._current_level = self.level
         
         total_monsters = min(
             INITIAL_MONSTER_COUNT + (self.level - 1) * MONSTER_INCREMENT,
@@ -61,20 +65,16 @@ class GameState:
         monster_levels = self._generate_monster_level_mix(total_monsters)
         
         for i, monster_level in enumerate(monster_levels):
-            self.show_loading(f"Generating monsters... ({i+1}/{total_monsters})")
-            # Force rendering of loading screen by processing events
-            pygame.event.pump()
+            # Generate monster using sprite manager (instant with placeholders)
+            monster_key = f"monster_level_{monster_level}"
+            monster_sprite, monster_stats = self.sprite_manager.get_monster_data(monster_key)
             
-            monster_sprite, monster_stats = self.sprite_generator.generate_monster_sprite_and_stats(
-                monster_level, self
-            )
             x, y = self._find_safe_monster_spawn_position()
             
             is_miniboss = monster_level >= self.level + 2
             monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss)
+            monster.sprite_key = monster_key  # Store key for sprite updates
             self.monsters.append(monster)
-        
-        self.hide_loading()
     
     def _generate_monster_level_mix(self, total_monsters):
         """Generate a mix of monster levels for the current dungeon level."""
@@ -139,7 +139,15 @@ class GameState:
         remaining = count
         while remaining > 0:
             if random.random() < count:
-                item_sprite, item_type = self.sprite_generator.generate_item_sprite(self)
+                # Generate item type immediately (don't wait for sprite)
+                item_type = random.choice(['weapon', 'armor', 'potion'])
+                
+                # Generate unique key for this loot item
+                import time
+                item_key = f"item_{item_type}_{int(time.time() * 1000000) % 1000000}"
+                
+                # Get placeholder sprite, real sprite loads in background
+                item_sprite = self.sprite_manager.get_sprite(item_key, 'item', {'item_type': item_type})
                 
                 # If monster position provided, scatter loot nearby
                 if monster_x is not None and monster_y is not None:
@@ -157,6 +165,7 @@ class GameState:
                     item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
                 
                 loot_item = LootItem(item_type, item_x, item_y, item_sprite)
+                loot_item.sprite_key = item_key  # Store key for sprite updates
                 self.loot_items.append(loot_item)
             remaining -= 1
     
@@ -165,15 +174,15 @@ class GameState:
         if self.stairway is not None:
             return
             
-        self.show_loading("Generating stairway...")
-        stairway_sprite = self.sprite_generator.generate_stairway_sprite(self)
+        # Get stairway sprite (placeholder initially)
+        stairway_sprite = self.sprite_manager.get_sprite('stairway', 'stairway', priority=2)
         
         # Find a safe position for the stairway
         stairway_x, stairway_y = self._find_safe_stairway_position()
         self.stairway = Stairway(stairway_x, stairway_y, stairway_sprite)
+        self.stairway.sprite_key = 'stairway'  # Store key for sprite updates
         
         self.set_message("Level cleared! Collect loot, then find the stairway!", 240)
-        self.hide_loading()
     
     def _find_safe_stairway_position(self):
         """Find a position for stairway that doesn't conflict with player or loot."""
@@ -252,6 +261,39 @@ class GameState:
                 monster.damage_flash_timer -= 1
             if monster.attack_flash_timer > 0:
                 monster.attack_flash_timer -= 1
+    
+    def update_sprites(self):
+        """Update sprites that have finished generating."""
+        # Update player sprite
+        if hasattr(self.player, 'sprite_key') or 'player' in self.sprite_manager.sprites:
+            new_sprite = self.sprite_manager.sprites.get('player')
+            if new_sprite and new_sprite != self.player.sprite:
+                self.player.sprite = new_sprite
+        
+        # Update monster sprites
+        for monster in self.monsters:
+            if hasattr(monster, 'sprite_key'):
+                new_sprite = self.sprite_manager.sprites.get(monster.sprite_key)
+                if new_sprite and new_sprite != monster.sprite:
+                    # Handle mini-boss scaling
+                    if monster.is_miniboss:
+                        scaled_size = int(TILE_SIZE * 1.5)
+                        monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+                    else:
+                        monster.sprite = new_sprite
+        
+        # Update loot item sprites
+        for loot_item in self.loot_items:
+            if hasattr(loot_item, 'sprite_key'):
+                new_sprite = self.sprite_manager.sprites.get(loot_item.sprite_key)
+                if new_sprite and new_sprite != loot_item.sprite:
+                    loot_item.sprite = new_sprite
+        
+        # Update stairway sprite
+        if self.stairway and hasattr(self.stairway, 'sprite_key'):
+            new_sprite = self.sprite_manager.sprites.get(self.stairway.sprite_key)
+            if new_sprite and new_sprite != self.stairway.sprite:
+                self.stairway.sprite = new_sprite
     
     def show_loading(self, message):
         """Show loading screen with message."""
