@@ -20,6 +20,7 @@ class RenderSystem:
         self._render_monsters(game_state.monsters)
         self._render_loot(game_state.loot_items)
         self._render_stairway(game_state.stairway)
+        self._render_death_sprites(game_state.death_sprites)
         self._render_ui(game_state)
         
         # Render overlays on top
@@ -69,6 +70,12 @@ class RenderSystem:
         """Render the stairway if it exists."""
         if stairway and stairway.sprite:
             self.screen.blit(stairway.sprite, (stairway.x, stairway.y))
+    
+    def _render_death_sprites(self, death_sprites):
+        """Render all death sprites with fade effect."""
+        for death_sprite in death_sprites:
+            if death_sprite.sprite:
+                self.screen.blit(death_sprite.sprite, (death_sprite.x, death_sprite.y))
     
     def _render_entity_effect_circle(self, entity, x, y, sprite):
         """Render standardized effect circle for any entity."""

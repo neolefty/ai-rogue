@@ -109,6 +109,8 @@ class SpriteManager:
                             self.sprites[f"{key}_type"] = item_type
                     elif sprite_type == 'stairway':
                         sprite = self.sprite_generator.generate_stairway_sprite()
+                    elif sprite_type == 'death':
+                        sprite = self.sprite_generator.generate_death_sprite()
                     else:
                         sprite = None
                     
@@ -221,6 +223,8 @@ class SpriteManager:
                     cache_path = None
         elif sprite_type == 'stairway':
             cache_path = "cache/sprites/stairway.png"
+        elif sprite_type == 'death':
+            cache_path = "cache/sprites/death.png"
         
         if cache_path and os.path.exists(cache_path):
             try:
@@ -279,6 +283,10 @@ class SpriteManager:
             bg_color = (100, 100, 100, 200)  # Gray
             text = ">"
             text_color = (255, 255, 255)
+        elif sprite_type == 'death':
+            bg_color = (150, 150, 150, 200)  # Light gray
+            text = "†"  # Dagger/cross symbol for death
+            text_color = (64, 64, 64)  # Dark gray text
         else:
             bg_color = (128, 128, 128, 200)  # Default gray
             text = "?"

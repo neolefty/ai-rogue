@@ -44,6 +44,9 @@ MINIBOSS_BIAS_CHANCE = 0.3  # 30% chance to move toward mini-boss when in range 
 MONSTER_DISPERSION_RADIUS = 80  # Pixels - monsters within this range trigger dispersion
 MONSTER_DISPERSION_CHANCE = 0.5  # 50% chance to apply dispersion when clustered
 
+# Death sprite constants
+DEATH_SPRITE_LIFETIME = 90  # Frames - 1.5 seconds at 60 FPS
+
 # Colors
 BACKGROUND_COLOR = (32, 32, 48)  # Dark blue-gray
 WHITE = (255, 255, 255)

@@ -158,6 +158,39 @@ class LootItem(Entity):
         self.item_type = item_type  # 'weapon', 'armor', 'potion'
 
 
+class DeathSprite(Entity):
+    """Temporary death sprite that appears when monsters die."""
+    
+    def __init__(self, x, y, sprite=None):
+        super().__init__(x, y, sprite)
+        self.lifetime = DEATH_SPRITE_LIFETIME  # Total time to exist
+        self.fade_timer = self.lifetime
+        self.alpha = 255  # Full opacity initially
+    
+    def update(self):
+        """Update fade animation and return True if sprite should be removed."""
+        self.fade_timer -= 1
+        
+        # Calculate fade steps (fade in discrete steps over lifetime)
+        fade_steps = 4  # Number of discrete fade levels
+        step_duration = self.lifetime // fade_steps
+        current_step = (self.lifetime - self.fade_timer) // step_duration
+        
+        # Set alpha based on current fade step
+        if current_step >= fade_steps:
+            self.alpha = 0
+        else:
+            self.alpha = max(0, 255 - (current_step * (255 // fade_steps)))
+        
+        # Apply alpha to sprite if available
+        if self.sprite and self.alpha < 255:
+            faded_sprite = self.sprite.copy()
+            faded_sprite.set_alpha(self.alpha)
+            self.sprite = faded_sprite
+        
+        return self.fade_timer <= 0
+
+
 class Stairway(Entity):
     """Stairway entity for level progression."""
     

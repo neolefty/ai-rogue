@@ -17,6 +17,7 @@ from prompts import (
     ARMOR_SPRITE_PROMPT,
     POTION_SPRITE_PROMPT,
     STAIRWAY_SPRITE_PROMPT,
+    DEATH_SPRITE_PROMPT,
     SPRITE_STYLE,
     MONSTER_STATS_SYSTEM_PROMPT,
     MONSTER_STATS_USER_PROMPT,
@@ -155,6 +156,14 @@ class SpriteGenerator:
         return self.generate_sprite(
             STAIRWAY_SPRITE_PROMPT,
             f"{CACHE_SPRITES_DIR}/stairway.png",
+            game
+        )
+    
+    def generate_death_sprite(self, game=None):
+        """Generate the death sprite."""
+        return self.generate_sprite(
+            DEATH_SPRITE_PROMPT,
+            f"{CACHE_SPRITES_DIR}/death.png",
             game
         )
     

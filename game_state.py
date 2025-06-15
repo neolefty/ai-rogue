@@ -3,7 +3,7 @@
 import random
 import pygame
 from constants import *
-from entities import Monster, Player, LootItem, Stairway
+from entities import Monster, Player, LootItem, Stairway, DeathSprite
 from sprite_manager import SpriteManager
 
 
@@ -31,6 +31,7 @@ class GameState:
         self.monsters = []
         self.loot_items = []
         self.stairway = None
+        self.death_sprites = []
         
         # UI state
         self.message = ""
@@ -51,6 +52,7 @@ class GameState:
         self.monsters = []
         # Keep loot_items - they persist between levels
         self.stairway = None
+        self.death_sprites = []  # Clear death sprites for new level
         
         # Update sprite manager with current level for mini-boss scaling
         self.sprite_manager._current_level = self.level
@@ -227,10 +229,21 @@ class GameState:
         self.generate_level()
     
     def remove_monster(self, monster):
-        """Remove a monster from the game."""
+        """Remove a monster from the game and create death sprite."""
         if monster in self.monsters:
             self.monsters.remove(monster)
             self.monsters_defeated += 1
+            
+            # Create death sprite at monster's position
+            self.create_death_sprite(monster.x, monster.y)
+    
+    def create_death_sprite(self, x, y):
+        """Create a death sprite at the given position."""
+        # Get death sprite (placeholder initially, real sprite loads in background)
+        death_sprite = self.sprite_manager.get_sprite('death', 'death')
+        death_entity = DeathSprite(x, y, death_sprite)
+        death_entity.sprite_key = 'death'
+        self.death_sprites.append(death_entity)
     
     def remove_loot_item(self, loot_item):
         """Remove a loot item from the game."""
@@ -260,6 +273,10 @@ class GameState:
                 monster.damage_flash_timer -= 1
             if monster.attack_flash_timer > 0:
                 monster.attack_flash_timer -= 1
+        
+        # Update death sprites and remove expired ones
+        self.death_sprites = [death_sprite for death_sprite in self.death_sprites 
+                             if not death_sprite.update()]
     
     def update_sprites(self):
         """Update sprites that have finished generating."""
@@ -295,6 +312,13 @@ class GameState:
             new_sprite = self.sprite_manager.sprites.get(self.stairway.sprite_key)
             if new_sprite and new_sprite != self.stairway.sprite:
                 self.stairway.sprite = new_sprite
+        
+        # Update death sprites
+        for death_sprite in self.death_sprites:
+            if hasattr(death_sprite, 'sprite_key'):
+                new_sprite = self.sprite_manager.sprites.get(death_sprite.sprite_key)
+                if new_sprite and new_sprite != death_sprite.sprite:
+                    death_sprite.sprite = new_sprite
     
     # Loading screen methods removed - using background generation with placeholders
     
@@ -314,6 +338,7 @@ class GameState:
         self.monsters = []
         # Keep loot_items - they persist through restarts!
         self.stairway = None
+        self.death_sprites = []
         
         # Reset UI state
         self.message = ""

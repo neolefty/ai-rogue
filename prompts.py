@@ -8,6 +8,7 @@ STAIRWAY_SPRITE_PROMPT = "Simple stone steps going down"
 WEAPON_SPRITE_PROMPT = "Simple sword shape, plain blade, no decoration"
 ARMOR_SPRITE_PROMPT = "Simple helmet or shield shape, basic armor piece"
 POTION_SPRITE_PROMPT = "Simple round bottle, colored liquid inside"
+DEATH_SPRITE_PROMPT = "Small pile of bones or skull, simple skeleton remains"
 
 SPRITE_STYLE = (
     "Style: Extremely simple 8-bit pixel art from 1980s video games. "
