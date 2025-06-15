@@ -5,6 +5,17 @@ This document provides context for AI assistants working on this project.
 ## Project Overview
 AI Rogue is a dungeon crawler game that demonstrates AI integration by dynamically generating sprites and monster stats using OpenAI's APIs. It's a fun project designed to showcase AI capabilities to co-workers.
 
+**Current Architecture**: Modular design with separated concerns (June 2025 refactor)
+- `game.py` - Main game loop and coordination (139 lines, down from 680+)
+- `entities.py` - Clean entity hierarchy (Entity → Monster/Player/LootItem)
+- `combat.py` - Multi-target combat system with damage falloff
+- `ai_behavior.py` - Monster AI with three-zone behavior and mini-boss clustering
+- `rendering.py` - All visual rendering and UI
+- `game_state.py` - Game data management
+- `ai_client.py` - OpenAI integration for sprites/stats
+- `constants.py` - All game configuration
+- `prompts.py` - AI generation prompts
+
 ## Key Features
 - **Dynamic Sprite Generation**: Uses DALL-E 3 to generate pixel art sprites for players, monsters, items, and environment elements
 - **AI-Generated Monster Stats**: Uses GPT-3.5 to generate contextual monster statistics based on level (visual only, gameplay uses balanced formulas)
@@ -42,25 +53,41 @@ When making code changes, run these commands to ensure code quality:
 ```
 
 ## Recent Development Notes
-1. **Combat Rebalance (2025-01)**: Complete overhaul for fast-paced tactical gameplay
+1. **Modular Architecture Refactor (2025-06)**: Complete restructuring from monolithic 680+ line file
+   - Separated into focused modules: entities, combat, ai_behavior, rendering, game_state
+   - Clean entity hierarchy with proper inheritance
+   - Professional structure for team collaboration
+2. **Movement System Overhaul**: Normalized 8-directional movement
+   - Both player and monsters constrained to 8 directions
+   - Diagonal movement normalized to prevent speed exploits
+   - Consistent movement feel across all entities
+3. **Game Over & Restart System**: Professional death handling
+   - Translucent overlay preserves final battle view
+   - Complete stats summary (levels, monsters, items)
+   - SPACE to restart with persistent loot ("ghost of runs past")
+4. **Loot Persistence Mechanics**: 
+   - Items persist between levels and through restarts
+   - Loot drops near monster death locations (3-tile radius)
+   - Creates natural treasure trails and battle graveyards
+   - Strategic resource management (save potions for later)
+5. **Visual Enhancements**:
+   - Health bars show bonus health in cyan (normal in green)
+   - Loading screens properly render during sprite generation
+   - Consistent translucent overlay system for pause/game over
+6. **Combat Rebalance (2025-01)**: Complete overhaul for fast-paced tactical gameplay
    - Player: 5 base HP, 0.5 base damage, weapons give +0.05 damage
    - Monsters: HP = level, damage = level
    - Armor gives +1 HP per piece (critical for survival)
    - Attack cooldowns: 500ms player, 1000ms monsters
-2. **Visual System Redesign**: Unified effect circles sized to attack ranges
-   - Single circle per entity (behind sprites)
-   - Colorblind-friendly: red/cyan/green/gray states
-   - Damage state prioritized over attack state
-3. **AI Enhancements**: 
-   - Multi-zone monster behavior with smooth transitions
-   - Mini-boss clustering for emergent group tactics
-   - Monster separation to prevent stacking
-4. **OpenAI Integration**: Successfully migrated from HTTP API calls to OpenAI Python client
-5. **Model Compatibility**: 
-   - Using DALL-E 3 for sprite generation (gpt-image-1 requires organization verification)
-   - Base64 image responses with `response_format="b64_json"`
-6. **Sprite Prompts**: Optimized for simple 8-bit pixel art with minimal details
-7. **Window Events**: Using pygame's WINDOWFOCUSLOST/WINDOWFOCUSGAINED events (not deprecated ACTIVEEVENT)
+7. **AI System**: 
+   - Three-zone behavior: aggressive, alert (with mini-boss bias), passive
+   - Mini-boss clustering creates tactical group formations
+   - 30% chance for monsters to approach nearby mini-bosses
+8. **Technical Details**:
+   - OpenAI Python Client for sprite/stats generation
+   - DALL-E 3 with base64 responses
+   - Pygame 2.6.1 with modern window focus events
+   - Python 3.13.2 with virtual environment
 
 ## Game Balance Philosophy
 - **Fast, Tactical Combat**: Low HP pools make positioning and timing critical
