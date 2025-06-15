@@ -5,14 +5,16 @@ This document provides context for AI assistants working on this project.
 ## Project Overview
 AI Rogue is a dungeon crawler game that demonstrates AI integration by dynamically generating sprites and monster stats using OpenAI's APIs. It's a fun project designed to showcase AI capabilities to co-workers.
 
-**Current Architecture**: Modular design with separated concerns (June 2025 refactor)
-- `game.py` - Main game loop and coordination (139 lines, down from 680+)
-- `entities.py` - Clean entity hierarchy (Entity → Monster/Player/LootItem)
+**Current Architecture**: Modular design with separated concerns
+- `game.py` - Main game loop and coordination
+- `entities.py` - Clean entity hierarchy (Entity → Monster/Player/LootItem/Stairway)
 - `combat.py` - Multi-target combat system with damage falloff
-- `ai_behavior.py` - Monster AI with three-zone behavior and mini-boss clustering
+- `ai_behavior.py` - Monster AI with three-zone behavior and clustering/dispersion
 - `rendering.py` - All visual rendering and UI
 - `game_state.py` - Game data management
 - `ai_client.py` - OpenAI integration for sprites/stats
+- `sprite_manager.py` - Background sprite generation with placeholders
+- `image_utils.py` - Shared image processing utilities
 - `constants.py` - All game configuration
 - `prompts.py` - AI generation prompts
 
@@ -25,9 +27,9 @@ AI Rogue is a dungeon crawler game that demonstrates AI integration by dynamical
   - Quick combat timing (player attacks every 0.5s, monsters every 1s)
   - Low HP, high damage for tactical gameplay
 - **Advanced Monster AI**: 
-  - Three behavior zones: aggressive (always chase), alert (70% chase chance), passive (wander)
-  - Mini-boss clustering: regular monsters are drawn toward mini-bosses
-  - Monster separation to prevent pile-ups
+  - Three behavior zones: aggressive (≤150px), alert (≤300px), passive
+  - Mini-boss clustering and smart dispersion system
+  - Dynamic behavior switching with collision priority
 - **Visual Effect System**: Colorblind-friendly circles showing attack states (red=damage taken, cyan=damage dealt, green=ready, gray=cooldown)
 - **Loot System**: Weapon, armor, and potion drops that enhance player capabilities
 - **Window Focus Pause**: Game automatically pauses when window loses focus
@@ -40,9 +42,11 @@ AI Rogue is a dungeon crawler game that demonstrates AI integration by dynamical
 - **python-dotenv** for environment variable management
 
 ## Key Files
-- `game.py`: Main game logic, sprite generation, and gameplay mechanics
-- `prompts.py`: All AI prompts for sprite and stat generation
-- `requirements.txt`: Python dependencies
+- `game.py`: Main game loop and event handling
+- `ai_client.py`: OpenAI integration for DALL-E and GPT
+- `sprite_manager.py`: Background sprite generation with threading
+- `prompts.py`: Specialized AI prompts for each sprite type
+- `image_utils.py`: Shared image processing utilities
 - `.env`: Contains `OPENAI_API_KEY` (not in version control)
 
 ## Important Commands
@@ -52,50 +56,16 @@ When making code changes, run these commands to ensure code quality:
 # Consider asking the user for their preferred commands if needed
 ```
 
-## Recent Development Notes
-1. **Code Quality & Documentation Enhancement (2025-06)**: Major cleanup for AI maintainability
-   - Removed legacy `dungeon_crawler.py` (205 lines of outdated monolithic code)
-   - Extracted shared `image_utils.py` to eliminate PIL/pygame processing duplication
-   - Added comprehensive documentation for complex systems (AI behavior, threading, combat)
-   - Specialized item sprite prompts (weapon/armor/potion) for better generation quality
-   - Removed loading screens - now uses seamless placeholder system
-2. **Modular Architecture Refactor (2025-06)**: Complete restructuring from monolithic 680+ line file
-   - Separated into focused modules: entities, combat, ai_behavior, rendering, game_state
-   - Clean entity hierarchy with proper inheritance
-   - Professional structure for team collaboration
-3. **Movement System Overhaul**: Normalized 8-directional movement
-   - Both player and monsters constrained to 8 directions
-   - Diagonal movement normalized to prevent speed exploits
-   - Consistent movement feel across all entities
-4. **Game Over & Restart System**: Professional death handling
-   - Translucent overlay preserves final battle view
-   - Complete stats summary (levels, monsters, items)
-   - SPACE to restart with persistent loot ("ghost of runs past")
-5. **Loot Persistence Mechanics**: 
-   - Items persist between levels and through restarts
-   - Loot drops near monster death locations (3-tile radius)
-   - Creates natural treasure trails and battle graveyards
-   - Strategic resource management (save potions for later)
-6. **Visual Enhancements**:
-   - Health bars show bonus health in cyan (normal in green)
-   - Loading screens properly render during sprite generation
-   - Consistent translucent overlay system for pause/game over
-7. **Combat Rebalance (2025-01)**: Complete overhaul for fast-paced tactical gameplay
-   - Player: 5 base HP, 0.5 base damage, weapons give +0.05 damage
-   - Monsters: HP = level, damage = level
-   - Armor gives +1 HP per piece (critical for survival)
-   - Attack cooldowns: 500ms player, 1000ms monsters
-8. **AI System Enhancement (2025-06)**: Advanced monster behavior with clustering and dispersion
-   - Three-zone behavior: aggressive (≤150px always chase), alert (≤300px mixed behavior), passive (wander)
-   - Alert zone: 30% mini-boss attraction, 70% chase, 30% wander (fixed probability bug)
-   - Mini-boss clustering: regular monsters drawn to mini-bosses within 200px radius
-   - Smart dispersion system: clustered monsters spread out when distant from player
-   - Collision priority: mini-bosses and dispersing monsters can push through others
-9. **Technical Details**:
-   - OpenAI Python Client for sprite/stats generation
-   - DALL-E 3 with base64 responses
-   - Pygame 2.6.1 with modern window focus events
-   - Python 3.13.2 with virtual environment
+## Current System Status (2025-06)
+**Architecture**: Fully modular with clean separation of concerns and comprehensive documentation
+
+**Key Systems**:
+- **Combat**: Multi-target attacks with damage falloff (1st full, 2nd ½, 3rd ⅓, etc.)
+- **AI Behavior**: Three-zone system with clustering/dispersion (aggressive ≤150px, alert ≤300px, passive)
+- **Sprite Generation**: Background threading with placeholders, specialized prompts per item type
+- **Game Flow**: Persistent loot, translucent overlays, 8-directional normalized movement
+
+**Balance**: Fast-paced tactical gameplay - Player: 5 HP + armor, 0.5s attacks; Monsters: HP=level, 1s attacks
 
 ## Game Balance Philosophy
 - **Fast, Tactical Combat**: Low HP pools make positioning and timing critical
@@ -104,20 +74,17 @@ When making code changes, run these commands to ensure code quality:
 - **Visual Clarity**: Effect circles provide instant feedback on combat states
 
 ## Common Issues & Solutions
-1. **NoneType error in image generation**: Ensure `response_format="b64_json"` is included in DALL-E API calls
-2. **Busy/complex sprites**: Keep prompts minimal - "Basic human figure" works better than detailed descriptions
-3. **Window pause not working**: Remove `pygame.display.get_active()` checks that can conflict with window events
-4. **Monster stats vs gameplay**: AI-generated stats are for flavor only; actual combat uses balanced formulas
-5. **Visual effect performance**: Effect circles use pygame.SRCALPHA surfaces for transparency
+1. **Complex sprites**: Use simple, specific prompts - "Simple sword shape, plain blade, no decoration"
+2. **Monster stats vs gameplay**: AI-generated stats are for flavor only; actual combat uses balanced formulas
+3. **Threading issues**: All sprite generation uses background threads with placeholder system
 
 ## Cache Structure
 - `cache/sprites/`: Player and stairway sprites
 - `cache/monsters/`: Monster sprites and stats files (cached by level)
-- `cache/items/`: Item sprites (weapon, armor, potion)
-- `cache-old-1/`: Previous sprite generation attempts (for comparison)
+- `cache/items/`: Item sprites with specialized prompts (weapon, armor, potion)
 
 ## Development Workflow
 1. Test changes locally before committing
-2. Verify sprite generation works with current prompts
-3. Check that window focus events trigger properly
-4. Ensure game performance remains smooth with generated content
+2. Verify sprite generation works with current specialized prompts
+3. Check that AI behavior systems work as intended
+4. Ensure threading and background generation remain stable
