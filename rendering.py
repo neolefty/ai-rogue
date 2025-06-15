@@ -14,24 +14,21 @@ class RenderSystem:
     
     def render_game(self, game_state):
         """Render the complete game state."""
-        if game_state.loading:
-            self._render_loading_screen(game_state.loading_message)
-        else:
-            # Always render the game world
-            self.screen.fill(BACKGROUND_COLOR)
-            self._render_player(game_state.player)
-            self._render_monsters(game_state.monsters)
-            self._render_loot(game_state.loot_items)
-            self._render_stairway(game_state.stairway)
-            self._render_ui(game_state)
+        # Always render the game world
+        self.screen.fill(BACKGROUND_COLOR)
+        self._render_player(game_state.player)
+        self._render_monsters(game_state.monsters)
+        self._render_loot(game_state.loot_items)
+        self._render_stairway(game_state.stairway)
+        self._render_ui(game_state)
+        
+        # Render overlays on top
+        if game_state.paused:
+            self._render_paused_overlay()
+        elif game_state.game_over:
+            self._render_game_over_overlay(game_state)
             
-            # Render overlays on top
-            if game_state.paused:
-                self._render_paused_overlay()
-            elif game_state.game_over:
-                self._render_game_over_overlay(game_state)
-                
-            pygame.display.flip()
+        pygame.display.flip()
     
     def _render_player(self, player):
         """Render the player sprite and effects."""
@@ -228,20 +225,7 @@ class RenderSystem:
             status_surface = self.small_font.render(status_text, True, (150, 150, 255))
             self.screen.blit(status_surface, (10, WINDOW_HEIGHT - 25))
     
-    def _render_loading_screen(self, loading_message):
-        """Render loading screen when generating sprites."""
-        self.screen.fill(BACKGROUND_COLOR)
-        loading_text = self.font.render(loading_message, True, WHITE)
-        text_rect = loading_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-        self.screen.blit(loading_text, text_rect)
-        
-        # Draw animated indicator
-        dots = "." * ((pygame.time.get_ticks() // 500) % 4)
-        dots_text = self.font.render(dots, True, WHITE)
-        dots_rect = dots_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 50))
-        self.screen.blit(dots_text, dots_rect)
-
-        pygame.display.flip()
+    # Loading screen rendering removed - using background generation with placeholders
     
     def _render_paused_overlay(self):
         """Render a transparent overlay indicating the game is paused."""

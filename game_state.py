@@ -35,8 +35,7 @@ class GameState:
         # UI state
         self.message = ""
         self.message_timer = 0
-        self.loading = False
-        self.loading_message = ""
+        # Loading screens removed - using placeholders now
         
         # Initialize player
         self._initialize_player()
@@ -297,16 +296,7 @@ class GameState:
             if new_sprite and new_sprite != self.stairway.sprite:
                 self.stairway.sprite = new_sprite
     
-    def show_loading(self, message):
-        """Show loading screen with message."""
-        self.loading = True
-        self.loading_message = message
-        if self.render_callback:
-            self.render_callback()
-    
-    def hide_loading(self):
-        """Hide loading screen."""
-        self.loading = False
+    # Loading screen methods removed - using background generation with placeholders
     
     def restart_game(self):
         """Restart the game with a fresh state."""

@@ -26,8 +26,7 @@ class Game:
         self.ai_system = AIBehaviorSystem(self.game_state)
         self.render_system = RenderSystem(self.screen)
         
-        # Set render callback for loading screens
-        self.game_state.render_callback = lambda: self.render_system.render_game(self.game_state)
+        # Loading screens removed - using background generation
         
         # Generate first level
         self.game_state.generate_level()
@@ -36,7 +35,7 @@ class Game:
         """Main game loop."""
         while self.game_state.running:
             self.handle_events()
-            if not self.game_state.paused and not self.game_state.loading:
+            if not self.game_state.paused:
                 self.update()
             self.render()
             self.clock.tick(60)

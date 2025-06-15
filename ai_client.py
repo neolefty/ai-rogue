@@ -84,8 +84,7 @@ class SpriteGenerator:
         if os.path.exists(cache_path):
             return pygame.image.load(cache_path)
         
-        if game:
-            game.show_loading("Generating sprite...")
+        # Loading screens removed - generation now uses placeholders
         
         try:
             # Generate image using DALL-E
@@ -112,14 +111,10 @@ class SpriteGenerator:
             img.save(cache_path, "PNG")
             
             sprite = pygame.image.load(cache_path)
-            if game:
-                game.hide_loading()
             return sprite
             
         except Exception as e:
             print(f"Error generating sprite: {str(e)}")
-            if game:
-                game.hide_loading()
             # Fallback to a default sprite if generation fails
             return pygame.Surface((32, 32))
     
