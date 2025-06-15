@@ -79,10 +79,12 @@ When making code changes, run these commands to ensure code quality:
    - Monsters: HP = level, damage = level
    - Armor gives +1 HP per piece (critical for survival)
    - Attack cooldowns: 500ms player, 1000ms monsters
-7. **AI System**: 
-   - Three-zone behavior: aggressive, alert (with mini-boss bias), passive
-   - Mini-boss clustering creates tactical group formations
-   - 30% chance for monsters to approach nearby mini-bosses
+7. **AI System Enhancement (2025-06)**: Advanced monster behavior with clustering and dispersion
+   - Three-zone behavior: aggressive (≤150px always chase), alert (≤300px mixed behavior), passive (wander)
+   - Alert zone: 30% mini-boss attraction, 70% chase, 30% wander (fixed probability bug)
+   - Mini-boss clustering: regular monsters drawn to mini-bosses within 200px radius
+   - Smart dispersion system: clustered monsters spread out when distant from player
+   - Collision priority: mini-bosses and dispersing monsters can push through others
 8. **Technical Details**:
    - OpenAI Python Client for sprite/stats generation
    - DALL-E 3 with base64 responses
