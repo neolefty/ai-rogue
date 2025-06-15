@@ -46,6 +46,9 @@ MONSTER_DISPERSION_CHANCE = 0.5  # 50% chance to apply dispersion when clustered
 
 # Death sprite constants
 DEATH_SPRITE_LIFETIME = 90  # Frames - 1.5 seconds at 60 FPS
+DEATH_SPRITE_MINIBOSS_LIFETIME = 180  # Frames - 3 seconds for mini-bosses
+DEATH_SPRITE_MINIBOSS_SCALE = 1.5  # Scale factor for mini-boss death sprites
+STAIRWAY_SCALE = 1.5  # Scale factor for stairway sprites
 
 # Colors
 BACKGROUND_COLOR = (32, 32, 48)  # Dark blue-gray

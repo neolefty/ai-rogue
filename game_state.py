@@ -275,7 +275,7 @@ class GameState:
             self.monsters_defeated += 1
             
             # Create death sprite at monster's position
-            self.create_death_sprite(monster.x, monster.y)
+            self.create_death_sprite(monster.x, monster.y, monster.is_miniboss)
             
             # Update preferences and check for new unlocks
             newly_unlocked = self.preferences.update_game_stats(monsters_killed=1, sprite_manager=self.sprite_manager)
@@ -283,11 +283,11 @@ class GameState:
                 unlock_names = [name.replace('_', ' ').title() for name in newly_unlocked]
                 self.set_message(f"Unlocked: {', '.join(unlock_names)}!", 180)
     
-    def create_death_sprite(self, x, y):
+    def create_death_sprite(self, x, y, is_miniboss=False):
         """Create a death sprite at the given position."""
         # Get death sprite (placeholder initially, real sprite loads in background)
         death_sprite = self.sprite_manager.get_sprite('death', 'death')
-        death_entity = DeathSprite(x, y, death_sprite)
+        death_entity = DeathSprite(x, y, death_sprite, is_miniboss)
         death_entity.sprite_key = 'death'
         self.death_sprites.append(death_entity)
     
@@ -361,14 +361,21 @@ class GameState:
         if self.stairway and hasattr(self.stairway, 'sprite_key'):
             new_sprite = self.sprite_manager.sprites.get(self.stairway.sprite_key)
             if new_sprite and new_sprite != self.stairway.sprite:
-                self.stairway.sprite = new_sprite
+                # Scale stairway sprite to be more prominent
+                scaled_size = int(TILE_SIZE * STAIRWAY_SCALE)
+                self.stairway.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
         
         # Update death sprites
         for death_sprite in self.death_sprites:
             if hasattr(death_sprite, 'sprite_key'):
                 new_sprite = self.sprite_manager.sprites.get(death_sprite.sprite_key)
                 if new_sprite and new_sprite != death_sprite.sprite:
-                    death_sprite.sprite = new_sprite
+                    # Scale for mini-bosses if needed
+                    if death_sprite.is_miniboss:
+                        scaled_size = int(TILE_SIZE * DEATH_SPRITE_MINIBOSS_SCALE)
+                        death_sprite.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+                    else:
+                        death_sprite.sprite = new_sprite
     
     # Loading screen methods removed - using background generation with placeholders
     

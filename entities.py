@@ -196,13 +196,20 @@ class LootItem(Entity):
 class DeathSprite(Entity):
     """Temporary death sprite that appears when monsters die."""
     
-    def __init__(self, x, y, sprite=None):
+    def __init__(self, x, y, sprite=None, is_miniboss=False):
         super().__init__(x, y, sprite)
-        self.lifetime = DEATH_SPRITE_LIFETIME  # Total time to exist
+        self.is_miniboss = is_miniboss
+        self.lifetime = DEATH_SPRITE_MINIBOSS_LIFETIME if is_miniboss else DEATH_SPRITE_LIFETIME
         self.fade_timer = self.lifetime
         self.alpha = 255  # Full opacity initially
         self.original_sprite = None  # Store original sprite for fading
         self.faded_sprite = None  # Store current faded version
+        
+        # Scale sprite for mini-bosses
+        if is_miniboss and sprite:
+            import pygame
+            scaled_size = int(TILE_SIZE * DEATH_SPRITE_MINIBOSS_SCALE)
+            self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
     
     def update(self):
         """Update fade animation and return True if sprite should be removed."""

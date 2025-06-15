@@ -261,7 +261,7 @@ class SpriteManager:
             try:
                 sprite = pygame.image.load(cache_path)
                 
-                # Handle mini-boss scaling for monsters
+                # Handle scaling for special sprite types
                 if sprite_type == 'monster' and params:
                     level = params.get('level', 1)
                     current_level = getattr(self, '_current_level', 1)
@@ -269,6 +269,11 @@ class SpriteManager:
                         from constants import TILE_SIZE
                         scaled_size = int(TILE_SIZE * 1.5)
                         sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
+                elif sprite_type == 'stairway':
+                    # Scale stairway sprites to be more prominent
+                    from constants import TILE_SIZE, STAIRWAY_SCALE
+                    scaled_size = int(TILE_SIZE * STAIRWAY_SCALE)
+                    sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
                 
                 return sprite
             except Exception as e:
@@ -278,7 +283,14 @@ class SpriteManager:
     
     def _create_placeholder(self, sprite_type, params):
         """Create a placeholder sprite for the given type."""
-        surface = pygame.Surface((TILE_SIZE, TILE_SIZE), pygame.SRCALPHA)
+        # Determine size based on sprite type
+        if sprite_type == 'stairway':
+            from constants import STAIRWAY_SCALE
+            size = int(TILE_SIZE * STAIRWAY_SCALE)
+        else:
+            size = TILE_SIZE
+        
+        surface = pygame.Surface((size, size), pygame.SRCALPHA)
         
         # Choose colors and text based on type
         if sprite_type == 'player':
@@ -324,13 +336,14 @@ class SpriteManager:
             text_color = (255, 255, 255)
         
         # Draw background
-        pygame.draw.rect(surface, bg_color, (0, 0, TILE_SIZE, TILE_SIZE))
-        pygame.draw.rect(surface, (255, 255, 255, 255), (0, 0, TILE_SIZE, TILE_SIZE), 2)
+        pygame.draw.rect(surface, bg_color, (0, 0, size, size))
+        pygame.draw.rect(surface, (255, 255, 255, 255), (0, 0, size, size), 2)
         
         # Draw text
-        font = pygame.font.Font(None, 20)
+        font_size = int(20 * (size / TILE_SIZE))  # Scale font with sprite size
+        font = pygame.font.Font(None, font_size)
         text_surface = font.render(text, True, text_color)
-        text_rect = text_surface.get_rect(center=(TILE_SIZE // 2, TILE_SIZE // 2))
+        text_rect = text_surface.get_rect(center=(size // 2, size // 2))
         surface.blit(text_surface, text_rect)
         
         return surface
