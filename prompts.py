@@ -10,6 +10,31 @@ ARMOR_SPRITE_PROMPT = "Simple helmet or shield shape, basic armor piece"
 POTION_SPRITE_PROMPT = "Simple round bottle, colored liquid inside"
 DEATH_SPRITE_PROMPT = "Small pile of bones or skull, simple skeleton remains"
 
+# Variant-specific prompts
+WEAPON_VARIANTS = {
+    "sword": "Simple sword shape, straight blade",
+    "axe": "Simple axe shape, wooden handle",
+    "dagger": "Simple dagger shape, short blade",
+    "mace": "Simple mace shape, spiked head",
+    "spear": "Simple spear shape, pointed tip"
+}
+
+ARMOR_VARIANTS = {
+    "helmet": "Simple helmet shape, basic protection",
+    "shield": "Simple shield shape, round or rectangular",
+    "chestplate": "Simple armor chestplate, basic metal",
+    "gauntlets": "Simple gauntlets shape, hand protection",
+    "boots": "Simple boots shape, armored footwear"
+}
+
+POTION_VARIANTS = {
+    "bottle": "Simple round bottle, colored liquid inside",
+    "vial": "Simple vial shape, thin glass container",
+    "flask": "Simple flask shape, wide bottom container",
+    "orb": "Simple orb shape, glowing magical sphere",
+    "crystal": "Simple crystal shape, gem-like container"
+}
+
 SPRITE_STYLE = (
     "Style: Extremely simple 8-bit pixel art from 1980s video games. "
     "Maximum 4 colors total, very chunky pixels, no fine details whatsoever. "

@@ -5,6 +5,7 @@ import pygame
 from constants import *
 from entities import Monster, Player, LootItem, Stairway, DeathSprite
 from sprite_manager import SpriteManager
+from preferences import PreferencesManager
 
 
 class GameState:
@@ -14,6 +15,7 @@ class GameState:
         self.sprite_generator = sprite_generator
         self.sprite_manager = SpriteManager(sprite_generator)
         self.render_callback = render_callback
+        self.preferences = PreferencesManager()
         
         # Core game state
         self.running = True
@@ -140,15 +142,16 @@ class GameState:
         remaining = count
         while remaining > 0:
             if random.random() < count:
-                # Generate item type immediately (don't wait for sprite)
+                # Generate item type and variant based on unlocked options
                 item_type = random.choice(['weapon', 'armor', 'potion'])
+                item_variant = self.preferences.get_random_variant(item_type)
                 
                 # Generate unique key for this loot item
                 import time
-                item_key = f"item_{item_type}_{int(time.time() * 1000000) % 1000000}"
+                item_key = f"item_{item_type}_{item_variant}_{int(time.time() * 1000000) % 1000000}"
                 
                 # Get placeholder sprite, real sprite loads in background
-                item_sprite = self.sprite_manager.get_sprite(item_key, 'item', {'item_type': item_type})
+                item_sprite = self.sprite_manager.get_sprite(item_key, 'item', {'item_type': item_type, 'item_variant': item_variant})
                 
                 # If monster position provided, create sliding animation
                 if monster_x is not None and monster_y is not None:
@@ -172,7 +175,9 @@ class GameState:
                     item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
                     item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
                     loot_item = LootItem(item_type, item_x, item_y, item_sprite)
+                
                 loot_item.sprite_key = item_key  # Store key for sprite updates
+                loot_item.item_variant = item_variant  # Store variant for identification
                 self.loot_items.append(loot_item)
             remaining -= 1
     
@@ -230,7 +235,15 @@ class GameState:
         self.levels_completed += 1
         self.level += 1
         self.stairway = None
-        self.set_message(f"Entering Level {self.level}!", 120)
+        
+        # Update preferences and check for new unlocks
+        newly_unlocked = self.preferences.update_game_stats(levels_completed=1)
+        if newly_unlocked:
+            unlock_names = [name.replace('_', ' ').title() for name in newly_unlocked]
+            self.set_message(f"Level {self.level}! Unlocked: {', '.join(unlock_names)}!", 180)
+        else:
+            self.set_message(f"Entering Level {self.level}!", 120)
+        
         print(f"Advanced to Level {self.level}!")
         self.generate_level()
     
@@ -242,6 +255,12 @@ class GameState:
             
             # Create death sprite at monster's position
             self.create_death_sprite(monster.x, monster.y)
+            
+            # Update preferences and check for new unlocks
+            newly_unlocked = self.preferences.update_game_stats(monsters_killed=1)
+            if newly_unlocked:
+                unlock_names = [name.replace('_', ' ').title() for name in newly_unlocked]
+                self.set_message(f"Unlocked: {', '.join(unlock_names)}!", 180)
     
     def create_death_sprite(self, x, y):
         """Create a death sprite at the given position."""
@@ -310,10 +329,10 @@ class GameState:
         
         # Update loot item sprites
         for loot_item in self.loot_items:
-            if hasattr(loot_item, 'sprite_key'):
-                # For items, check type-based key since sprites are shared by type
-                type_based_key = f"item_{loot_item.item_type}"
-                new_sprite = self.sprite_manager.sprites.get(type_based_key)
+            if hasattr(loot_item, 'item_variant') and hasattr(loot_item, 'item_type'):
+                # Check for variant-specific sprite using shared key
+                variant_key = f"item_{loot_item.item_type}_{loot_item.item_variant}"
+                new_sprite = self.sprite_manager.sprites.get(variant_key)
                 if new_sprite and new_sprite != loot_item.sprite:
                     loot_item.sprite = new_sprite
         

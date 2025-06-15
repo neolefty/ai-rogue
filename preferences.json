@@ -1,0 +1,48 @@
+{
+  "lifetime_stats": {
+    "total_monsters_killed": 18,
+    "total_levels_completed": 2,
+    "games_played": 0
+  },
+  "unlocked_variants": {
+    "weapon": [
+      "sword",
+      "axe"
+    ],
+    "armor": [
+      "helmet",
+      "shield"
+    ],
+    "potion": [
+      "bottle"
+    ]
+  },
+  "variant_definitions": {
+    "weapon": [
+      "sword",
+      "axe",
+      "dagger",
+      "mace",
+      "spear"
+    ],
+    "armor": [
+      "helmet",
+      "shield",
+      "chestplate",
+      "gauntlets",
+      "boots"
+    ],
+    "potion": [
+      "bottle",
+      "vial",
+      "flask",
+      "orb",
+      "crystal"
+    ]
+  },
+  "unlock_thresholds": {
+    "monsters_per_weapon": 10,
+    "monsters_per_armor": 15,
+    "levels_per_potion": 3
+  }
+}

@@ -84,20 +84,22 @@ class SpriteManager:
                         import os
                         item_type = params.get('item_type') if params else None
                         if item_type:
-                            # Generate sprite for specific item type using consistent cache path
-                            cache_path = f"cache/items/item_{item_type}.png"
+                            # Generate sprite for specific item type and variant using consistent cache path
+                            item_variant = params.get('item_variant', item_type)
+                            cache_path = f"cache/items/item_{item_type}_{item_variant}.png"
                             if os.path.exists(cache_path):
                                 sprite = pygame.image.load(cache_path)
                             else:
-                                from prompts import WEAPON_SPRITE_PROMPT, ARMOR_SPRITE_PROMPT, POTION_SPRITE_PROMPT, SPRITE_STYLE
+                                from prompts import WEAPON_VARIANTS, ARMOR_VARIANTS, POTION_VARIANTS, SPRITE_STYLE
                                 
-                                # Use specialized prompts for each item type
+                                # Use variant-specific prompts if available
+                                item_variant = params.get('item_variant', item_type)
                                 if item_type == 'weapon':
-                                    prompt = WEAPON_SPRITE_PROMPT
+                                    prompt = WEAPON_VARIANTS.get(item_variant, f"Simple {item_variant} weapon")
                                 elif item_type == 'armor':
-                                    prompt = ARMOR_SPRITE_PROMPT
+                                    prompt = ARMOR_VARIANTS.get(item_variant, f"Simple {item_variant} armor")
                                 else:  # potion
-                                    prompt = POTION_SPRITE_PROMPT
+                                    prompt = POTION_VARIANTS.get(item_variant, f"Simple {item_variant} potion")
                                     
                                 image_bytes = self.sprite_generator.client.generate_image(f"{prompt}. {SPRITE_STYLE}")
                                 
@@ -133,10 +135,12 @@ class SpriteManager:
     
     def get_sprite(self, key, sprite_type, params=None, priority=5):
         """Get a sprite, returning placeholder if not ready."""
-        # For items, use type-based keys to share sprites of the same type
+        # For items, use type and variant-based keys to share sprites of the same type and variant
         cache_key = key
         if sprite_type == 'item' and params and 'item_type' in params:
-            cache_key = f"item_{params['item_type']}"
+            item_type = params['item_type']
+            item_variant = params.get('item_variant', item_type)
+            cache_key = f"item_{item_type}_{item_variant}"
         
         # Check if sprite is ready in memory
         with self.generation_lock:
@@ -208,15 +212,24 @@ class SpriteManager:
             cache_path = f"cache/monsters/monster_level_{level}.png"
         elif sprite_type == 'item':
             item_type = params.get('item_type') if params else None
-            if item_type:
-                # Use consistent type-based cache path
+            item_variant = params.get('item_variant') if params else None
+            if item_type and item_variant:
+                # Use consistent type and variant-based cache path
+                cache_path = f"cache/items/item_{item_type}_{item_variant}.png"
+            elif item_type:
+                # Fallback to old format for backward compatibility
                 cache_path = f"cache/items/item_{item_type}.png"
             else:
                 # Fallback: try to extract type from key or find any cached item
                 if key.startswith('item_'):
-                    type_from_key = key.split('_')[1] if len(key.split('_')) > 1 else None
-                    if type_from_key in ['weapon', 'armor', 'potion']:
-                        cache_path = f"cache/items/item_{type_from_key}.png"
+                    parts = key.split('_')
+                    if len(parts) >= 3:  # item_type_variant_timestamp
+                        type_from_key = parts[1]
+                        variant_from_key = parts[2]
+                        if type_from_key in ['weapon', 'armor', 'potion']:
+                            cache_path = f"cache/items/item_{type_from_key}_{variant_from_key}.png"
+                        else:
+                            cache_path = None
                     else:
                         cache_path = None
                 else:
