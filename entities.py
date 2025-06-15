@@ -143,7 +143,7 @@ class Player(Entity):
         elif item.item_type == 'armor':
             return "Max Health +1, Healed +1"
         elif item.item_type == 'potion':
-            if self.health > self.get_max_health():
+            if self.health >= self.get_max_health():
                 return "+1 Temporary Health"
             else:
                 return "Healed +5"

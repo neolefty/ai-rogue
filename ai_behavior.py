@@ -51,12 +51,16 @@ class AIBehaviorSystem:
             # Determine behavior with mini-boss bias
             rand = random.random()
             if nearby_miniboss and rand < MINIBOSS_BIAS_CHANCE:
+                # 30% chance to approach mini-boss when one is nearby
                 monster.alert_behavior = 'approach_miniboss'
                 monster.target_miniboss = nearby_miniboss
-            elif rand < MINIBOSS_BIAS_CHANCE + MONSTER_ALERT_CHASE_CHANCE:
-                monster.alert_behavior = 'chase'
             else:
-                monster.alert_behavior = 'wander'
+                # Remaining 70% split between chase and wander behavior
+                chase_rand = random.random()
+                if chase_rand < MONSTER_ALERT_CHASE_CHANCE:
+                    monster.alert_behavior = 'chase'
+                else:
+                    monster.alert_behavior = 'wander'
             
             # Commit to this behavior for 60-120 frames (1-2 seconds)
             monster.alert_behavior_timer = random.randint(60, 120)
@@ -116,8 +120,9 @@ class AIBehaviorSystem:
             new_y = monster.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
         
         # Check for collisions with other monsters
-        if not self._check_monster_collision(monster, new_x, new_y):
-            # Move to new position if no collision
+        # Mini-bosses can push through regular monsters to avoid getting stuck
+        if not self._check_monster_collision(monster, new_x, new_y) or monster.is_miniboss:
+            # Move to new position if no collision (or if mini-boss)
             monster.x = new_x
             monster.y = new_y
         else:
