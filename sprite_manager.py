@@ -75,8 +75,16 @@ class SpriteManager:
                             if os.path.exists(cache_path):
                                 sprite = pygame.image.load(cache_path)
                             else:
-                                from prompts import ITEM_SPRITE_PROMPT, SPRITE_STYLE
-                                prompt = ITEM_SPRITE_PROMPT.format(item_type=item_type)
+                                from prompts import WEAPON_SPRITE_PROMPT, ARMOR_SPRITE_PROMPT, POTION_SPRITE_PROMPT, SPRITE_STYLE
+                                
+                                # Use specialized prompts for each item type
+                                if item_type == 'weapon':
+                                    prompt = WEAPON_SPRITE_PROMPT
+                                elif item_type == 'armor':
+                                    prompt = ARMOR_SPRITE_PROMPT
+                                else:  # potion
+                                    prompt = POTION_SPRITE_PROMPT
+                                    
                                 image_bytes = self.sprite_generator.client.generate_image(f"{prompt}. {SPRITE_STYLE}")
                                 from io import BytesIO
                                 from PIL import Image

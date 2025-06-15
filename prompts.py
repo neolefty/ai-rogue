@@ -2,8 +2,12 @@
 
 PLAYER_SPRITE_PROMPT = "Basic human figure with sword"
 MONSTER_SPRITE_PROMPT = "Simple monster creature, basic shape"
-ITEM_SPRITE_PROMPT = "Simple {item_type} object, basic item"
 STAIRWAY_SPRITE_PROMPT = "Simple stone steps going down"
+
+# Item-specific prompts for better variety and detail
+WEAPON_SPRITE_PROMPT = "Simple sword shape, plain blade, no decoration"
+ARMOR_SPRITE_PROMPT = "Simple helmet or shield shape, basic armor piece"
+POTION_SPRITE_PROMPT = "Simple round bottle, colored liquid inside"
 
 SPRITE_STYLE = (
     "Style: Extremely simple 8-bit pixel art from 1980s video games. "

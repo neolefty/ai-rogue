@@ -14,7 +14,9 @@ from constants import *
 from prompts import (
     PLAYER_SPRITE_PROMPT,
     MONSTER_SPRITE_PROMPT,
-    ITEM_SPRITE_PROMPT,
+    WEAPON_SPRITE_PROMPT,
+    ARMOR_SPRITE_PROMPT,
+    POTION_SPRITE_PROMPT,
     STAIRWAY_SPRITE_PROMPT,
     SPRITE_STYLE,
     MONSTER_STATS_SYSTEM_PROMPT,
@@ -154,7 +156,15 @@ class SpriteGenerator:
     def generate_item_sprite(self, game=None):
         """Generate a random item sprite."""
         item_type = random.choice(['weapon', 'armor', 'potion'])
-        prompt = ITEM_SPRITE_PROMPT.format(item_type=item_type)
+        
+        # Use specialized prompts for each item type
+        if item_type == 'weapon':
+            prompt = WEAPON_SPRITE_PROMPT
+        elif item_type == 'armor':
+            prompt = ARMOR_SPRITE_PROMPT
+        else:  # potion
+            prompt = POTION_SPRITE_PROMPT
+            
         item_path = f"{CACHE_ITEMS_DIR}/item_{item_type}.png"
         sprite = self.generate_sprite(prompt, item_path, game)
         return sprite, item_type
