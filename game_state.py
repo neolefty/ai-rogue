@@ -150,22 +150,28 @@ class GameState:
                 # Get placeholder sprite, real sprite loads in background
                 item_sprite = self.sprite_manager.get_sprite(item_key, 'item', {'item_type': item_type})
                 
-                # If monster position provided, scatter loot nearby
+                # If monster position provided, create sliding animation
                 if monster_x is not None and monster_y is not None:
-                    # Scatter within 2-3 tiles of monster position
-                    scatter_radius = TILE_SIZE * 3
-                    item_x = monster_x + random.randint(-scatter_radius, scatter_radius)
-                    item_y = monster_y + random.randint(-scatter_radius, scatter_radius)
+                    # Start at monster center
+                    start_x = monster_x + TILE_SIZE // 2
+                    start_y = monster_y + TILE_SIZE // 2
                     
-                    # Keep within screen bounds
-                    item_x = max(0, min(WINDOW_WIDTH - TILE_SIZE, item_x))
-                    item_y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, item_y))
+                    # Calculate target position near monster (2-3 tiles away)
+                    scatter_radius = TILE_SIZE * 3
+                    target_x = monster_x + random.randint(-scatter_radius, scatter_radius)
+                    target_y = monster_y + random.randint(-scatter_radius, scatter_radius)
+                    
+                    # Keep target within screen bounds
+                    target_x = max(0, min(WINDOW_WIDTH - TILE_SIZE, target_x))
+                    target_y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, target_y))
+                    
+                    # Create loot item with sliding animation
+                    loot_item = LootItem(item_type, start_x, start_y, item_sprite, target_x, target_y)
                 else:
-                    # Fallback to random position (for edge cases)
+                    # Fallback to random position (for edge cases) - no animation
                     item_x = random.randint(0, WINDOW_WIDTH - TILE_SIZE)
                     item_y = random.randint(0, WINDOW_HEIGHT - TILE_SIZE)
-                
-                loot_item = LootItem(item_type, item_x, item_y, item_sprite)
+                    loot_item = LootItem(item_type, item_x, item_y, item_sprite)
                 loot_item.sprite_key = item_key  # Store key for sprite updates
                 self.loot_items.append(loot_item)
             remaining -= 1
@@ -277,6 +283,10 @@ class GameState:
         # Update death sprites and remove expired ones
         self.death_sprites = [death_sprite for death_sprite in self.death_sprites 
                              if not death_sprite.update()]
+        
+        # Update loot item animations
+        for loot_item in self.loot_items:
+            loot_item.update()
     
     def update_sprites(self):
         """Update sprites that have finished generating."""

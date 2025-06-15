@@ -153,9 +153,44 @@ class Player(Entity):
 class LootItem(Entity):
     """Loot item entity that can be picked up by the player."""
     
-    def __init__(self, item_type, x, y, sprite=None):
+    def __init__(self, item_type, x, y, sprite=None, target_x=None, target_y=None):
         super().__init__(x, y, sprite)
         self.item_type = item_type  # 'weapon', 'armor', 'potion'
+        
+        # Animation properties
+        self.target_x = target_x if target_x is not None else x
+        self.target_y = target_y if target_y is not None else y
+        self.slide_speed = 3.0  # Pixels per frame
+        self.is_sliding = (target_x is not None or target_y is not None)
+        self.animation_timer = 0
+    
+    def update(self):
+        """Update loot item animation and return True if done sliding."""
+        if not self.is_sliding:
+            return True
+        
+        # Calculate distance to target
+        dx = self.target_x - self.x
+        dy = self.target_y - self.y
+        distance = (dx ** 2 + dy ** 2) ** 0.5
+        
+        # If close enough, snap to target and stop sliding
+        if distance <= self.slide_speed:
+            self.x = self.target_x
+            self.y = self.target_y
+            self.is_sliding = False
+            return True
+        
+        # Move toward target
+        if distance > 0:
+            # Normalize direction and apply speed
+            move_x = (dx / distance) * self.slide_speed
+            move_y = (dy / distance) * self.slide_speed
+            self.x += move_x
+            self.y += move_y
+        
+        self.animation_timer += 1
+        return False
 
 
 class DeathSprite(Entity):
