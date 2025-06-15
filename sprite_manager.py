@@ -43,11 +43,26 @@ class SpriteManager:
         self.pending_count = 0
         self.completed_count = 0
         
+        # Completion callbacks
+        self.completion_callbacks = []
+        
         # Start worker threads
         self._start_workers()
         
         # Load any existing cached sprites immediately
         self._preload_cache()
+    
+    def add_completion_callback(self, callback):
+        """Add a callback to be called when sprite generation completes."""
+        self.completion_callbacks.append(callback)
+    
+    def _notify_completion(self, key, sprite_type, params):
+        """Notify all callbacks that a sprite generation completed."""
+        for callback in self.completion_callbacks:
+            try:
+                callback(key, sprite_type, params)
+            except Exception as e:
+                print(f"Error in completion callback: {e}")
     
     def _start_workers(self):
         """Start background worker threads for sprite generation."""
@@ -121,6 +136,9 @@ class SpriteManager:
                             self.sprites[key] = sprite
                             self.completed_count += 1
                             self.pending_count = max(0, self.pending_count - 1)
+                        
+                        # Notify completion callbacks
+                        self._notify_completion(key, sprite_type, params)
                 
                 except Exception as e:
                     print(f"Error generating sprite {key}: {e}")

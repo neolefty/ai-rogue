@@ -17,7 +17,9 @@ class PreferencesManager:
         if os.path.exists(self.preferences_file):
             try:
                 with open(self.preferences_file, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Migrate old format to new format
+                    return self._migrate_preferences(data)
             except (json.JSONDecodeError, IOError) as e:
                 print(f"Error loading preferences: {e}, using defaults")
         
@@ -33,6 +35,11 @@ class PreferencesManager:
                 "armor": ["helmet"],
                 "potion": ["bottle"]
             },
+            "available_variants": {
+                "weapon": ["sword"],  # Start with basic variants (sprites exist)
+                "armor": ["helmet"],
+                "potion": ["bottle"]
+            },
             "variant_definitions": {
                 "weapon": ["sword", "axe", "dagger", "mace", "spear"],
                 "armor": ["helmet", "shield", "chestplate", "gauntlets", "boots"],
@@ -44,6 +51,21 @@ class PreferencesManager:
                 "levels_per_potion": 3
             }
         }
+    
+    def _migrate_preferences(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Migrate old preferences format to new format with available_variants."""
+        # Add available_variants if missing
+        if "available_variants" not in data:
+            data["available_variants"] = {}
+            unlocked = data.get("unlocked_variants", {})
+            
+            # Initially, all unlocked variants are available (backward compatibility)
+            for item_type, variants in unlocked.items():
+                data["available_variants"][item_type] = variants.copy()
+            
+            print("Migrated preferences to include available_variants")
+        
+        return data
     
     def save_preferences(self):
         """Save current preferences to file."""
@@ -57,13 +79,17 @@ class PreferencesManager:
         """Get list of unlocked variants for given item type."""
         return self.data.get("unlocked_variants", {}).get(item_type, [])
     
+    def get_available_variants(self, item_type: str) -> List[str]:
+        """Get list of available (sprite-ready) variants for given item type."""
+        return self.data.get("available_variants", {}).get(item_type, [])
+    
     def get_random_variant(self, item_type: str) -> str:
-        """Get a random unlocked variant for the given item type."""
+        """Get a random available variant for the given item type."""
         import random
-        variants = self.get_unlocked_variants(item_type)
+        variants = self.get_available_variants(item_type)
         return random.choice(variants) if variants else item_type
     
-    def update_game_stats(self, monsters_killed: int = 0, levels_completed: int = 0, game_finished: bool = False):
+    def update_game_stats(self, monsters_killed: int = 0, levels_completed: int = 0, game_finished: bool = False, sprite_manager=None):
         """Update lifetime statistics and check for new unlocks."""
         stats = self.data["lifetime_stats"]
         
@@ -75,6 +101,10 @@ class PreferencesManager:
         
         # Check for new unlocks
         newly_unlocked = self._check_unlocks()
+        
+        # Pre-generate sprites for newly unlocked variants
+        if newly_unlocked and sprite_manager:
+            self._queue_variant_generation(newly_unlocked, sprite_manager)
         
         # Save after updates
         self.save_preferences()
@@ -122,6 +152,73 @@ class PreferencesManager:
             newly_unlocked.append(f"potion_{new_potion}")
         
         return newly_unlocked
+    
+    def _queue_variant_generation(self, newly_unlocked: List[str], sprite_manager):
+        """Queue sprite generation for newly unlocked variants."""
+        for variant_name in newly_unlocked:
+            # Parse variant name (e.g., "weapon_axe" -> item_type="weapon", variant="axe")
+            if '_' in variant_name:
+                item_type, variant = variant_name.split('_', 1)
+                
+                # Queue generation with high priority for immediate feedback
+                cache_key = f"item_{item_type}_{variant}"
+                params = {'item_type': item_type, 'item_variant': variant}
+                sprite_manager.get_sprite(cache_key, 'item', params, priority=1)
+                
+                print(f"Queued generation for {variant_name}")
+    
+    def queue_initial_variants(self, sprite_manager):
+        """Queue generation for all currently unlocked variants on game start."""
+        unlocked = self.data["unlocked_variants"]
+        
+        for item_type, variants in unlocked.items():
+            for variant in variants:
+                cache_key = f"item_{item_type}_{variant}"
+                params = {'item_type': item_type, 'item_variant': variant}
+                
+                # Lower priority for initial generation to not block other sprites
+                sprite_manager.get_sprite(cache_key, 'item', params, priority=3)
+                
+        print(f"Queued initial variant generation: {sum(len(v) for v in unlocked.values())} variants")
+    
+    def mark_variant_available(self, item_type: str, variant: str) -> bool:
+        """Mark a variant as available (sprite ready) and return True if it was newly available."""
+        available = self.data.get("available_variants", {})
+        if item_type not in available:
+            available[item_type] = []
+        
+        if variant not in available[item_type]:
+            available[item_type].append(variant)
+            self.save_preferences()
+            print(f"Variant {item_type}_{variant} is now available!")
+            return True
+        return False
+    
+    def sync_available_with_existing_sprites(self, sprite_manager):
+        """Sync available variants with existing cached sprites on startup."""
+        import os
+        newly_available = []
+        
+        unlocked = self.data.get("unlocked_variants", {})
+        available = self.data.get("available_variants", {})
+        
+        for item_type, variants in unlocked.items():
+            if item_type not in available:
+                available[item_type] = []
+            
+            for variant in variants:
+                if variant not in available[item_type]:
+                    # Check if sprite exists on disk
+                    cache_path = f"cache/items/item_{item_type}_{variant}.png"
+                    if os.path.exists(cache_path):
+                        available[item_type].append(variant)
+                        newly_available.append(f"{item_type}_{variant}")
+        
+        if newly_available:
+            self.save_preferences()
+            print(f"Synced {len(newly_available)} existing sprites to available variants")
+        
+        return newly_available
     
     def get_progress_summary(self) -> str:
         """Get a summary of current unlock progress."""

@@ -42,12 +42,33 @@ class GameState:
         
         # Initialize player
         self._initialize_player()
+        
+        # Set up sprite completion callback for variant availability
+        self.sprite_manager.add_completion_callback(self._on_sprite_completion)
+        
+        # Sync available variants with existing cached sprites
+        self.preferences.sync_available_with_existing_sprites(self.sprite_manager)
+        
+        # Queue generation for all unlocked variants on game start
+        self.preferences.queue_initial_variants(self.sprite_manager)
     
     def _initialize_player(self):
         """Initialize the player with sprite manager."""
         # Get sprite (placeholder initially, real sprite loads in background)
         player_sprite = self.sprite_manager.get_sprite('player', 'player', priority=1)
         self.player = Player(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, player_sprite)
+    
+    def _on_sprite_completion(self, key, sprite_type, params):
+        """Handle sprite generation completion."""
+        if sprite_type == 'item' and params and 'item_type' in params and 'item_variant' in params:
+            item_type = params['item_type']
+            item_variant = params['item_variant']
+            
+            # Mark variant as available if it was newly completed
+            newly_available = self.preferences.mark_variant_available(item_type, item_variant)
+            if newly_available:
+                variant_name = f"{item_variant.title()}"
+                self.set_message(f"New {item_type} ready: {variant_name}!", 150)
     
     def generate_level(self):
         """Generate a new level with monsters."""
@@ -237,7 +258,7 @@ class GameState:
         self.stairway = None
         
         # Update preferences and check for new unlocks
-        newly_unlocked = self.preferences.update_game_stats(levels_completed=1)
+        newly_unlocked = self.preferences.update_game_stats(levels_completed=1, sprite_manager=self.sprite_manager)
         if newly_unlocked:
             unlock_names = [name.replace('_', ' ').title() for name in newly_unlocked]
             self.set_message(f"Level {self.level}! Unlocked: {', '.join(unlock_names)}!", 180)
@@ -257,7 +278,7 @@ class GameState:
             self.create_death_sprite(monster.x, monster.y)
             
             # Update preferences and check for new unlocks
-            newly_unlocked = self.preferences.update_game_stats(monsters_killed=1)
+            newly_unlocked = self.preferences.update_game_stats(monsters_killed=1, sprite_manager=self.sprite_manager)
             if newly_unlocked:
                 unlock_names = [name.replace('_', ' ').title() for name in newly_unlocked]
                 self.set_message(f"Unlocked: {', '.join(unlock_names)}!", 180)
