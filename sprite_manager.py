@@ -31,6 +31,9 @@ class SpriteManager:
         
         # Start worker threads
         self._start_workers()
+        
+        # Load any existing cached sprites immediately
+        self._preload_cache()
     
     def _start_workers(self):
         """Start background worker threads for sprite generation."""
@@ -64,6 +67,7 @@ class SpriteManager:
                         self.sprites[f"{key}_stats"] = stats
                     elif sprite_type == 'item':
                         # Use specific item type if provided, otherwise generate random
+                        import os
                         item_type = params.get('item_type') if params else None
                         if item_type:
                             # Generate sprite for specific item type using consistent cache path
@@ -77,7 +81,6 @@ class SpriteManager:
                                 from io import BytesIO
                                 from PIL import Image
                                 import pygame
-                                import os
                                 
                                 img = Image.open(BytesIO(image_bytes))
                                 img = img.convert("RGBA")
@@ -138,10 +141,17 @@ class SpriteManager:
         if cached_sprite:
             with self.generation_lock:
                 self.sprites[cache_key] = cached_sprite
+                # Remove from placeholders if it was there
+                if cache_key in self.placeholders:
+                    del self.placeholders[cache_key]
+                    self.pending_count = max(0, self.pending_count - 1)
             return cached_sprite
         
-        # Queue for generation if not already queued
-        if cache_key not in self.placeholders:
+        # Queue for generation if not already queued or active
+        with self.generation_lock:
+            already_queued = cache_key in self.placeholders or cache_key in self.active_generations
+        
+        if not already_queued:
             self.placeholders[cache_key] = self._create_placeholder(sprite_type, params)
             with self.generation_lock:
                 self.pending_count += 1
@@ -281,9 +291,45 @@ class SpriteManager:
         
         return surface
     
+    def _preload_cache(self):
+        """Load commonly used cached sprites immediately."""
+        import os
+        
+        # Preload player sprite if cached
+        player_path = "cache/sprites/player.png"
+        if os.path.exists(player_path):
+            try:
+                import pygame
+                self.sprites['player'] = pygame.image.load(player_path)
+            except Exception as e:
+                print(f"Error preloading player sprite: {e}")
+        
+        # Preload stairway sprite if cached
+        stairway_path = "cache/sprites/stairway.png"
+        if os.path.exists(stairway_path):
+            try:
+                import pygame
+                self.sprites['stairway'] = pygame.image.load(stairway_path)
+            except Exception as e:
+                print(f"Error preloading stairway sprite: {e}")
+        
+        # Preload common item types
+        for item_type in ['weapon', 'armor', 'potion']:
+            item_path = f"cache/items/item_{item_type}.png"
+            if os.path.exists(item_path):
+                try:
+                    import pygame
+                    self.sprites[f'item_{item_type}'] = pygame.image.load(item_path)
+                except Exception as e:
+                    print(f"Error preloading {item_type} sprite: {e}")
+    
     def get_status(self):
         """Get generation status for UI display."""
         with self.generation_lock:
+            # Sync pending count with actual queue state
+            actual_pending = len(self.placeholders) - len([k for k in self.placeholders.keys() if k in self.sprites])
+            self.pending_count = max(0, actual_pending)
+            
             return {
                 'pending': self.pending_count,
                 'completed': self.completed_count,

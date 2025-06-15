@@ -285,7 +285,9 @@ class GameState:
         # Update loot item sprites
         for loot_item in self.loot_items:
             if hasattr(loot_item, 'sprite_key'):
-                new_sprite = self.sprite_manager.sprites.get(loot_item.sprite_key)
+                # For items, check type-based key since sprites are shared by type
+                type_based_key = f"item_{loot_item.item_type}"
+                new_sprite = self.sprite_manager.sprites.get(type_based_key)
                 if new_sprite and new_sprite != loot_item.sprite:
                     loot_item.sprite = new_sprite
         
