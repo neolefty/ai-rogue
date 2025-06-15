@@ -5,12 +5,11 @@ import os
 import random
 import pygame
 import requests
-from io import BytesIO
-from PIL import Image
 from openai import OpenAI
 from dotenv import load_dotenv
 
 from constants import *
+from image_utils import process_generated_image, save_and_load_sprite
 from prompts import (
     PLAYER_SPRITE_PROMPT,
     MONSTER_SPRITE_PROMPT,
@@ -91,28 +90,10 @@ class SpriteGenerator:
         try:
             # Generate image using DALL-E
             image_bytes = self.client.generate_image(f"{prompt}. {SPRITE_STYLE}")
-            img = Image.open(BytesIO(image_bytes))
-
-            # Convert to RGBA to preserve transparency
-            img = img.convert("RGBA")
             
-            # Resize to 32x32 while maintaining pixel art style
-            img = img.resize((32, 32), Image.Resampling.NEAREST)
-            
-            # Convert dark background pixels to transparent
-            data = img.getdata()
-            new_data = []
-            for item in data:
-                # If pixel is very dark (close to black), make it transparent
-                if item[0] + item[1] + item[2] < 30:
-                    new_data.append((255, 255, 255, 0))  # Transparent
-                else:
-                    new_data.append(item)
-            
-            img.putdata(new_data)
-            img.save(cache_path, "PNG")
-            
-            sprite = pygame.image.load(cache_path)
+            # Process the image using shared utility
+            img = process_generated_image(image_bytes)
+            sprite = save_and_load_sprite(img, cache_path)
             return sprite
             
         except Exception as e:

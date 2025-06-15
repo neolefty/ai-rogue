@@ -42,7 +42,16 @@ class AIBehaviorSystem:
             self._clamp_to_bounds(monster)
     
     def _handle_alert_zone_behavior(self, monster, dx_to_player, dy_to_player):
-        """Handle monster behavior in the alert zone."""
+        """
+        Handle monster behavior in the alert zone (between aggressive and passive).
+        
+        Alert Zone Behavior State Machine:
+        - Commits to one behavior for 60-120 frames (1-2 seconds)
+        - 30% chance to approach nearby mini-boss (if not mini-boss itself)
+        - Remaining 70%: 70% chase player, 30% wander randomly
+        
+        This creates dynamic, unpredictable movement while maintaining tactical clustering.
+        """
         # Choose new behavior if timer expired or no behavior set
         if monster.alert_behavior_timer <= 0 or monster.alert_behavior is None:
             # Check if there's a nearby mini-boss to bias toward (only for regular monsters)
@@ -189,7 +198,16 @@ class AIBehaviorSystem:
         return nearest_miniboss
     
     def _get_dispersion_direction(self, monster):
-        """Calculate direction to move away from nearby monsters when wandering."""
+        """
+        Calculate direction to move away from nearby monsters when wandering.
+        
+        Dispersion System:
+        - Only activates when monster is beyond alert distance (not in combat)
+        - Finds monsters within 80px dispersion radius
+        - Calculates weighted repulsion (closer monsters = stronger push)
+        - Returns 8-directional movement vector away from cluster
+        - Used to prevent monsters getting permanently stuck together
+        """
         # Only apply dispersion when monster is distant from player (not in combat)
         player = self.game_state.player
         dx_to_player = player.x - monster.x

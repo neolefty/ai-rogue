@@ -49,7 +49,19 @@ class CombatSystem:
         return [monster for distance, monster in monsters_in_range]
     
     def _player_attack(self, monsters, current_time):
-        """Handle player attacking multiple monsters with damage falloff."""
+        """
+        Handle player attacking multiple monsters with damage falloff.
+        
+        Multi-Target Combat System:
+        - Player can hit multiple monsters in range simultaneously
+        - Damage decreases with each additional target:
+          * 1st target: Full damage
+          * 2nd target: 50% damage (÷2)  
+          * 3rd target: 33% damage (÷3)
+          * 4th target: 25% damage (÷4), etc.
+        - Encourages tactical positioning to group enemies
+        - Targets sorted by distance (closest hit hardest)
+        """
         player = self.game_state.player
         player.attack(current_time)
         

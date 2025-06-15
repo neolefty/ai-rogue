@@ -6,10 +6,24 @@ import pygame
 from collections import defaultdict
 import time
 from constants import TILE_SIZE
+from image_utils import process_generated_image, save_and_load_sprite
 
 
 class SpriteManager:
-    """Manages sprite generation with placeholders and background loading."""
+    """
+    Manages sprite generation with placeholders and background loading.
+    
+    Thread Safety:
+    - Uses threading.Lock for sprites dict access
+    - Background worker threads process generation queue
+    - Safe to call from multiple threads
+    
+    Flow:
+    1. get_sprite() returns placeholder immediately if not cached
+    2. Background thread generates real sprite asynchronously  
+    3. Real sprite replaces placeholder when ready
+    4. Entities automatically get updated sprite on next frame
+    """
     
     def __init__(self, sprite_generator, max_concurrent=3):
         self.sprite_generator = sprite_generator
@@ -86,27 +100,10 @@ class SpriteManager:
                                     prompt = POTION_SPRITE_PROMPT
                                     
                                 image_bytes = self.sprite_generator.client.generate_image(f"{prompt}. {SPRITE_STYLE}")
-                                from io import BytesIO
-                                from PIL import Image
-                                import pygame
                                 
-                                img = Image.open(BytesIO(image_bytes))
-                                img = img.convert("RGBA")
-                                img = img.resize((32, 32), Image.Resampling.NEAREST)
-                                
-                                # Convert dark background pixels to transparent
-                                data = img.getdata()
-                                new_data = []
-                                for item in data:
-                                    if item[0] + item[1] + item[2] < 30:
-                                        new_data.append((255, 255, 255, 0))
-                                    else:
-                                        new_data.append(item)
-                                img.putdata(new_data)
-                                
-                                # Save using consistent type-based cache path
-                                img.save(cache_path, "PNG")
-                                sprite = pygame.image.load(cache_path)
+                                # Process the image using shared utility
+                                img = process_generated_image(image_bytes)
+                                sprite = save_and_load_sprite(img, cache_path)
                         else:
                             sprite, item_type = self.sprite_generator.generate_item_sprite()
                             self.sprites[f"{key}_type"] = item_type
