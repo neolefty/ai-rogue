@@ -132,18 +132,36 @@ class RenderSystem:
             self.screen.blit(flash_surface, flash_rect)
     
     def _render_player_health_bar(self, player):
-        """Render health bar for the player."""
+        """Render health bar for the player with bonus health in cyan."""
         x, y = player.x, player.y
-        health_ratio = player.health / player.get_max_health()
+        max_health = player.get_max_health()
+        current_health = player.health
         
         # Draw background (red)
         pygame.draw.rect(self.screen, RED, 
                        (x, y - 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT))
-        # Draw health (green)
-        pygame.draw.rect(self.screen, GREEN, 
-                       (x, y - 10, 
-                        HEALTH_BAR_WIDTH * health_ratio, 
-                        HEALTH_BAR_HEIGHT))
+        
+        if current_health > 0:
+            if current_health <= max_health:
+                # Normal health (green)
+                health_ratio = current_health / max_health
+                pygame.draw.rect(self.screen, GREEN, 
+                               (x, y - 10, 
+                                HEALTH_BAR_WIDTH * health_ratio, 
+                                HEALTH_BAR_HEIGHT))
+            else:
+                # Player has bonus health beyond max
+                # Draw max health portion (green)
+                pygame.draw.rect(self.screen, GREEN, 
+                               (x, y - 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT))
+                
+                # Draw bonus health portion (cyan) - extends beyond normal bar
+                bonus_health = current_health - max_health
+                bonus_ratio = bonus_health / max_health  # Bonus relative to max health
+                bonus_width = min(HEALTH_BAR_WIDTH * bonus_ratio, HEALTH_BAR_WIDTH)  # Cap at bar width
+                
+                pygame.draw.rect(self.screen, CYAN, 
+                               (x, y - 15, bonus_width, HEALTH_BAR_HEIGHT))
     
     def _render_monster_health_bar(self, monster):
         """Render health bar for a monster."""

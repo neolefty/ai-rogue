@@ -26,6 +26,9 @@ class Game:
         self.ai_system = AIBehaviorSystem(self.game_state)
         self.render_system = RenderSystem(self.screen)
         
+        # Set render callback for loading screens
+        self.game_state.render_callback = lambda: self.render_system.render_game(self.game_state)
+        
         # Generate first level
         self.game_state.generate_level()
     

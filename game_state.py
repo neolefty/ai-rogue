@@ -9,8 +9,9 @@ from entities import Monster, Player, LootItem, Stairway
 class GameState:
     """Manages all game state data and provides clean interfaces for systems."""
     
-    def __init__(self, sprite_generator):
+    def __init__(self, sprite_generator, render_callback=None):
         self.sprite_generator = sprite_generator
+        self.render_callback = render_callback
         
         # Core game state
         self.running = True
@@ -61,6 +62,8 @@ class GameState:
         
         for i, monster_level in enumerate(monster_levels):
             self.show_loading(f"Generating monsters... ({i+1}/{total_monsters})")
+            # Force rendering of loading screen by processing events
+            pygame.event.pump()
             
             monster_sprite, monster_stats = self.sprite_generator.generate_monster_sprite_and_stats(
                 monster_level, self
@@ -254,6 +257,8 @@ class GameState:
         """Show loading screen with message."""
         self.loading = True
         self.loading_message = message
+        if self.render_callback:
+            self.render_callback()
     
     def hide_loading(self):
         """Hide loading screen."""
