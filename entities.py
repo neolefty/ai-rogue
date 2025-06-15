@@ -166,6 +166,8 @@ class DeathSprite(Entity):
         self.lifetime = DEATH_SPRITE_LIFETIME  # Total time to exist
         self.fade_timer = self.lifetime
         self.alpha = 255  # Full opacity initially
+        self.original_sprite = None  # Store original sprite for fading
+        self.faded_sprite = None  # Store current faded version
     
     def update(self):
         """Update fade animation and return True if sprite should be removed."""
@@ -182,11 +184,16 @@ class DeathSprite(Entity):
         else:
             self.alpha = max(0, 255 - (current_step * (255 // fade_steps)))
         
-        # Apply alpha to sprite if available
-        if self.sprite and self.alpha < 255:
-            faded_sprite = self.sprite.copy()
-            faded_sprite.set_alpha(self.alpha)
-            self.sprite = faded_sprite
+        # Update faded sprite when sprite changes or alpha changes
+        if self.sprite != self.original_sprite or self.faded_sprite is None:
+            self.original_sprite = self.sprite
+            if self.sprite:
+                self.faded_sprite = self.sprite.copy()
+                self.faded_sprite.set_alpha(self.alpha)
+        elif self.original_sprite and self.alpha < 255:
+            # Apply current alpha to original sprite
+            self.faded_sprite = self.original_sprite.copy()
+            self.faded_sprite.set_alpha(self.alpha)
         
         return self.fade_timer <= 0
 

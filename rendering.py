@@ -74,8 +74,10 @@ class RenderSystem:
     def _render_death_sprites(self, death_sprites):
         """Render all death sprites with fade effect."""
         for death_sprite in death_sprites:
-            if death_sprite.sprite:
-                self.screen.blit(death_sprite.sprite, (death_sprite.x, death_sprite.y))
+            # Use faded sprite if available, otherwise use regular sprite
+            sprite_to_render = death_sprite.faded_sprite if death_sprite.faded_sprite else death_sprite.sprite
+            if sprite_to_render:
+                self.screen.blit(sprite_to_render, (death_sprite.x, death_sprite.y))
     
     def _render_entity_effect_circle(self, entity, x, y, sprite):
         """Render standardized effect circle for any entity."""
