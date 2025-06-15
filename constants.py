@@ -40,6 +40,10 @@ MONSTER_ATTACK_RANGE = TILE_SIZE  # Monsters need to be adjacent to attack (mele
 MINIBOSS_INFLUENCE_RADIUS = 200  # Pixels - monsters within this range are influenced by mini-boss
 MINIBOSS_BIAS_CHANCE = 0.3  # 30% chance to move toward mini-boss when in range (similar to alert zone)
 
+# Monster dispersion constants
+MONSTER_DISPERSION_RADIUS = 80  # Pixels - monsters within this range trigger dispersion
+MONSTER_DISPERSION_CHANCE = 0.5  # 50% chance to apply dispersion when clustered
+
 # Colors
 BACKGROUND_COLOR = (32, 32, 48)  # Dark blue-gray
 WHITE = (255, 255, 255)

@@ -98,10 +98,19 @@ class AIBehaviorSystem:
     
     def _wander_monster(self, monster):
         """Make monster wander randomly, avoiding walls and other monsters."""
+        # Check for dispersion behavior when clustered with other monsters
+        dispersion_direction = self._get_dispersion_direction(monster)
+        
         # Occasionally change direction
         if random.random() < MONSTER_DIRECTION_CHANGE_CHANCE:
-            monster.wander_direction_x = random.choice([-1, 0, 1])
-            monster.wander_direction_y = random.choice([-1, 0, 1])
+            if dispersion_direction and random.random() < MONSTER_DISPERSION_CHANCE:
+                # Apply dispersion - move away from nearby monsters
+                monster.wander_direction_x = dispersion_direction[0]
+                monster.wander_direction_y = dispersion_direction[1]
+            else:
+                # Normal random direction change
+                monster.wander_direction_x = random.choice([-1, 0, 1])
+                monster.wander_direction_y = random.choice([-1, 0, 1])
         
         # Calculate new position
         new_x = monster.x + (monster.wander_direction_x * MONSTER_WANDER_SPEED)
@@ -120,9 +129,14 @@ class AIBehaviorSystem:
             new_y = monster.y + (monster.wander_direction_y * MONSTER_WANDER_SPEED)
         
         # Check for collisions with other monsters
-        # Mini-bosses can push through regular monsters to avoid getting stuck
-        if not self._check_monster_collision(monster, new_x, new_y) or monster.is_miniboss:
-            # Move to new position if no collision (or if mini-boss)
+        # Allow movement if: no collision, mini-boss, or actively dispersing
+        is_dispersing = dispersion_direction is not None
+        can_move = (not self._check_monster_collision(monster, new_x, new_y) or 
+                   monster.is_miniboss or 
+                   is_dispersing)
+        
+        if can_move:
+            # Move to new position
             monster.x = new_x
             monster.y = new_y
         else:
@@ -173,6 +187,53 @@ class AIBehaviorSystem:
                 nearest_distance = distance
         
         return nearest_miniboss
+    
+    def _get_dispersion_direction(self, monster):
+        """Calculate direction to move away from nearby monsters when wandering."""
+        # Only apply dispersion when monster is distant from player (not in combat)
+        player = self.game_state.player
+        dx_to_player = player.x - monster.x
+        dy_to_player = player.y - monster.y
+        distance_to_player = (dx_to_player ** 2 + dy_to_player ** 2) ** 0.5
+        
+        # Only disperse when not near player (beyond alert distance)
+        if distance_to_player <= MONSTER_ALERT_DISTANCE:
+            return None
+        
+        # Find all nearby monsters within dispersion radius
+        nearby_monsters = []
+        for other_monster in self.game_state.monsters:
+            if (other_monster == monster or not other_monster.is_alive):
+                continue
+            
+            dx = other_monster.x - monster.x
+            dy = other_monster.y - monster.y
+            distance = (dx ** 2 + dy ** 2) ** 0.5
+            
+            if distance <= MONSTER_DISPERSION_RADIUS:
+                nearby_monsters.append((dx, dy, distance))
+        
+        # If no nearby monsters, no dispersion needed
+        if not nearby_monsters:
+            return None
+        
+        # Calculate average direction away from nearby monsters
+        repel_x = 0
+        repel_y = 0
+        for dx, dy, distance in nearby_monsters:
+            # Weight by inverse distance (closer monsters have more repelling force)
+            weight = 1.0 / max(distance, 1)  # Avoid division by zero
+            repel_x -= dx * weight
+            repel_y -= dy * weight
+        
+        # Convert to normalized 8-directional movement
+        if abs(repel_x) < 0.1 and abs(repel_y) < 0.1:
+            return None  # No clear direction
+        
+        direction_x = 1 if repel_x > 0 else -1 if repel_x < 0 else 0
+        direction_y = 1 if repel_y > 0 else -1 if repel_y < 0 else 0
+        
+        return (direction_x, direction_y)
     
     def _clamp_to_bounds(self, monster):
         """Keep monster within screen bounds."""
