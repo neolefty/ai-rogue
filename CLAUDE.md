@@ -53,39 +53,45 @@ When making code changes, run these commands to ensure code quality:
 ```
 
 ## Recent Development Notes
-1. **Modular Architecture Refactor (2025-06)**: Complete restructuring from monolithic 680+ line file
+1. **Code Quality & Documentation Enhancement (2025-06)**: Major cleanup for AI maintainability
+   - Removed legacy `dungeon_crawler.py` (205 lines of outdated monolithic code)
+   - Extracted shared `image_utils.py` to eliminate PIL/pygame processing duplication
+   - Added comprehensive documentation for complex systems (AI behavior, threading, combat)
+   - Specialized item sprite prompts (weapon/armor/potion) for better generation quality
+   - Removed loading screens - now uses seamless placeholder system
+2. **Modular Architecture Refactor (2025-06)**: Complete restructuring from monolithic 680+ line file
    - Separated into focused modules: entities, combat, ai_behavior, rendering, game_state
    - Clean entity hierarchy with proper inheritance
    - Professional structure for team collaboration
-2. **Movement System Overhaul**: Normalized 8-directional movement
+3. **Movement System Overhaul**: Normalized 8-directional movement
    - Both player and monsters constrained to 8 directions
    - Diagonal movement normalized to prevent speed exploits
    - Consistent movement feel across all entities
-3. **Game Over & Restart System**: Professional death handling
+4. **Game Over & Restart System**: Professional death handling
    - Translucent overlay preserves final battle view
    - Complete stats summary (levels, monsters, items)
    - SPACE to restart with persistent loot ("ghost of runs past")
-4. **Loot Persistence Mechanics**: 
+5. **Loot Persistence Mechanics**: 
    - Items persist between levels and through restarts
    - Loot drops near monster death locations (3-tile radius)
    - Creates natural treasure trails and battle graveyards
    - Strategic resource management (save potions for later)
-5. **Visual Enhancements**:
+6. **Visual Enhancements**:
    - Health bars show bonus health in cyan (normal in green)
    - Loading screens properly render during sprite generation
    - Consistent translucent overlay system for pause/game over
-6. **Combat Rebalance (2025-01)**: Complete overhaul for fast-paced tactical gameplay
+7. **Combat Rebalance (2025-01)**: Complete overhaul for fast-paced tactical gameplay
    - Player: 5 base HP, 0.5 base damage, weapons give +0.05 damage
    - Monsters: HP = level, damage = level
    - Armor gives +1 HP per piece (critical for survival)
    - Attack cooldowns: 500ms player, 1000ms monsters
-7. **AI System Enhancement (2025-06)**: Advanced monster behavior with clustering and dispersion
+8. **AI System Enhancement (2025-06)**: Advanced monster behavior with clustering and dispersion
    - Three-zone behavior: aggressive (≤150px always chase), alert (≤300px mixed behavior), passive (wander)
    - Alert zone: 30% mini-boss attraction, 70% chase, 30% wander (fixed probability bug)
    - Mini-boss clustering: regular monsters drawn to mini-bosses within 200px radius
    - Smart dispersion system: clustered monsters spread out when distant from player
    - Collision priority: mini-bosses and dispersing monsters can push through others
-8. **Technical Details**:
+9. **Technical Details**:
    - OpenAI Python Client for sprite/stats generation
    - DALL-E 3 with base64 responses
    - Pygame 2.6.1 with modern window focus events
