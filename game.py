@@ -58,6 +58,26 @@ class Game:
                         self.game_state.regenerate_sprite()
                     elif event.key == pygame.K_ESCAPE:
                         self.game_state.hide_regeneration_dialog()
+                elif self.game_state.reset_confirmation_dialog:
+                    # Handle reset confirmation dialog input
+                    if event.key == pygame.K_y:
+                        self.game_state.reset_progress()
+                    elif event.key == pygame.K_ESCAPE:
+                        self.game_state.hide_reset_confirmation()
+                elif self.game_state.paused:
+                    # Handle pause menu input
+                    if event.key == pygame.K_SPACE:
+                        # Resume game
+                        self.game_state.paused = False
+                        print("Game resumed")
+                    elif event.key == pygame.K_q:
+                        # Quit and save
+                        print("Saving game before quit...")
+                        self.game_state.save_game()
+                        self.game_state.running = False
+                    elif event.key == pygame.K_r:
+                        # Show reset confirmation
+                        self.game_state.show_reset_confirmation()
                 elif event.key == pygame.K_ESCAPE:
                     self.game_state.running = False
                 elif event.key == pygame.K_SPACE:

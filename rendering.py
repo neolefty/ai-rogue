@@ -26,6 +26,8 @@ class RenderSystem:
         # Render overlays on top
         if game_state.regeneration_dialog:
             self._render_regeneration_dialog(game_state)
+        elif game_state.reset_confirmation_dialog:
+            self._render_reset_confirmation_dialog()
         elif game_state.paused:
             self._render_paused_overlay()
         elif game_state.game_over:
@@ -239,13 +241,29 @@ class RenderSystem:
     # Loading screen rendering removed - using background generation with placeholders
     
     def _render_paused_overlay(self):
-        """Render a transparent overlay indicating the game is paused."""
+        """Render a transparent overlay with pause menu options."""
         overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 100))  # Semi-transparent black
-        font = pygame.font.Font(None, 72)
-        pause_text = font.render("Paused", True, WHITE)
-        text_rect = pause_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
-        overlay.blit(pause_text, text_rect)
+        overlay.fill((0, 0, 0, 120))  # Semi-transparent black
+        
+        # Title
+        title_font = pygame.font.Font(None, 72)
+        pause_text = title_font.render("Paused", True, WHITE)
+        title_rect = pause_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+        overlay.blit(pause_text, title_rect)
+        
+        # Menu options
+        menu_font = pygame.font.Font(None, 36)
+        options = [
+            "Press SPACE to Resume",
+            "Press Q to Quit (saves game)",
+            "Press R to Reset Progress"
+        ]
+        
+        for i, option in enumerate(options):
+            option_surface = menu_font.render(option, True, WHITE)
+            option_rect = option_surface.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 10 + i * 40))
+            overlay.blit(option_surface, option_rect)
+        
         self.screen.blit(overlay, (0, 0))
     
     def _render_regeneration_dialog(self, game_state):
@@ -284,6 +302,46 @@ class RenderSystem:
         instruction_text = "Press R to Regenerate  |  Press ESC to Cancel"
         instruction_surface = instruction_font.render(instruction_text, True, WHITE)
         instruction_rect = instruction_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 165))
+        overlay.blit(instruction_surface, instruction_rect)
+        
+        self.screen.blit(overlay, (0, 0))
+    
+    def _render_reset_confirmation_dialog(self):
+        """Render the reset confirmation dialog."""
+        # Create translucent overlay
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))  # Darker overlay for important dialog
+        
+        # Dialog box
+        dialog_width = 500
+        dialog_height = 180
+        dialog_x = (WINDOW_WIDTH - dialog_width) // 2
+        dialog_y = (WINDOW_HEIGHT - dialog_height) // 2
+        
+        # Draw dialog background
+        dialog_rect = pygame.Rect(dialog_x, dialog_y, dialog_width, dialog_height)
+        pygame.draw.rect(overlay, (60, 20, 20, 240), dialog_rect)  # Reddish background for warning
+        pygame.draw.rect(overlay, WHITE, dialog_rect, 3)
+        
+        # Title
+        title_font = pygame.font.Font(None, 42)
+        title_text = "Reset Progress?"
+        title_surface = title_font.render(title_text, True, WHITE)
+        title_rect = title_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 40))
+        overlay.blit(title_surface, title_rect)
+        
+        # Warning text
+        warning_font = pygame.font.Font(None, 28)
+        warning_text = "This will delete your save and start completely fresh!"
+        warning_surface = warning_font.render(warning_text, True, (255, 200, 200))  # Light red
+        warning_rect = warning_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 80))
+        overlay.blit(warning_surface, warning_rect)
+        
+        # Instructions
+        instruction_font = pygame.font.Font(None, 24)
+        instruction_text = "Press Y to Reset  |  Press ESC to Cancel"
+        instruction_surface = instruction_font.render(instruction_text, True, WHITE)
+        instruction_rect = instruction_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 130))
         overlay.blit(instruction_surface, instruction_rect)
         
         self.screen.blit(overlay, (0, 0))

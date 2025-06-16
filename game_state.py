@@ -45,6 +45,9 @@ class GameState:
         self.regeneration_entity = None
         self.regeneration_type = None
         
+        # Reset confirmation dialog state
+        self.reset_confirmation_dialog = False
+        
         # Initialize player
         self._initialize_player()
         
@@ -673,6 +676,54 @@ class GameState:
             self._regenerate_death_sprite()
         
         self.hide_regeneration_dialog()
+    
+    def show_reset_confirmation(self):
+        """Show reset confirmation dialog."""
+        self.reset_confirmation_dialog = True
+        print("Showing reset confirmation dialog")
+    
+    def hide_reset_confirmation(self):
+        """Hide reset confirmation dialog."""
+        self.reset_confirmation_dialog = False
+    
+    def reset_progress(self):
+        """Reset all progress to start fresh (like a new game)."""
+        import os
+        
+        # Delete save file
+        if os.path.exists("savegame.json"):
+            os.remove("savegame.json")
+            print("Deleted save file")
+        
+        # Reset to fresh state
+        self.level = 1
+        self.monsters_defeated = 0
+        self.items_collected = 0
+        self.levels_completed = 0
+        self.game_over = False
+        self.paused = False
+        self.message = ""
+        self.message_timer = 0
+        
+        # Clear all entities
+        self.monsters = []
+        self.loot_items = []
+        self.stairway = None
+        self.death_sprites = []
+        
+        # Reset UI state
+        self.regeneration_dialog = None
+        self.regeneration_entity = None
+        self.regeneration_type = None
+        self.reset_confirmation_dialog = False
+        
+        # Reinitialize player with base stats
+        self._initialize_player()
+        
+        # Generate fresh first level
+        self.generate_level()
+        
+        print("Progress reset - starting fresh!")
     
     def _regenerate_player_sprite(self):
         """Regenerate player sprite."""
