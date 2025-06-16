@@ -48,17 +48,29 @@ class Game:
             if event.type == pygame.QUIT:
                 self.game_state.running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if self.game_state.regeneration_dialog:
+                    # Handle regeneration dialog input
+                    if event.key == pygame.K_r:
+                        self.game_state.regenerate_sprite()
+                    elif event.key == pygame.K_ESCAPE:
+                        self.game_state.hide_regeneration_dialog()
+                elif event.key == pygame.K_ESCAPE:
                     self.game_state.running = False
                 elif event.key == pygame.K_SPACE and self.game_state.game_over:
                     # Restart the game
                     self.game_state.restart_game()
+                elif event.key == pygame.K_d:
+                    # Debug sprite queue
+                    self.game_state.sprite_manager.debug_queue_state()
             elif event.type == pygame.WINDOWFOCUSLOST:
                 print("Window focus lost - pausing game")
                 self.game_state.paused = True
             elif event.type == pygame.WINDOWFOCUSGAINED:
                 print("Window focus gained - resuming game")
                 self.game_state.paused = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left click
+                    self._handle_mouse_click(event.pos)
     
     def update(self):
         """Update all game systems."""
@@ -143,6 +155,57 @@ class Game:
         dy = abs(player.y - stairway.y)
         if dx <= TILE_SIZE and dy <= TILE_SIZE:
             self.game_state.advance_level()
+    
+    def _handle_mouse_click(self, mouse_pos):
+        """Handle mouse clicks for sprite regeneration."""
+        mx, my = mouse_pos
+        
+        # Check if we clicked on any entity
+        clicked_entity = None
+        entity_type = None
+        
+        # Check player
+        if self._point_in_entity(mx, my, self.game_state.player):
+            clicked_entity = self.game_state.player
+            entity_type = 'player'
+        
+        # Check monsters
+        for monster in self.game_state.monsters:
+            if self._point_in_entity(mx, my, monster):
+                clicked_entity = monster
+                entity_type = 'monster'
+                break
+        
+        # Check loot items
+        for loot_item in self.game_state.loot_items:
+            if self._point_in_entity(mx, my, loot_item):
+                clicked_entity = loot_item
+                entity_type = 'loot'
+                break
+        
+        # Check stairway
+        if self.game_state.stairway and self._point_in_entity(mx, my, self.game_state.stairway):
+            clicked_entity = self.game_state.stairway
+            entity_type = 'stairway'
+        
+        # Check death sprites
+        for death_sprite in self.game_state.death_sprites:
+            if self._point_in_entity(mx, my, death_sprite):
+                clicked_entity = death_sprite
+                entity_type = 'death'
+                break
+        
+        # If we clicked on an entity, show regeneration dialog
+        if clicked_entity:
+            self.game_state.show_regeneration_dialog(clicked_entity, entity_type)
+    
+    def _point_in_entity(self, x, y, entity):
+        """Check if a point is within an entity's bounds."""
+        if not entity or not entity.sprite:
+            return False
+        
+        entity_rect = entity.get_rect()
+        return entity_rect.collidepoint(x, y)
     
     def render(self):
         """Render the game."""

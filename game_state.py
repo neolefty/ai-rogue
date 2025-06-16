@@ -40,6 +40,11 @@ class GameState:
         self.message_timer = 0
         # Loading screens removed - using placeholders now
         
+        # Regeneration dialog state
+        self.regeneration_dialog = None
+        self.regeneration_entity = None
+        self.regeneration_type = None
+        
         # Initialize player
         self._initialize_player()
         
@@ -406,3 +411,183 @@ class GameState:
         
         # Generate first level
         self.generate_level()
+    
+    def show_regeneration_dialog(self, entity, entity_type):
+        """Show regeneration dialog for an entity."""
+        self.regeneration_dialog = True
+        self.regeneration_entity = entity
+        self.regeneration_type = entity_type
+        self.paused = True
+        print(f"Showing regeneration dialog for {entity_type}")
+    
+    def hide_regeneration_dialog(self):
+        """Hide regeneration dialog and resume game."""
+        self.regeneration_dialog = None
+        self.regeneration_entity = None
+        self.regeneration_type = None
+        self.paused = False
+    
+    def regenerate_sprite(self):
+        """Regenerate the sprite for the selected entity."""
+        if not self.regeneration_entity or not self.regeneration_type:
+            return
+        
+        entity = self.regeneration_entity
+        entity_type = self.regeneration_type
+        
+        if entity_type == 'player':
+            self._regenerate_player_sprite()
+        elif entity_type == 'monster':
+            self._regenerate_monster_sprite(entity)
+        elif entity_type == 'loot':
+            self._regenerate_loot_sprite(entity)
+        elif entity_type == 'stairway':
+            self._regenerate_stairway_sprite()
+        elif entity_type == 'death':
+            self._regenerate_death_sprite()
+        
+        self.hide_regeneration_dialog()
+    
+    def _regenerate_player_sprite(self):
+        """Regenerate player sprite."""
+        import os
+        
+        # Archive old sprite
+        cache_path = "cache/sprites/player.png"
+        if os.path.exists(cache_path):
+            import time
+            archived_path = f"cache/sprites/player_archived_{int(time.time())}.png"
+            os.rename(cache_path, archived_path)
+            print(f"Archived player sprite to {archived_path}")
+        
+        # Remove from sprite manager (both sprites and placeholders)
+        if 'player' in self.sprite_manager.sprites:
+            del self.sprite_manager.sprites['player']
+        if 'player' in self.sprite_manager.placeholders:
+            del self.sprite_manager.placeholders['player']
+        
+        # Queue regeneration and set placeholder
+        new_sprite = self.sprite_manager.get_sprite('player', 'player', priority=1)
+        self.player.sprite = new_sprite
+        
+        self.set_message("Regenerating player sprite...", 120)
+    
+    def _regenerate_monster_sprite(self, monster):
+        """Regenerate monster sprite."""
+        import os
+        
+        # Get monster cache info
+        level = monster.level
+        cache_path = f"cache/monsters/monster_level_{level}.png"
+        
+        # Archive old sprite
+        if os.path.exists(cache_path):
+            import time
+            archived_path = f"cache/monsters/monster_level_{level}_archived_{int(time.time())}.png"
+            os.rename(cache_path, archived_path)
+            print(f"Archived monster sprite to {archived_path}")
+        
+        # Remove from sprite manager (both sprites and placeholders)
+        monster_key = f"monster_level_{level}"
+        if monster_key in self.sprite_manager.sprites:
+            del self.sprite_manager.sprites[monster_key]
+        if monster_key in self.sprite_manager.placeholders:
+            del self.sprite_manager.placeholders[monster_key]
+        
+        # Queue regeneration and set placeholder
+        new_sprite, _ = self.sprite_manager.get_monster_data(monster_key)
+        
+        # Handle mini-boss scaling
+        if monster.is_miniboss:
+            scaled_size = int(TILE_SIZE * 1.5)
+            monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+        else:
+            monster.sprite = new_sprite
+        
+        self.set_message(f"Regenerating level {level} monster sprite...", 120)
+    
+    def _regenerate_loot_sprite(self, loot_item):
+        """Regenerate loot item sprite."""
+        import os
+        
+        # Get loot cache info
+        item_type = loot_item.item_type
+        item_variant = getattr(loot_item, 'item_variant', item_type)
+        cache_path = f"cache/items/item_{item_type}_{item_variant}.png"
+        
+        # Archive old sprite
+        if os.path.exists(cache_path):
+            import time
+            archived_path = f"cache/items/item_{item_type}_{item_variant}_archived_{int(time.time())}.png"
+            os.rename(cache_path, archived_path)
+            print(f"Archived loot sprite to {archived_path}")
+        
+        # Remove from sprite manager (both sprites and placeholders)
+        variant_key = f"item_{item_type}_{item_variant}"
+        if variant_key in self.sprite_manager.sprites:
+            del self.sprite_manager.sprites[variant_key]
+        if variant_key in self.sprite_manager.placeholders:
+            del self.sprite_manager.placeholders[variant_key]
+        
+        # Queue regeneration and set placeholder
+        cache_key = f"item_{item_type}_{item_variant}"
+        params = {'item_type': item_type, 'item_variant': item_variant}
+        new_sprite = self.sprite_manager.get_sprite(cache_key, 'item', params, priority=1)
+        loot_item.sprite = new_sprite
+        
+        self.set_message(f"Regenerating {item_variant} {item_type} sprite...", 120)
+    
+    def _regenerate_stairway_sprite(self):
+        """Regenerate stairway sprite."""
+        import os
+        
+        # Archive old sprite
+        cache_path = "cache/sprites/stairway.png"
+        if os.path.exists(cache_path):
+            import time
+            archived_path = f"cache/sprites/stairway_archived_{int(time.time())}.png"
+            os.rename(cache_path, archived_path)
+            print(f"Archived stairway sprite to {archived_path}")
+        
+        # Remove from sprite manager (both sprites and placeholders)
+        if 'stairway' in self.sprite_manager.sprites:
+            del self.sprite_manager.sprites['stairway']
+        if 'stairway' in self.sprite_manager.placeholders:
+            del self.sprite_manager.placeholders['stairway']
+        
+        # Queue regeneration and set placeholder
+        new_sprite = self.sprite_manager.get_sprite('stairway', 'stairway', priority=1)
+        self.stairway.sprite = new_sprite
+        
+        self.set_message("Regenerating stairway sprite...", 120)
+    
+    def _regenerate_death_sprite(self):
+        """Regenerate death sprite."""
+        import os
+        
+        # Archive old sprite
+        cache_path = "cache/sprites/death.png"
+        if os.path.exists(cache_path):
+            import time
+            archived_path = f"cache/sprites/death_archived_{int(time.time())}.png"
+            os.rename(cache_path, archived_path)
+            print(f"Archived death sprite to {archived_path}")
+        
+        # Remove from sprite manager (both sprites and placeholders)
+        if 'death' in self.sprite_manager.sprites:
+            del self.sprite_manager.sprites['death']
+        if 'death' in self.sprite_manager.placeholders:
+            del self.sprite_manager.placeholders['death']
+        
+        # Queue regeneration and set placeholder for all death sprites
+        new_sprite = self.sprite_manager.get_sprite('death', 'death', priority=1)
+        
+        # Update all current death sprites to use the new placeholder
+        for death_sprite in self.death_sprites:
+            if death_sprite.is_miniboss:
+                scaled_size = int(TILE_SIZE * DEATH_SPRITE_MINIBOSS_SCALE)
+                death_sprite.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+            else:
+                death_sprite.sprite = new_sprite
+        
+        self.set_message("Regenerating death sprite...", 120)

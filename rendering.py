@@ -24,7 +24,9 @@ class RenderSystem:
         self._render_ui(game_state)
         
         # Render overlays on top
-        if game_state.paused:
+        if game_state.regeneration_dialog:
+            self._render_regeneration_dialog(game_state)
+        elif game_state.paused:
             self._render_paused_overlay()
         elif game_state.game_over:
             self._render_game_over_overlay(game_state)
@@ -244,6 +246,47 @@ class RenderSystem:
         pause_text = font.render("Paused", True, WHITE)
         text_rect = pause_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
         overlay.blit(pause_text, text_rect)
+        self.screen.blit(overlay, (0, 0))
+    
+    def _render_regeneration_dialog(self, game_state):
+        """Render the sprite regeneration dialog."""
+        # Create translucent overlay
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 120))  # Semi-transparent black
+        
+        # Dialog box
+        dialog_width = 400
+        dialog_height = 200
+        dialog_x = (WINDOW_WIDTH - dialog_width) // 2
+        dialog_y = (WINDOW_HEIGHT - dialog_height) // 2
+        
+        # Draw dialog background
+        dialog_rect = pygame.Rect(dialog_x, dialog_y, dialog_width, dialog_height)
+        pygame.draw.rect(overlay, (40, 40, 60, 240), dialog_rect)
+        pygame.draw.rect(overlay, WHITE, dialog_rect, 3)
+        
+        # Title
+        title_font = pygame.font.Font(None, 36)
+        title_text = f"Regenerate {game_state.regeneration_type.title()} Sprite?"
+        title_surface = title_font.render(title_text, True, WHITE)
+        title_rect = title_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 50))
+        overlay.blit(title_surface, title_rect)
+        
+        # Instructions
+        instruction_font = pygame.font.Font(None, 24)
+        instructions = [
+            "Click the sprite to regenerate it with AI.",
+            "This will archive the current sprite and create a new one.",
+            "",
+            "Press R to Regenerate  |  Press ESC to Cancel"
+        ]
+        
+        for i, instruction in enumerate(instructions):
+            if instruction:  # Skip empty lines
+                instruction_surface = instruction_font.render(instruction, True, WHITE)
+                instruction_rect = instruction_surface.get_rect(center=(WINDOW_WIDTH // 2, dialog_y + 90 + i * 25))
+                overlay.blit(instruction_surface, instruction_rect)
+        
         self.screen.blit(overlay, (0, 0))
     
     def _render_game_over_overlay(self, game_state):

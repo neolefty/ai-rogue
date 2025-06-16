@@ -142,6 +142,8 @@ class SpriteManager:
                 
                 except Exception as e:
                     print(f"Error generating sprite {key}: {e}")
+                    import traceback
+                    traceback.print_exc()
                 
                 finally:
                     with self.generation_lock:
@@ -185,6 +187,10 @@ class SpriteManager:
             with self.generation_lock:
                 self.pending_count += 1
             self.generation_queue.put((priority, cache_key, sprite_type, params or {}))
+        
+        # Handle case where placeholder might have been deleted (e.g., during regeneration)
+        if cache_key not in self.placeholders:
+            self.placeholders[cache_key] = self._create_placeholder(sprite_type, params)
         
         return self.placeholders[cache_key]
     
@@ -387,8 +393,48 @@ class SpriteManager:
             actual_pending = len(self.placeholders) - len([k for k in self.placeholders.keys() if k in self.sprites])
             self.pending_count = max(0, actual_pending)
             
+            queue_size = self.generation_queue.qsize()
+            
+            # Debug output if queue seems stuck
+            if queue_size > 0 and len(self.active_generations) == 0:
+                print(f"WARNING: Queue has {queue_size} items but no active generations!")
+                print(f"Placeholders: {len(self.placeholders)}, Sprites: {len(self.sprites)}")
+            
             return {
                 'pending': self.pending_count,
                 'completed': self.completed_count,
-                'active': len(self.active_generations)
+                'active': len(self.active_generations),
+                'queue_size': queue_size
             }
+    
+    def debug_queue_state(self):
+        """Print detailed queue state for debugging."""
+        with self.generation_lock:
+            print(f"=== Sprite Manager Debug ===")
+            print(f"Queue size: {self.generation_queue.qsize()}")
+            print(f"Active generations: {len(self.active_generations)} - {list(self.active_generations)}")
+            print(f"Placeholders: {len(self.placeholders)} - {list(self.placeholders.keys())[:5]}...")
+            print(f"Sprites: {len(self.sprites)}")
+            print(f"Workers: {len(self.workers)} threads")
+            
+            # Check if workers are alive
+            alive_workers = [w for w in self.workers if w.is_alive()]
+            print(f"Alive workers: {len(alive_workers)}")
+            
+            if len(alive_workers) < self.max_concurrent:
+                print("WARNING: Some worker threads have died!")
+                self._restart_dead_workers()
+    
+    def _restart_dead_workers(self):
+        """Restart any dead worker threads."""
+        alive_workers = [w for w in self.workers if w.is_alive()]
+        if len(alive_workers) < self.max_concurrent:
+            print(f"Restarting {self.max_concurrent - len(alive_workers)} dead workers...")
+            self.workers = alive_workers
+            
+            # Start new workers to replace dead ones
+            for i in range(self.max_concurrent - len(alive_workers)):
+                worker = threading.Thread(target=self._generation_worker, daemon=True)
+                worker.start()
+                self.workers.append(worker)
+                print(f"Started replacement worker {i+1}")
