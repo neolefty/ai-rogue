@@ -56,9 +56,15 @@ class Game:
                         self.game_state.hide_regeneration_dialog()
                 elif event.key == pygame.K_ESCAPE:
                     self.game_state.running = False
-                elif event.key == pygame.K_SPACE and self.game_state.game_over:
-                    # Restart the game
-                    self.game_state.restart_game()
+                elif event.key == pygame.K_SPACE:
+                    if self.game_state.game_over:
+                        # Restart the game
+                        self.game_state.restart_game()
+                    else:
+                        # Toggle pause
+                        self.game_state.paused = not self.game_state.paused
+                        pause_state = "paused" if self.game_state.paused else "resumed"
+                        print(f"Game {pause_state}")
                 elif event.key == pygame.K_d:
                     # Debug sprite queue
                     self.game_state.sprite_manager.debug_queue_state()
