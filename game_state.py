@@ -442,6 +442,202 @@ class GameState:
         # Generate first level
         self.generate_level()
     
+    def save_game(self, filename="savegame.json"):
+        """Save complete game state to file."""
+        import json
+        import time
+        
+        save_data = {
+            "version": "1.0",
+            "timestamp": time.time(),
+            "game_state": {
+                "level": self.level,
+                "monsters_defeated": self.monsters_defeated,
+                "items_collected": self.items_collected,
+                "levels_completed": self.levels_completed,
+                "game_over": self.game_over,
+                "paused": self.paused,
+                "message": self.message,
+                "message_timer": self.message_timer
+            },
+            "player": {
+                "x": self.player.x,
+                "y": self.player.y,
+                "health": self.player.health,
+                "attack_power": self.player.attack_power,
+                "inventory": [{"item_type": item.item_type} for item in self.player.inventory]
+            },
+            "monsters": [],
+            "loot_items": [],
+            "stairway": None,
+            "death_sprites": []
+        }
+        
+        # Save monsters
+        for monster in self.monsters:
+            monster_data = {
+                "x": monster.x,
+                "y": monster.y,
+                "level": monster.level,
+                "health": monster.health,
+                "max_health": monster.max_health,
+                "damage": monster.damage,
+                "stats": monster.stats,
+                "is_miniboss": monster.is_miniboss,
+                "sprite_key": getattr(monster, 'sprite_key', f"monster_level_{monster.level}")
+            }
+            save_data["monsters"].append(monster_data)
+        
+        # Save loot items
+        for loot_item in self.loot_items:
+            loot_data = {
+                "x": loot_item.x,
+                "y": loot_item.y,
+                "item_type": loot_item.item_type,
+                "item_variant": getattr(loot_item, 'item_variant', loot_item.item_type),
+                "sprite_key": getattr(loot_item, 'sprite_key', f"item_{loot_item.item_type}"),
+                "is_sliding": getattr(loot_item, 'is_sliding', False),
+                "target_x": getattr(loot_item, 'target_x', loot_item.x),
+                "target_y": getattr(loot_item, 'target_y', loot_item.y)
+            }
+            save_data["loot_items"].append(loot_data)
+        
+        # Save stairway
+        if self.stairway:
+            save_data["stairway"] = {
+                "x": self.stairway.x,
+                "y": self.stairway.y,
+                "sprite_key": getattr(self.stairway, 'sprite_key', 'stairway')
+            }
+        
+        # Save death sprites
+        for death_sprite in self.death_sprites:
+            death_data = {
+                "x": death_sprite.x,
+                "y": death_sprite.y,
+                "is_miniboss": death_sprite.is_miniboss,
+                "fade_timer": death_sprite.fade_timer,
+                "lifetime": death_sprite.lifetime,
+                "alpha": death_sprite.alpha
+            }
+            save_data["death_sprites"].append(death_data)
+        
+        # Write to file
+        try:
+            with open(filename, 'w') as f:
+                json.dump(save_data, f, indent=2)
+            print(f"Game saved to {filename}")
+            return True
+        except Exception as e:
+            print(f"Failed to save game: {e}")
+            return False
+    
+    def load_game(self, filename="savegame.json"):
+        """Load complete game state from file."""
+        import json
+        import os
+        
+        if not os.path.exists(filename):
+            return False
+        
+        try:
+            with open(filename, 'r') as f:
+                save_data = json.load(f)
+            
+            print(f"Loading game from {filename}")
+            
+            # Restore game state
+            game_state = save_data["game_state"]
+            self.level = game_state["level"]
+            self.monsters_defeated = game_state["monsters_defeated"]
+            self.items_collected = game_state["items_collected"]
+            self.levels_completed = game_state["levels_completed"]
+            self.game_over = game_state["game_over"]
+            self.paused = game_state["paused"]
+            self.message = game_state["message"]
+            self.message_timer = game_state["message_timer"]
+            
+            # Restore player
+            player_data = save_data["player"]
+            self.player.x = player_data["x"]
+            self.player.y = player_data["y"]
+            self.player.health = player_data["health"]
+            self.player.attack_power = player_data["attack_power"]
+            
+            # Restore player inventory
+            self.player.inventory = []
+            for item_data in player_data["inventory"]:
+                # Create dummy loot item for inventory
+                dummy_item = type('Item', (), item_data)()
+                self.player.inventory.append(dummy_item)
+            
+            # Clear existing entities
+            self.monsters = []
+            self.loot_items = []
+            self.stairway = None
+            self.death_sprites = []
+            
+            # Restore monsters
+            for monster_data in save_data["monsters"]:
+                sprite = self.sprite_manager.get_sprite(
+                    monster_data["sprite_key"], 'monster', 
+                    {'level': monster_data["level"]}
+                )
+                monster = Monster(
+                    monster_data["level"], monster_data["stats"],
+                    monster_data["x"], monster_data["y"], sprite,
+                    monster_data["is_miniboss"]
+                )
+                monster.health = monster_data["health"]
+                monster.max_health = monster_data["max_health"]
+                monster.damage = monster_data["damage"]
+                monster.sprite_key = monster_data["sprite_key"]
+                self.monsters.append(monster)
+            
+            # Restore loot items
+            for loot_data in save_data["loot_items"]:
+                sprite = self.sprite_manager.get_sprite(
+                    loot_data["sprite_key"], 'item',
+                    {'item_type': loot_data["item_type"], 'item_variant': loot_data["item_variant"]}
+                )
+                loot_item = LootItem(
+                    loot_data["item_type"], loot_data["x"], loot_data["y"], sprite,
+                    loot_data["target_x"], loot_data["target_y"]
+                )
+                loot_item.sprite_key = loot_data["sprite_key"]
+                loot_item.item_variant = loot_data["item_variant"]
+                loot_item.is_sliding = loot_data["is_sliding"]
+                self.loot_items.append(loot_item)
+            
+            # Restore stairway
+            if save_data["stairway"]:
+                stairway_data = save_data["stairway"]
+                sprite = self.sprite_manager.get_sprite('stairway', 'stairway')
+                self.stairway = Stairway(stairway_data["x"], stairway_data["y"], sprite)
+                self.stairway.sprite_key = stairway_data["sprite_key"]
+            
+            # Restore death sprites
+            for death_data in save_data["death_sprites"]:
+                sprite = self.sprite_manager.get_sprite('death', 'death')
+                death_sprite = DeathSprite(
+                    death_data["x"], death_data["y"], sprite,
+                    death_data["is_miniboss"]
+                )
+                death_sprite.fade_timer = death_data["fade_timer"]
+                death_sprite.lifetime = death_data["lifetime"]
+                death_sprite.alpha = death_data["alpha"]
+                death_sprite.sprite_key = 'death'
+                self.death_sprites.append(death_sprite)
+            
+            print(f"Game loaded: Level {self.level}, {len(self.monsters)} monsters, {len(self.loot_items)} loot items")
+            return True
+            
+        except Exception as e:
+            print(f"Failed to load game: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
     def show_regeneration_dialog(self, entity, entity_type):
         """Show regeneration dialog for an entity."""
         self.regeneration_dialog = True

@@ -28,8 +28,9 @@ class Game:
         
         # Loading screens removed - using background generation
         
-        # Generate first level
-        self.game_state.generate_level()
+        # Try to load saved game, otherwise generate first level
+        if not self.game_state.load_game():
+            self.game_state.generate_level()
     
     def run(self):
         """Main game loop."""
@@ -46,6 +47,9 @@ class Game:
         """Handle input events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # Auto-save before quitting
+                print("Saving game before exit...")
+                self.game_state.save_game()
                 self.game_state.running = False
             elif event.type == pygame.KEYDOWN:
                 if self.game_state.regeneration_dialog:

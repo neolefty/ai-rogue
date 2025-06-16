@@ -126,13 +126,17 @@ class Player(Entity):
                 self.health  # Don't reduce temp health if already above max
             )
         elif item.item_type == 'potion':
-            heal_amount = POTION_HEAL_AMOUNT
-            temp_heal_amount = POTION_TEMP_HEAL
             max_health = self.get_max_health()
-            self.health = max(
-                min(max_health, self.health + heal_amount),
-                self.health + temp_heal_amount
-            )
+            temp_heal_amount = POTION_TEMP_HEAL
+            
+            if self.health >= max_health:
+                # Already at max health, give temporary health
+                self.health += temp_heal_amount
+            else:
+                # Scale healing based on missing health: heal half the damage or 5 points, whichever is greater
+                missing_health = max_health - self.health
+                scaled_heal = max(POTION_HEAL_AMOUNT, missing_health // 2)
+                self.health = min(max_health, self.health + scaled_heal)
         
         self.inventory.append(item)
     
@@ -143,10 +147,13 @@ class Player(Entity):
         elif item.item_type == 'armor':
             return f"Max Health +{ARMOR_HEALTH_BONUS}, Healed +{ARMOR_HEAL_BONUS}"
         elif item.item_type == 'potion':
-            if self.health >= self.get_max_health():
+            max_health = self.get_max_health()
+            if self.health >= max_health:
                 return f"+{POTION_TEMP_HEAL} Temporary Health"
             else:
-                return f"Healed +{POTION_HEAL_AMOUNT}"
+                missing_health = max_health - self.health
+                scaled_heal = max(POTION_HEAL_AMOUNT, missing_health // 2)
+                return f"Healed +{scaled_heal}"
         return ""
 
 
