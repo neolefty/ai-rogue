@@ -127,6 +127,9 @@ class Game:
     
     def _handle_loot_pickup(self):
         """Handle player picking up loot items."""
+        if self.game_state.game_over:
+            return
+            
         player = self.game_state.player
         
         for loot_item in self.game_state.loot_items[:]:  # Use slice copy to avoid modification during iteration

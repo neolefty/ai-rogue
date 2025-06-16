@@ -17,6 +17,13 @@ PLAYER_SPEED = 5
 MONSTER_HEALTH_MULTIPLIER = 1  # Monster HP = level * multiplier
 MONSTER_DAMAGE_MULTIPLIER = 1  # Monster damage = level * multiplier
 
+# Equipment bonus constants
+WEAPON_ATTACK_BONUS = 0.05  # Each weapon adds this much attack power
+ARMOR_HEALTH_BONUS = 1      # Each armor adds this much max health
+ARMOR_HEAL_BONUS = 1        # Heal amount when picking up armor
+POTION_HEAL_AMOUNT = 5      # Normal heal from potions
+POTION_TEMP_HEAL = 1        # Temporary health from potions
+
 # Visual constants
 HEALTH_BAR_WIDTH = 32
 HEALTH_BAR_HEIGHT = 4

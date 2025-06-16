@@ -207,6 +207,36 @@ class GameState:
                 self.loot_items.append(loot_item)
             remaining -= 1
     
+    def generate_specific_loot(self, item_type, x, y):
+        """Generate a specific type of loot item at the given position."""
+        # Generate variant based on unlocked options
+        item_variant = self.preferences.get_random_variant(item_type)
+        
+        # Generate unique key for this loot item
+        import time
+        item_key = f"item_{item_type}_{item_variant}_{int(time.time() * 1000000) % 1000000}"
+        
+        # Get placeholder sprite, real sprite loads in background
+        item_sprite = self.sprite_manager.get_sprite(item_key, 'item', {'item_type': item_type, 'item_variant': item_variant})
+        
+        # Calculate scatter position from center point
+        scatter_radius = TILE_SIZE * 2
+        target_x = x + random.randint(-scatter_radius, scatter_radius)
+        target_y = y + random.randint(-scatter_radius, scatter_radius)
+        
+        # Keep target within screen bounds
+        target_x = max(0, min(WINDOW_WIDTH - TILE_SIZE, target_x))
+        target_y = max(0, min(WINDOW_HEIGHT - TILE_SIZE, target_y))
+        
+        # Create loot item with sliding animation from center
+        start_x = x + TILE_SIZE // 2
+        start_y = y + TILE_SIZE // 2
+        loot_item = LootItem(item_type, start_x, start_y, item_sprite, target_x, target_y)
+        
+        loot_item.sprite_key = item_key  # Store key for sprite updates
+        loot_item.item_variant = item_variant  # Store variant for identification
+        self.loot_items.append(loot_item)
+    
     def spawn_stairway(self):
         """Spawn the stairway to the next level."""
         if self.stairway is not None:

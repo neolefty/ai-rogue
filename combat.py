@@ -86,6 +86,7 @@ class CombatSystem:
         
         if player_died:
             self.game_state.game_over = True
+            self._handle_player_death()
     
     def _handle_monster_death(self, monster):
         """Handle when a monster dies."""
@@ -118,3 +119,49 @@ class CombatSystem:
     def _is_in_melee_range(self, entity1, entity2):
         """Check if entities are in melee range."""
         return self._is_within_range(entity1, entity2, MONSTER_ATTACK_RANGE)
+    
+    def _handle_player_death(self):
+        """Handle when the player dies, dropping legacy loot."""
+        player = self.game_state.player
+        
+        # Calculate how many armor and weapon pieces the player had collected
+        # Base stats: 5 health, 0.5 attack
+        armor_pieces = player.get_max_health() - PLAYER_BASE_HEALTH  # Each armor gives +1 max health
+        weapon_pieces = round((player.attack_power - PLAYER_BASE_ATTACK) / WEAPON_ATTACK_BONUS)  # Each weapon gives attack bonus
+        
+        # Drop half of each (rounded down)
+        armor_to_drop = armor_pieces // 2
+        weapons_to_drop = weapon_pieces // 2
+        
+        # Ensure at least 1 drop if player had any of that type
+        if armor_pieces > 0 and armor_to_drop == 0:
+            armor_to_drop = 1
+        if weapon_pieces > 0 and weapons_to_drop == 0:
+            weapons_to_drop = 1
+        
+        # Store player position for loot placement
+        player_x, player_y = player.x, player.y
+        
+        # Generate armor drops
+        for _ in range(armor_to_drop):
+            self.game_state.generate_specific_loot('armor', player_x, player_y)
+        
+        # Generate weapon drops
+        for _ in range(weapons_to_drop):
+            self.game_state.generate_specific_loot('weapon', player_x, player_y)
+        
+        # Log the legacy drop
+        total_drops = armor_to_drop + weapons_to_drop
+        if total_drops > 0:
+            drop_parts = []
+            if armor_to_drop > 0:
+                drop_parts.append(f"{armor_to_drop} armor")
+            if weapons_to_drop > 0:
+                drop_parts.append(f"{weapons_to_drop} weapons")
+            
+            drop_message = " and ".join(drop_parts)
+            print(f"Player death: Dropping {drop_message} as legacy loot")
+            self.game_state.set_message(
+                f"Your spirit left behind {drop_message}...", 
+                300
+            )

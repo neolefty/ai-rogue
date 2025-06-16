@@ -95,7 +95,7 @@ class Player(Entity):
     def get_max_health(self):
         """Calculate player's current max health based on armor."""
         armor_count = len([item for item in self.inventory if item.item_type == 'armor'])
-        return PLAYER_BASE_HEALTH + (armor_count * 1)
+        return PLAYER_BASE_HEALTH + (armor_count * ARMOR_HEALTH_BONUS)
     
     def can_attack(self, current_time):
         """Check if player can attack based on cooldown."""
@@ -116,18 +116,18 @@ class Player(Entity):
     def add_to_inventory(self, item):
         """Add an item to inventory and apply its effects."""
         if item.item_type == 'weapon':
-            self.attack_power += 0.05
+            self.attack_power += WEAPON_ATTACK_BONUS
         elif item.item_type == 'armor':
             # Calculate new max health with this armor
-            new_max_health = self.get_max_health() + 1  # +1 for the new armor
-            heal_amount = 1
+            new_max_health = self.get_max_health() + ARMOR_HEALTH_BONUS  # +1 for the new armor
+            heal_amount = ARMOR_HEAL_BONUS
             self.health = max(
                 min(new_max_health, self.health + heal_amount),
                 self.health  # Don't reduce temp health if already above max
             )
         elif item.item_type == 'potion':
-            heal_amount = 5
-            temp_heal_amount = 1
+            heal_amount = POTION_HEAL_AMOUNT
+            temp_heal_amount = POTION_TEMP_HEAL
             max_health = self.get_max_health()
             self.health = max(
                 min(max_health, self.health + heal_amount),
@@ -139,14 +139,14 @@ class Player(Entity):
     def get_effect_message(self, item):
         """Get the message describing what an item does."""
         if item.item_type == 'weapon':
-            return "Attack +0.05"
+            return f"Attack +{WEAPON_ATTACK_BONUS}"
         elif item.item_type == 'armor':
-            return "Max Health +1, Healed +1"
+            return f"Max Health +{ARMOR_HEALTH_BONUS}, Healed +{ARMOR_HEAL_BONUS}"
         elif item.item_type == 'potion':
             if self.health >= self.get_max_health():
-                return "+1 Temporary Health"
+                return f"+{POTION_TEMP_HEAL} Temporary Health"
             else:
-                return "Healed +5"
+                return f"Healed +{POTION_HEAL_AMOUNT}"
         return ""
 
 
