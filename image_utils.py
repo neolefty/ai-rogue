@@ -3,6 +3,7 @@
 from io import BytesIO
 from PIL import Image
 import pygame
+from constants import TILE_SIZE, MINIBOSS_SCALE_FACTOR, STAIRWAY_SCALE, DEATH_SPRITE_MINIBOSS_SCALE
 
 
 def process_generated_image(image_bytes, target_size=(32, 32)):
@@ -56,3 +57,36 @@ def save_and_load_sprite(img, cache_path):
     """
     img.save(cache_path, "PNG")
     return pygame.image.load(cache_path)
+
+
+def scale_sprite(sprite, scale_factor):
+    """
+    Scale a sprite by the given factor.
+    
+    Args:
+        sprite: pygame.Surface sprite to scale
+        scale_factor: Float scale factor (e.g., 1.5 for 150% size)
+        
+    Returns:
+        pygame.Surface scaled sprite
+    """
+    if scale_factor == 1.0:
+        return sprite
+    
+    scaled_size = int(TILE_SIZE * scale_factor)
+    return pygame.transform.scale(sprite, (scaled_size, scaled_size))
+
+
+def scale_sprite_for_miniboss(sprite):
+    """Scale a sprite for mini-boss display (150% size)."""
+    return scale_sprite(sprite, MINIBOSS_SCALE_FACTOR)
+
+
+def scale_sprite_for_stairway(sprite):
+    """Scale a sprite for stairway display (200% size)."""
+    return scale_sprite(sprite, STAIRWAY_SCALE)
+
+
+def scale_sprite_for_death_miniboss(sprite):
+    """Scale a sprite for mini-boss death display (150% size)."""
+    return scale_sprite(sprite, DEATH_SPRITE_MINIBOSS_SCALE)

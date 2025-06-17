@@ -4,6 +4,7 @@ import math
 import random
 import pygame
 from constants import *
+from image_utils import scale_sprite
 
 
 class MonsterRenderInfo:
@@ -122,13 +123,12 @@ class Monster(Entity):
         # Apply sprite scaling using render info
         if sprite:
             self.update_render_info()
-            if self.render_info.scale_factor != 1.0:
-                self.sprite = pygame.transform.scale(sprite, (self.render_info.sprite_size, self.render_info.sprite_size))
+            self.sprite = scale_sprite(sprite, self.render_info.scale_factor)
     
     def take_damage(self, amount):
         """Apply damage to the monster."""
         self.health -= amount
-        self.damage_flash_timer = 20  # Flash for ~1/3 second
+        self.damage_flash_timer = DAMAGE_FLASH_DURATION
         if self.health <= 0:
             self.is_alive = False
     
@@ -142,7 +142,7 @@ class Monster(Entity):
     
     def attack(self, current_time):
         """Perform an attack (updates last attack time)."""
-        self.attack_flash_timer = 10
+        self.attack_flash_timer = ATTACK_FLASH_DURATION
         self.last_attack_time = current_time
         return self.damage
     
@@ -180,14 +180,14 @@ class Player(Entity):
     
     def attack(self, current_time):
         """Perform an attack (updates last attack time and returns damage)."""
-        self.attack_flash_timer = 10
+        self.attack_flash_timer = ATTACK_FLASH_DURATION
         self.last_attack_time = current_time
         return self.attack_power
     
     def take_damage(self, amount):
         """Apply damage to the player."""
         self.health -= amount
-        self.damage_flash_timer = 20
+        self.damage_flash_timer = DAMAGE_FLASH_DURATION
         return self.health <= 0  # Return True if player died
     
     def add_to_inventory(self, item):

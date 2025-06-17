@@ -72,7 +72,7 @@ class AIBehaviorSystem:
                     monster.alert_behavior = 'wander'
             
             # Commit to this behavior for 60-120 frames (1-2 seconds)
-            monster.alert_behavior_timer = random.randint(60, 120)
+            monster.alert_behavior_timer = random.randint(AI_BEHAVIOR_TIMER_MIN, AI_BEHAVIOR_TIMER_MAX)
         
         # Execute chosen behavior
         if monster.alert_behavior == 'chase':

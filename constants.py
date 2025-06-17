@@ -35,6 +35,14 @@ LOOT_DROP_CHANCE = 0.3
 PLAYER_ATTACK_COOLDOWN = 500  # 0.5 seconds
 MONSTER_ATTACK_COOLDOWN = 1000  # 1 second
 
+# Visual effect timing constants (in frames at 60 FPS)
+DAMAGE_FLASH_DURATION = 20     # ~1/3 second damage flash
+ATTACK_FLASH_DURATION = 10     # ~1/6 second attack flash
+
+# AI behavior timing constants (in frames at 60 FPS)
+AI_BEHAVIOR_TIMER_MIN = 60     # 1 second minimum behavior duration
+AI_BEHAVIOR_TIMER_MAX = 120    # 2 second maximum behavior duration
+
 # Monster AI constants
 MONSTER_AGGRESSIVE_DISTANCE = 150  # Pixels - monsters always chase within this range
 MONSTER_ALERT_DISTANCE = 300  # Pixels - monsters sometimes chase within this range

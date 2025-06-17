@@ -446,7 +446,6 @@ class GameState:
                     else:
                         monster.sprite = base_sprite
     
-    # Loading screen methods removed - using background generation with placeholders
     
     def restart_game(self):
         """Restart the game with a fresh state."""
