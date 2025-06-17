@@ -21,8 +21,11 @@ class MonsterRenderInfo:
         # Calculate sprite size
         self.sprite_size = int(TILE_SIZE * self.scale_factor)
         
+        # Calculate if level indicator should be shown (hide for 1-hit kills)
+        self.show_level_indicator = self._should_show_level_indicator(monster, player_damage)
+        
         # Calculate font size based on scale
-        self.font_size = self._calculate_font_size()
+        self.font_size = self._calculate_font_size() if self.show_level_indicator else 0
         
         # Calculate colors
         self.level_text_color = GOLD if self.is_miniboss else WHITE
@@ -65,6 +68,21 @@ class MonsterRenderInfo:
             return 16
         else:
             return 20
+    
+    def _should_show_level_indicator(self, monster, player_damage):
+        """Determine if level indicator should be shown (hide for 1-hit kills)."""
+        # Always show for mini-bosses
+        if monster.is_miniboss:
+            return True
+        
+        # If no player damage available, show indicator
+        if player_damage is None or player_damage <= 0:
+            return True
+        
+        # Hide indicator for monsters that die in 1 hit
+        import math
+        hits_to_kill = math.ceil(monster.max_health / player_damage)
+        return hits_to_kill > 1
 
 
 class Entity:

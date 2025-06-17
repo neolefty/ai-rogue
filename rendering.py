@@ -192,6 +192,10 @@ class RenderSystem:
         # Get render info for this monster
         render_info = monster.get_render_info()
         
+        # Skip rendering if level indicator should not be shown
+        if not render_info.show_level_indicator:
+            return
+        
         # Create font and text
         font = pygame.font.Font(None, render_info.font_size)
         level_text = font.render(str(render_info.level), True, render_info.level_text_color)
