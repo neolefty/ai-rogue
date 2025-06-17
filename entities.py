@@ -35,20 +35,20 @@ class MonsterRenderInfo:
     def _calculate_scale_factor(self, monster, player_damage):
         """Calculate the scale factor based on hits to kill."""
         if monster.is_miniboss:
-            return 1.5  # Mini-bosses are always 150%
+            return MINIBOSS_SCALE_FACTOR
         
         if player_damage is None or player_damage <= 0:
-            return 1.0  # Default to regular size
+            return REGULAR_SCALE_FACTOR  # Default to regular size
         
         # Calculate hits to kill based on max health
         hits_to_kill = math.ceil(monster.max_health / player_damage)
         
         if hits_to_kill <= 2:
-            return LOW_LEVEL_SCALE_FACTOR  # 60%
+            return LOW_LEVEL_SCALE_FACTOR
         elif hits_to_kill <= 5:
-            return MID_LEVEL_SCALE_FACTOR  # 75%
+            return MID_LEVEL_SCALE_FACTOR
         else:
-            return 1.0  # Regular size
+            return REGULAR_SCALE_FACTOR
     
     def _calculate_font_size(self):
         """Calculate appropriate font size based on scale factor."""
