@@ -27,6 +27,8 @@ class GameState:
         self.monsters_defeated = 0
         self.items_collected = 0
         self.levels_completed = 0
+        self.deaths = 0
+        self.monster_levels_defeated = 0
         
         # Entities
         self.player = None
@@ -312,6 +314,7 @@ class GameState:
         if monster in self.monsters:
             self.monsters.remove(monster)
             self.monsters_defeated += 1
+            self.monster_levels_defeated += monster.level
             
             # Create death sprite at monster's position
             self.create_death_sprite(monster.x, monster.y, monster.is_miniboss)
@@ -454,10 +457,12 @@ class GameState:
         self.paused = False
         self.level = 1
         
-        # Reset statistics
+        # Reset statistics (but keep death count for playthrough tracking)
         self.monsters_defeated = 0
         self.items_collected = 0
         self.levels_completed = 0
+        # self.deaths is NOT reset - it tracks playthroughs
+        self.monster_levels_defeated = 0
         
         # Clear entities (but keep loot_items for "ghost of runs past" effect)
         self.monsters = []
@@ -490,6 +495,8 @@ class GameState:
             "timestamp": time.time(),
             "level": self.level,
             "levels_completed": self.levels_completed,
+            "deaths": self.deaths,
+            "monster_levels_defeated": self.monster_levels_defeated,
             "player": {
                 "x": self.player.x,
                 "y": self.player.y,
@@ -580,6 +587,8 @@ class GameState:
                 # New compact format
                 self.level = save_data["level"]
                 self.levels_completed = save_data["levels_completed"]
+                self.deaths = save_data.get("deaths", 0)
+                self.monster_levels_defeated = save_data.get("monster_levels_defeated", 0)
                 
                 # Restore player position
                 player_data = save_data["player"]

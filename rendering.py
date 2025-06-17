@@ -221,13 +221,14 @@ class RenderSystem:
         """Render user interface elements."""
         player = game_state.player
         
-        # Level display
-        level_text = self.font.render(f"Level: {game_state.level}", True, WHITE)
+        # Level display (playthrough-level format)
+        playthrough = game_state.deaths + 1
+        level_text = self.font.render(f"Level: {playthrough}-{game_state.level}", True, WHITE)
         self.screen.blit(level_text, (10, 10))
         
-        # Inventory count
-        inventory_text = self.small_font.render(f"Inventory: {len(player.inventory)} items", True, (200, 200, 200))
-        self.screen.blit(inventory_text, (10, 50))
+        # Prowess (monster levels defeated)
+        prowess_text = self.small_font.render(f"Prowess: {game_state.monster_levels_defeated}", True, (200, 200, 200))
+        self.screen.blit(prowess_text, (10, 50))
         
         # Player stats
         health_text = self.small_font.render(f"Health: {player.health}/{player.get_max_health()}", True, (255, 100, 100))
@@ -376,6 +377,8 @@ class RenderSystem:
             f"Level Reached: {game_state.level}",
             f"Levels Completed: {game_state.levels_completed}",
             f"Monsters Defeated: {game_state.monsters_defeated}",
+            f"Monster Levels Defeated: {game_state.monster_levels_defeated}",
+            f"Deaths: {game_state.deaths}",
             f"Items Collected: {game_state.items_collected}",
             f"Final Attack Power: {game_state.player.attack_power:.2f}" if game_state.player else "",
             f"Inventory Items: {len(game_state.player.inventory)}" if game_state.player else ""

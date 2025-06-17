@@ -86,6 +86,7 @@ class CombatSystem:
         
         if player_died:
             self.game_state.game_over = True
+            self.game_state.deaths += 1
             self._handle_player_death()
     
     def _handle_monster_death(self, monster):
