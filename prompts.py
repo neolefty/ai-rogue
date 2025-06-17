@@ -16,7 +16,14 @@ WEAPON_VARIANTS = {
     "axe": "Simple axe shape, wooden handle",
     "dagger": "Simple dagger shape, short blade",
     "mace": "Simple mace shape, spiked head",
-    "spear": "Simple spear shape, pointed tip"
+    "spear": "Simple spear shape, pointed tip",
+    "bow": "Simple bow shape, curved wooden weapon",
+    "hammer": "Simple hammer shape, heavy blunt weapon",
+    "club": "Simple club shape, thick wooden stick",
+    "scythe": "Simple scythe shape, curved blade",
+    "staff": "Simple staff shape, long wooden rod",
+    "whip": "Simple whip shape, coiled rope weapon",
+    "crossbow": "Simple crossbow shape, mechanical bow"
 }
 
 ARMOR_VARIANTS = {
@@ -24,7 +31,14 @@ ARMOR_VARIANTS = {
     "shield": "Simple shield shape, round or rectangular",
     "chestplate": "Simple armor chestplate, basic metal",
     "gauntlets": "Simple gauntlets shape, hand protection",
-    "boots": "Simple boots shape, armored footwear"
+    "boots": "Simple boots shape, armored footwear",
+    "bracers": "Simple bracers shape, forearm protection",
+    "cloak": "Simple cloak shape, flowing fabric armor",
+    "vest": "Simple vest shape, light body armor",
+    "pauldrons": "Simple shoulder armor, metal plates",
+    "greaves": "Simple leg armor, shin protection",
+    "belt": "Simple belt shape, utility armor piece",
+    "mask": "Simple mask shape, face protection"
 }
 
 POTION_VARIANTS = {
@@ -32,7 +46,14 @@ POTION_VARIANTS = {
     "vial": "Simple vial shape, thin glass container",
     "flask": "Simple flask shape, wide bottom container",
     "orb": "Simple orb shape, glowing magical sphere",
-    "crystal": "Simple crystal shape, gem-like container"
+    "crystal": "Simple crystal shape, gem-like container",
+    "jar": "Simple jar shape, wide mouth container",
+    "tube": "Simple tube shape, test tube container",
+    "goblet": "Simple goblet shape, ceremonial cup",
+    "chalice": "Simple chalice shape, ornate drinking vessel",
+    "phial": "Simple phial shape, small glass bottle",
+    "ampule": "Simple ampule shape, sealed glass container",
+    "beaker": "Simple beaker shape, laboratory vessel"
 }
 
 SPRITE_STYLE = (
