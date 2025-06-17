@@ -275,19 +275,6 @@ class SpriteManager:
                         from constants import TILE_SIZE
                         scaled_size = int(TILE_SIZE * 1.5)
                         sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
-                    else:
-                        # Scale down mid and low level monsters
-                        level_ratio = level / current_level if current_level > 0 else 1.0
-                        from constants import TILE_SIZE, LOW_LEVEL_SCALE_FACTOR, MID_LEVEL_SCALE_FACTOR
-                        
-                        if level_ratio < 0.5:
-                            # Low-level monsters
-                            scaled_size = int(TILE_SIZE * LOW_LEVEL_SCALE_FACTOR)
-                            sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
-                        elif level_ratio <= 0.8:
-                            # Mid-level monsters
-                            scaled_size = int(TILE_SIZE * MID_LEVEL_SCALE_FACTOR)
-                            sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
                 elif sprite_type == 'stairway':
                     # Scale stairway sprites to be more prominent
                     from constants import TILE_SIZE, STAIRWAY_SCALE

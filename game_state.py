@@ -104,7 +104,8 @@ class GameState:
             x, y = self._find_safe_monster_spawn_position()
             
             is_miniboss = monster_level >= self.level + 2
-            monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss, self.level)
+            player_damage = self.player.attack_power if hasattr(self, 'player') else None
+            monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss, self.level, player_damage)
             monster.sprite_key = monster_key  # Store key for sprite updates
             self.monsters.append(monster)
     
@@ -379,18 +380,18 @@ class GameState:
             if hasattr(monster, 'sprite_key'):
                 new_sprite = self.sprite_manager.sprites.get(monster.sprite_key)
                 if new_sprite and new_sprite != monster.sprite:
-                    # Handle scaling based on monster level
-                    if monster.is_miniboss:
-                        scaled_size = int(TILE_SIZE * 1.5)
-                        monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+                    # Update player damage for monster if player exists
+                    if hasattr(self, 'player'):
+                        monster.player_damage = self.player.attack_power
+                    
+                    # Update render info and apply scaling
+                    monster.update_render_info()
+                    render_info = monster.get_render_info()
+                    
+                    if render_info.scale_factor != 1.0:
+                        monster.sprite = pygame.transform.scale(new_sprite, (render_info.sprite_size, render_info.sprite_size))
                     else:
-                        # Apply scaling for mid and low level monsters
-                        scale_factor = monster._get_scale_factor()
-                        if scale_factor != 1.0:
-                            scaled_size = int(TILE_SIZE * scale_factor)
-                            monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
-                        else:
-                            monster.sprite = new_sprite
+                        monster.sprite = new_sprite
         
         # Update loot item sprites
         for loot_item in self.loot_items:
@@ -420,6 +421,30 @@ class GameState:
                         death_sprite.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
                     else:
                         death_sprite.sprite = new_sprite
+    
+    def update_monster_scales(self):
+        """Update all monster scales based on current player damage."""
+        if not hasattr(self, 'player'):
+            return
+        
+        player_damage = self.player.attack_power
+        
+        for monster in self.monsters:
+            if monster.sprite:
+                # Update stored player damage
+                monster.player_damage = player_damage
+                
+                # Update render info and apply scaling
+                monster.update_render_info()
+                render_info = monster.get_render_info()
+                
+                # Get base sprite from sprite manager
+                base_sprite = self.sprite_manager.sprites.get(monster.sprite_key)
+                if base_sprite:
+                    if render_info.scale_factor != 1.0:
+                        monster.sprite = pygame.transform.scale(base_sprite, (render_info.sprite_size, render_info.sprite_size))
+                    else:
+                        monster.sprite = base_sprite
     
     # Loading screen methods removed - using background generation with placeholders
     
@@ -592,10 +617,11 @@ class GameState:
                     monster_data["sprite_key"], 'monster', 
                     {'level': monster_data["level"]}
                 )
+                player_damage = self.player.attack_power if hasattr(self, 'player') else None
                 monster = Monster(
                     monster_data["level"], monster_data["stats"],
                     monster_data["x"], monster_data["y"], sprite,
-                    monster_data["is_miniboss"], self.level
+                    monster_data["is_miniboss"], self.level, player_damage
                 )
                 monster.health = monster_data["health"]
                 monster.max_health = monster_data["max_health"]

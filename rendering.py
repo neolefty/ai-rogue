@@ -189,36 +189,25 @@ class RenderSystem:
     
     def _render_monster_level_indicator(self, monster):
         """Render level number on monster to show difficulty."""
-        # Determine font size based on monster scale
-        scale_factor = monster._get_scale_factor() if hasattr(monster, '_get_scale_factor') else 1.0
-        if monster.is_miniboss:
-            font_size = 24
-        elif scale_factor < 0.7:  # Low-level monsters
-            font_size = 16  # Increased from 14
-        elif scale_factor < 1.0:  # Mid-level monsters
-            font_size = 16
-        else:
-            font_size = 20
+        # Get render info for this monster
+        render_info = monster.get_render_info()
         
-        color = GOLD if monster.is_miniboss else WHITE
-        font = pygame.font.Font(None, font_size)
-        level_text = font.render(str(monster.level), True, color)
+        # Create font and text
+        font = pygame.font.Font(None, render_info.font_size)
+        level_text = font.render(str(render_info.level), True, render_info.level_text_color)
 
         # Position in top-right corner of monster
         sprite_w = monster.sprite.get_width() if monster.sprite else TILE_SIZE
         text_rect = level_text.get_rect()
-        text_x = monster.x + sprite_w - text_rect.width - 2
-        text_y = monster.y - 2
+        text_x = monster.x + sprite_w - text_rect.width - render_info.level_indicator_offset_x
+        text_y = monster.y - render_info.level_indicator_offset_y
 
         # Create translucent surface for background
         bg_size = max(text_rect.width + 4, text_rect.height + 4)
         bg_surface = pygame.Surface((bg_size, bg_size), pygame.SRCALPHA)
         
         # Draw translucent background circle
-        if monster.is_miniboss:
-            pygame.draw.circle(bg_surface, (100, 80, 0, 180), (bg_size//2, bg_size//2), bg_size//2)
-        else:
-            pygame.draw.circle(bg_surface, (0, 0, 0, 60), (bg_size//2, bg_size//2), bg_size//2)  # More translucent
+        pygame.draw.circle(bg_surface, render_info.bg_color, (bg_size//2, bg_size//2), bg_size//2)
         
         # Blit background and text
         self.screen.blit(bg_surface, (text_x - 2, text_y - 2))

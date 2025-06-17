@@ -172,6 +172,10 @@ class Game:
                 player.add_to_inventory(loot_item)
                 self.game_state.remove_loot_item(loot_item)
                 
+                # Update monster scales if weapon was picked up
+                if loot_item.item_type == 'weapon':
+                    self.game_state.update_monster_scales()
+                
                 # Show pickup message
                 self.game_state.set_message(f"Picked up {loot_item.item_type}! {effect_msg}", 180)
                 print(f"Picked up {loot_item.item_type}! {effect_msg}")

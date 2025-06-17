@@ -1,8 +1,65 @@
 """Game entity classes with improved hierarchy."""
 
+import math
 import random
 import pygame
 from constants import *
+
+
+class MonsterRenderInfo:
+    """Contains all information needed to render a monster properly."""
+    
+    def __init__(self, monster, player_damage=None):
+        self.monster = monster
+        self.is_miniboss = monster.is_miniboss
+        self.level = monster.level
+        
+        # Calculate scale factor based on hits to kill
+        self.scale_factor = self._calculate_scale_factor(monster, player_damage)
+        
+        # Calculate sprite size
+        self.sprite_size = int(TILE_SIZE * self.scale_factor)
+        
+        # Calculate font size based on scale
+        self.font_size = self._calculate_font_size()
+        
+        # Calculate colors
+        self.level_text_color = GOLD if self.is_miniboss else WHITE
+        self.bg_alpha = 180 if self.is_miniboss else 60
+        self.bg_color = (100, 80, 0, self.bg_alpha) if self.is_miniboss else (0, 0, 0, self.bg_alpha)
+        
+        # Calculate positioning offsets
+        self.level_indicator_offset_x = 2  # Distance from right edge
+        self.level_indicator_offset_y = 2  # Distance from top edge
+    
+    def _calculate_scale_factor(self, monster, player_damage):
+        """Calculate the scale factor based on hits to kill."""
+        if monster.is_miniboss:
+            return 1.5  # Mini-bosses are always 150%
+        
+        if player_damage is None or player_damage <= 0:
+            return 1.0  # Default to regular size
+        
+        # Calculate hits to kill based on max health
+        hits_to_kill = math.ceil(monster.max_health / player_damage)
+        
+        if hits_to_kill <= 2:
+            return LOW_LEVEL_SCALE_FACTOR  # 60%
+        elif hits_to_kill <= 5:
+            return MID_LEVEL_SCALE_FACTOR  # 75%
+        else:
+            return 1.0  # Regular size
+    
+    def _calculate_font_size(self):
+        """Calculate appropriate font size based on scale factor."""
+        if self.is_miniboss:
+            return 24
+        elif self.scale_factor < 0.7:  # Low-level monsters
+            return 16
+        elif self.scale_factor < 1.0:  # Mid-level monsters
+            return 16
+        else:
+            return 20
 
 
 class Entity:
@@ -34,10 +91,11 @@ class Entity:
 class Monster(Entity):
     """Monster entity with health, AI behavior, and combat capabilities."""
     
-    def __init__(self, level, stats, x, y, sprite=None, is_miniboss=False, dungeon_level=1):
+    def __init__(self, level, stats, x, y, sprite=None, is_miniboss=False, dungeon_level=1, player_damage=None):
         super().__init__(x, y, sprite)
         self.level = level
         self.dungeon_level = dungeon_level
+        self.player_damage = player_damage
         self.health = MONSTER_HEALTH_MULTIPLIER * level
         self.max_health = self.health
         self.damage = MONSTER_DAMAGE_MULTIPLIER * level
@@ -54,18 +112,11 @@ class Monster(Entity):
         self.alert_behavior_timer = 0
         self.target_miniboss = None  # Reference to targeted mini-boss
         
-        # Scale sprite based on monster level relative to dungeon level
+        # Apply sprite scaling using render info
         if sprite:
-            if is_miniboss:
-                # Mini-bosses are always scaled up
-                scaled_size = int(TILE_SIZE * 1.5)
-                self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
-            else:
-                # Scale down mid and low level monsters
-                scale_factor = self._get_scale_factor()
-                if scale_factor != 1.0:
-                    scaled_size = int(TILE_SIZE * scale_factor)
-                    self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
+            self.update_render_info()
+            if self.render_info.scale_factor != 1.0:
+                self.sprite = pygame.transform.scale(sprite, (self.render_info.sprite_size, self.render_info.sprite_size))
     
     def take_damage(self, amount):
         """Apply damage to the monster."""
@@ -88,19 +139,15 @@ class Monster(Entity):
         self.last_attack_time = current_time
         return self.damage
     
-    def _get_scale_factor(self):
-        """Get the scale factor based on monster level relative to dungeon level."""
-        level_ratio = self.level / self.dungeon_level if self.dungeon_level > 0 else 1.0
-        
-        if level_ratio < 0.5:
-            # Low-level monsters (below 50% of dungeon level)
-            return LOW_LEVEL_SCALE_FACTOR
-        elif level_ratio <= 0.8:
-            # Mid-level monsters (50% to 80% of dungeon level)
-            return MID_LEVEL_SCALE_FACTOR
-        else:
-            # Regular monsters (above 80% of dungeon level)
-            return 1.0
+    def update_render_info(self):
+        """Update the render info for this monster."""
+        self.render_info = MonsterRenderInfo(self, self.player_damage)
+    
+    def get_render_info(self):
+        """Get the current render info, creating it if needed."""
+        if not hasattr(self, 'render_info') or self.render_info is None:
+            self.update_render_info()
+        return self.render_info
 
 
 class Player(Entity):
