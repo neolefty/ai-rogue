@@ -33,14 +33,18 @@ class MonsterRenderInfo:
         self.level_indicator_offset_y = 2  # Distance from top edge
     
     def _calculate_scale_factor(self, monster, player_damage):
-        """Calculate the scale factor based on hits to kill."""
+        """Calculate the scale factor based on monster type and hits to kill."""
         if monster.is_miniboss:
             return MINIBOSS_SCALE_FACTOR
+        
+        # Regular monsters (close to dungeon level) always get regular scale
+        if monster.is_regular_monster:
+            return REGULAR_SCALE_FACTOR
         
         if player_damage is None or player_damage <= 0:
             return REGULAR_SCALE_FACTOR  # Default to regular size
         
-        # Calculate hits to kill based on max health
+        # For non-regular monsters, use hits-to-kill scaling
         hits_to_kill = math.ceil(monster.max_health / player_damage)
         
         if hits_to_kill <= 2:
@@ -96,12 +100,15 @@ class Monster(Entity):
         self.level = level
         self.dungeon_level = dungeon_level
         self.player_damage = player_damage
+        self.is_miniboss = is_miniboss
+        
+        # Regular monsters are those within 1 level of dungeon level (but not mini-bosses)
+        self.is_regular_monster = (dungeon_level - 1 <= level <= dungeon_level + 1) and not is_miniboss
         self.health = MONSTER_HEALTH_MULTIPLIER * level
         self.max_health = self.health
         self.damage = MONSTER_DAMAGE_MULTIPLIER * level
         self.stats = stats  # AI-generated flavor text
         self.is_alive = True
-        self.is_miniboss = is_miniboss
         self.last_attack_time = 0
         
         # AI behavior variables
