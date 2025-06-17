@@ -59,8 +59,8 @@ STAIRWAY_SCALE = 2.0  # Scale factor for stairway sprites
 
 # Monster scale factors based on hits-to-kill (using player damage vs monster max HP)
 LOW_LEVEL_SCALE_FACTOR = 0.6   # For monsters killed in ≤2 hits (weak enemies)
-MID_LEVEL_SCALE_FACTOR = 0.75  # For monsters killed in 3-5 hits (moderate enemies)
-REGULAR_SCALE_FACTOR = 1.0     # For monsters killed in >5 hits (strong enemies)
+MID_LEVEL_SCALE_FACTOR = 0.75  # For monsters killed in 3-4 hits (moderate enemies)
+REGULAR_SCALE_FACTOR = 1.0     # For monsters killed in ≥5 hits (strong enemies)
 MINIBOSS_SCALE_FACTOR = 1.5    # For mini-bosses (level ≥ dungeon_level + 2)
 
 # Colors

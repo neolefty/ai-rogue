@@ -45,7 +45,7 @@ class MonsterRenderInfo:
         
         if hits_to_kill <= 2:
             return LOW_LEVEL_SCALE_FACTOR
-        elif hits_to_kill <= 5:
+        elif hits_to_kill <= 4:
             return MID_LEVEL_SCALE_FACTOR
         else:
             return REGULAR_SCALE_FACTOR
