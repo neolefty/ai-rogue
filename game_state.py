@@ -104,7 +104,7 @@ class GameState:
             x, y = self._find_safe_monster_spawn_position()
             
             is_miniboss = monster_level >= self.level + 2
-            monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss)
+            monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss, self.level)
             monster.sprite_key = monster_key  # Store key for sprite updates
             self.monsters.append(monster)
     
@@ -379,12 +379,18 @@ class GameState:
             if hasattr(monster, 'sprite_key'):
                 new_sprite = self.sprite_manager.sprites.get(monster.sprite_key)
                 if new_sprite and new_sprite != monster.sprite:
-                    # Handle mini-boss scaling
+                    # Handle scaling based on monster level
                     if monster.is_miniboss:
                         scaled_size = int(TILE_SIZE * 1.5)
                         monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
                     else:
-                        monster.sprite = new_sprite
+                        # Apply scaling for mid and low level monsters
+                        scale_factor = monster._get_scale_factor()
+                        if scale_factor != 1.0:
+                            scaled_size = int(TILE_SIZE * scale_factor)
+                            monster.sprite = pygame.transform.scale(new_sprite, (scaled_size, scaled_size))
+                        else:
+                            monster.sprite = new_sprite
         
         # Update loot item sprites
         for loot_item in self.loot_items:
@@ -589,7 +595,7 @@ class GameState:
                 monster = Monster(
                     monster_data["level"], monster_data["stats"],
                     monster_data["x"], monster_data["y"], sprite,
-                    monster_data["is_miniboss"]
+                    monster_data["is_miniboss"], self.level
                 )
                 monster.health = monster_data["health"]
                 monster.max_health = monster_data["max_health"]

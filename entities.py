@@ -34,9 +34,10 @@ class Entity:
 class Monster(Entity):
     """Monster entity with health, AI behavior, and combat capabilities."""
     
-    def __init__(self, level, stats, x, y, sprite=None, is_miniboss=False):
+    def __init__(self, level, stats, x, y, sprite=None, is_miniboss=False, dungeon_level=1):
         super().__init__(x, y, sprite)
         self.level = level
+        self.dungeon_level = dungeon_level
         self.health = MONSTER_HEALTH_MULTIPLIER * level
         self.max_health = self.health
         self.damage = MONSTER_DAMAGE_MULTIPLIER * level
@@ -53,10 +54,18 @@ class Monster(Entity):
         self.alert_behavior_timer = 0
         self.target_miniboss = None  # Reference to targeted mini-boss
         
-        # Scale sprite for mini-bosses
-        if is_miniboss and sprite:
-            scaled_size = int(TILE_SIZE * 1.5)
-            self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
+        # Scale sprite based on monster level relative to dungeon level
+        if sprite:
+            if is_miniboss:
+                # Mini-bosses are always scaled up
+                scaled_size = int(TILE_SIZE * 1.5)
+                self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
+            else:
+                # Scale down mid and low level monsters
+                scale_factor = self._get_scale_factor()
+                if scale_factor != 1.0:
+                    scaled_size = int(TILE_SIZE * scale_factor)
+                    self.sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
     
     def take_damage(self, amount):
         """Apply damage to the monster."""
@@ -78,6 +87,20 @@ class Monster(Entity):
         self.attack_flash_timer = 10
         self.last_attack_time = current_time
         return self.damage
+    
+    def _get_scale_factor(self):
+        """Get the scale factor based on monster level relative to dungeon level."""
+        level_ratio = self.level / self.dungeon_level if self.dungeon_level > 0 else 1.0
+        
+        if level_ratio < 0.5:
+            # Low-level monsters (below 50% of dungeon level)
+            return LOW_LEVEL_SCALE_FACTOR
+        elif level_ratio <= 0.8:
+            # Mid-level monsters (50% to 80% of dungeon level)
+            return MID_LEVEL_SCALE_FACTOR
+        else:
+            # Regular monsters (above 80% of dungeon level)
+            return 1.0
 
 
 class Player(Entity):

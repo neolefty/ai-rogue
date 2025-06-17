@@ -57,6 +57,10 @@ DEATH_SPRITE_MINIBOSS_LIFETIME = 180  # Frames - 3 seconds for mini-bosses
 DEATH_SPRITE_MINIBOSS_SCALE = 1.5  # Scale factor for mini-boss death sprites
 STAIRWAY_SCALE = 2.0  # Scale factor for stairway sprites
 
+# Monster scale factors based on level relative to dungeon
+MID_LEVEL_SCALE_FACTOR = 0.75  # For monsters level * 0.5 to level * 0.8
+LOW_LEVEL_SCALE_FACTOR = 0.6   # For monsters below level * 0.5
+
 # Colors
 BACKGROUND_COLOR = (32, 32, 48)  # Dark blue-gray
 WHITE = (255, 255, 255)
