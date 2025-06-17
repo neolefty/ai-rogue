@@ -90,10 +90,15 @@ class CombatSystem:
     
     def _handle_monster_death(self, monster):
         """Handle when a monster dies."""
-        # Determine loot drop chance based on monster level vs player level
+        # Determine loot drop count based on monster danger level
+        player_max_health = self.game_state.player.get_max_health()
         player_level = self.game_state.level
-        if monster.level > player_level:
-            loot_count = 3  # Higher level monsters drop more
+        
+        # Check if this monster can one-shot the player (extremely dangerous)
+        if monster.damage >= player_max_health:
+            loot_count = 10  # Massive reward for surviving one-shot monsters
+        elif monster.is_miniboss:
+            loot_count = 3   # Standard mini-boss reward
         elif monster.level < player_level - 1:
             loot_count = LOOT_DROP_CHANCE * 0.5  # Lower level monsters drop less
         else:
