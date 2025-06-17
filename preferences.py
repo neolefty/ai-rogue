@@ -41,9 +41,9 @@ class PreferencesManager:
                 "potion": ["bottle"]
             },
             "variant_definitions": {
-                "weapon": ["sword", "axe", "dagger", "mace", "spear"],
-                "armor": ["helmet", "shield", "chestplate", "gauntlets", "boots"],
-                "potion": ["bottle", "vial", "flask", "orb", "crystal"]
+                "weapon": ["sword", "axe", "dagger", "mace", "spear", "bow", "hammer", "club", "scythe", "staff", "whip", "crossbow"],
+                "armor": ["helmet", "shield", "chestplate", "gauntlets", "boots", "bracers", "cloak", "vest", "pauldrons", "greaves", "belt", "mask"],
+                "potion": ["bottle", "vial", "flask", "orb", "crystal", "jar", "tube", "goblet", "chalice", "phial", "ampule", "beaker"]
             },
             "unlock_thresholds": {
                 "monsters_per_weapon": 10,
@@ -64,6 +64,26 @@ class PreferencesManager:
                 data["available_variants"][item_type] = variants.copy()
             
             print("Migrated preferences to include available_variants")
+        
+        # Update variant_definitions to include new expanded variants
+        current_definitions = data.get("variant_definitions", {})
+        new_definitions = {
+            "weapon": ["sword", "axe", "dagger", "mace", "spear", "bow", "hammer", "club", "scythe", "staff", "whip", "crossbow"],
+            "armor": ["helmet", "shield", "chestplate", "gauntlets", "boots", "bracers", "cloak", "vest", "pauldrons", "greaves", "belt", "mask"],
+            "potion": ["bottle", "vial", "flask", "orb", "crystal", "jar", "tube", "goblet", "chalice", "phial", "ampule", "beaker"]
+        }
+        
+        # Check if we need to update the definitions
+        needs_update = False
+        for item_type, new_variants in new_definitions.items():
+            current_variants = current_definitions.get(item_type, [])
+            if len(current_variants) < len(new_variants):
+                needs_update = True
+                break
+        
+        if needs_update:
+            data["variant_definitions"] = new_definitions
+            print("Updated variant definitions to include new expanded loot varieties")
         
         return data
     
