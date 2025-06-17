@@ -775,6 +775,8 @@ class GameState:
         self.monsters_defeated = 0
         self.items_collected = 0
         self.levels_completed = 0
+        self.deaths = 0
+        self.monster_levels_defeated = 0
         self.game_over = False
         self.paused = False
         self.message = ""
