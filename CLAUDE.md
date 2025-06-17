@@ -63,9 +63,17 @@ When making code changes, run these commands to ensure code quality:
 - **Combat**: Multi-target attacks with damage falloff (1st full, 2nd ½, 3rd ⅓, etc.)
 - **AI Behavior**: Three-zone system with clustering/dispersion (aggressive ≤150px, alert ≤300px, passive)
 - **Sprite Generation**: Background threading with placeholders, specialized prompts per item type
+- **Monster Scaling**: Dynamic visual scaling based on hits-to-kill relative to player damage
 - **Game Flow**: Persistent loot, translucent overlays, 8-directional normalized movement
 
 **Balance**: Fast-paced tactical gameplay - Player: 5 HP + armor, 0.5s attacks; Monsters: HP=level, 1s attacks
+
+**Monster Visual Scaling**: Monsters are rendered at different sizes based on how many hits it takes to kill them:
+- Low-level (≤2 hits): 60% size (19px sprites)
+- Mid-level (3-5 hits): 75% size (24px sprites)  
+- Regular (>5 hits): 100% size (32px sprites)
+- Mini-bosses: 150% size (48px sprites)
+- Scaling updates dynamically when player picks up weapons
 
 ## Game Balance Philosophy
 - **Fast, Tactical Combat**: Low HP pools make positioning and timing critical
@@ -77,6 +85,7 @@ When making code changes, run these commands to ensure code quality:
 1. **Complex sprites**: Use simple, specific prompts - "Simple sword shape, plain blade, no decoration"
 2. **Monster stats vs gameplay**: AI-generated stats are for flavor only; actual combat uses balanced formulas
 3. **Threading issues**: All sprite generation uses background threads with placeholder system
+4. **Monster scaling**: Uses MonsterRenderInfo class for centralized rendering calculations; scaling based on max HP, not current HP
 
 ## Cache Structure
 - `cache/sprites/`: Player and stairway sprites
