@@ -6,3 +6,9 @@ __pycache__/
 preferences.json
 savegame.json
 
+# Test files
+*_test.json
+*_new_format.json
+*_optimized.json
+*.tmp
+

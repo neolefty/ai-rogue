@@ -480,33 +480,27 @@ class GameState:
         import json
         import time
         
+        # Count inventory items
+        inventory_counts = {"weapon": 0, "armor": 0, "potion": 0}
+        for item in self.player.inventory:
+            inventory_counts[item.item_type] += 1
+        
         save_data = {
-            "version": "1.0",
+            "version": "2.0",  # Updated version for compact format
             "timestamp": time.time(),
-            "game_state": {
-                "level": self.level,
-                "monsters_defeated": self.monsters_defeated,
-                "items_collected": self.items_collected,
-                "levels_completed": self.levels_completed,
-                "game_over": self.game_over,
-                "paused": self.paused,
-                "message": self.message,
-                "message_timer": self.message_timer
-            },
+            "level": self.level,
+            "levels_completed": self.levels_completed,
             "player": {
                 "x": self.player.x,
                 "y": self.player.y,
-                "health": self.player.health,
-                "attack_power": self.player.attack_power,
-                "inventory": [{"item_type": item.item_type} for item in self.player.inventory]
+                "inventory": inventory_counts
             },
             "monsters": [],
             "loot_items": [],
-            "stairway": None,
             "death_sprites": []
         }
         
-        # Save monsters
+        # Save monsters (preserve positions and state)
         for monster in self.monsters:
             monster_data = {
                 "x": monster.x,
@@ -535,7 +529,7 @@ class GameState:
             }
             save_data["loot_items"].append(loot_data)
         
-        # Save stairway
+        # Save stairway (only if it exists)
         if self.stairway:
             save_data["stairway"] = {
                 "x": self.stairway.x,
@@ -579,30 +573,70 @@ class GameState:
             
             print(f"Loading game from {filename}")
             
-            # Restore game state
-            game_state = save_data["game_state"]
-            self.level = game_state["level"]
-            self.monsters_defeated = game_state["monsters_defeated"]
-            self.items_collected = game_state["items_collected"]
-            self.levels_completed = game_state["levels_completed"]
-            self.game_over = game_state["game_over"]
-            self.paused = game_state["paused"]
-            self.message = game_state["message"]
-            self.message_timer = game_state["message_timer"]
+            # Check version for backward compatibility
+            version = save_data.get("version", "1.0")
             
-            # Restore player
-            player_data = save_data["player"]
-            self.player.x = player_data["x"]
-            self.player.y = player_data["y"]
-            self.player.health = player_data["health"]
-            self.player.attack_power = player_data["attack_power"]
-            
-            # Restore player inventory
-            self.player.inventory = []
-            for item_data in player_data["inventory"]:
-                # Create dummy loot item for inventory
-                dummy_item = type('Item', (), item_data)()
-                self.player.inventory.append(dummy_item)
+            if version == "2.0":
+                # New compact format
+                self.level = save_data["level"]
+                self.levels_completed = save_data["levels_completed"]
+                
+                # Restore player position
+                player_data = save_data["player"]
+                self.player.x = player_data["x"]
+                self.player.y = player_data["y"]
+                
+                # Reconstruct inventory from counts
+                inventory_counts = player_data["inventory"]
+                self.player.inventory = []
+                for item_type, count in inventory_counts.items():
+                    for _ in range(count):
+                        # Create dummy item for inventory
+                        dummy_item = type('Item', (), {'item_type': item_type})()
+                        self.player.inventory.append(dummy_item)
+                
+                # Calculate derived stats from inventory
+                armor_count = inventory_counts.get("armor", 0)
+                weapon_count = inventory_counts.get("weapon", 0)
+                
+                self.player.health = PLAYER_BASE_HEALTH + armor_count * ARMOR_HEALTH_BONUS
+                self.player.attack_power = PLAYER_BASE_ATTACK + weapon_count * WEAPON_ATTACK_BONUS
+                
+                # Calculate derived game stats
+                self.items_collected = sum(inventory_counts.values())
+                self.monsters_defeated = 0  # Will be recalculated if needed
+                
+                # Reset temporary state
+                self.game_over = False
+                self.paused = False
+                self.message = ""
+                self.message_timer = 0
+                
+            else:
+                # Legacy format (version 1.0)
+                game_state = save_data["game_state"]
+                self.level = game_state["level"]
+                self.monsters_defeated = game_state["monsters_defeated"]
+                self.items_collected = game_state["items_collected"]
+                self.levels_completed = game_state["levels_completed"]
+                self.game_over = game_state["game_over"]
+                self.paused = game_state["paused"]
+                self.message = game_state["message"]
+                self.message_timer = game_state["message_timer"]
+                
+                # Restore player (legacy format)
+                player_data = save_data["player"]
+                self.player.x = player_data["x"]
+                self.player.y = player_data["y"]
+                self.player.health = player_data["health"]
+                self.player.attack_power = player_data["attack_power"]
+                
+                # Restore player inventory (legacy format)
+                self.player.inventory = []
+                for item_data in player_data["inventory"]:
+                    # Create dummy loot item for inventory
+                    dummy_item = type('Item', (), item_data)()
+                    self.player.inventory.append(dummy_item)
             
             # Clear existing entities
             self.monsters = []
@@ -610,8 +644,9 @@ class GameState:
             self.stairway = None
             self.death_sprites = []
             
+            # Restore entities for both formats
             # Restore monsters
-            for monster_data in save_data["monsters"]:
+            for monster_data in save_data.get("monsters", []):
                 sprite = self.sprite_manager.get_sprite(
                     monster_data["sprite_key"], 'monster', 
                     {'level': monster_data["level"]}
@@ -629,7 +664,7 @@ class GameState:
                 self.monsters.append(monster)
             
             # Restore loot items
-            for loot_data in save_data["loot_items"]:
+            for loot_data in save_data.get("loot_items", []):
                 sprite = self.sprite_manager.get_sprite(
                     loot_data["sprite_key"], 'item',
                     {'item_type': loot_data["item_type"], 'item_variant': loot_data["item_variant"]}
@@ -644,14 +679,14 @@ class GameState:
                 self.loot_items.append(loot_item)
             
             # Restore stairway
-            if save_data["stairway"]:
+            if save_data.get("stairway"):
                 stairway_data = save_data["stairway"]
                 sprite = self.sprite_manager.get_sprite('stairway', 'stairway')
                 self.stairway = Stairway(stairway_data["x"], stairway_data["y"], sprite)
-                self.stairway.sprite_key = stairway_data["sprite_key"]
+                self.stairway.sprite_key = stairway_data.get("sprite_key", "stairway")
             
             # Restore death sprites
-            for death_data in save_data["death_sprites"]:
+            for death_data in save_data.get("death_sprites", []):
                 sprite = self.sprite_manager.get_sprite('death', 'death')
                 death_sprite = DeathSprite(
                     death_data["x"], death_data["y"], sprite,
