@@ -90,6 +90,10 @@ class GameState:
         # Update sprite manager with current level for mini-boss scaling
         self.sprite_manager._current_level = self.level
         
+        # Show instructions for first level
+        if self.level == 1 and self.deaths == 0:
+            self.set_message("Use arrow keys to move. Don't get too close to monsters!", 300)
+        
         total_monsters = min(
             INITIAL_MONSTER_COUNT + (self.level - 1) * MONSTER_INCREMENT,
             MAX_MONSTER_COUNT

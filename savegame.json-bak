@@ -1,0 +1,118 @@
+{
+  "version": "2.0",
+  "timestamp": 1750203082.624268,
+  "level": 4,
+  "levels_completed": 3,
+  "deaths": 0,
+  "monster_levels_defeated": 37,
+  "player": {
+    "x": 204.33243173810428,
+    "y": 501.0155108391472,
+    "inventory": {
+      "weapon": 5,
+      "armor": 3,
+      "potion": 2
+    }
+  },
+  "monsters": [
+    {
+      "x": 569.2685066011733,
+      "y": 62.145706961199664,
+      "level": 4,
+      "health": 4,
+      "max_health": 4,
+      "damage": 4,
+      "stats": "Name: Shadow Stalker\n\nType: Undead\n\nLevel: 4\n\nHealth: 60\n\nStrength: 15\n\nAgility: 18\n\nDefense: 12\n\nMagic: 10\n\nAbilities: \n1. Shadow Step: Can teleport short distances instantly to surprise its enemies.\n2. Shadow Cloak: Can become invisible for a short period of time, making it harder to hit.\n3. Life Drain: Drains the life force of its target to replenish its own health.\n\nLoot: Shadow Essence (can be used to enhance magical abilities)",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_4"
+    },
+    {
+      "x": 1015.5,
+      "y": 517.5,
+      "level": 4,
+      "health": 4,
+      "max_health": 4,
+      "damage": 4,
+      "stats": "Name: Shadow Stalker\n\nType: Undead\n\nLevel: 4\n\nHealth: 60\n\nStrength: 15\n\nAgility: 18\n\nDefense: 12\n\nMagic: 10\n\nAbilities: \n1. Shadow Step: Can teleport short distances instantly to surprise its enemies.\n2. Shadow Cloak: Can become invisible for a short period of time, making it harder to hit.\n3. Life Drain: Drains the life force of its target to replenish its own health.\n\nLoot: Shadow Essence (can be used to enhance magical abilities)",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_4"
+    },
+    {
+      "x": 1010.0,
+      "y": 46.0,
+      "level": 1,
+      "health": 1,
+      "max_health": 1,
+      "damage": 1,
+      "stats": "Name: Gloomrat\nLevel: 1\nType: Undead\nHealth: 12\nAttack: 5\nDefense: 3\nSpeed: 8\nAbilities: \n1. Shadow Strike - Deals 4 damage\n2. Drain Life - Drains 3 health points from the target and adds it to Gloomrat\n3. Vanish - Gloomrat becomes invisible for 1 turn, increasing its evasion by 50%",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_1"
+    },
+    {
+      "x": 871.5,
+      "y": 582.5,
+      "level": 2,
+      "health": 2,
+      "max_health": 2,
+      "damage": 2,
+      "stats": "Name: Venomous Spitter\n\nStats:\n- HP: 25\n- Attack: 8\n- Defense: 5\n- Speed: 12\n- Special Abilities: \n  1. Poisonous Spit - can shoot a stream of toxic substance at its target, causing damage over time \n  2. Quick Reflexes - able to react swiftly to incoming attacks, granting a temporary boost to speed\n  3. Agile Dodge - can quickly evade incoming attacks, reducing damage received\n\nDescription: The Venomous Spitter is a small, agile creature with a greenish hue and razor-sharp teeth. It often lurks in dark corners of dungeons, waiting to ambush unsuspecting adventurers with its toxic spit. Its swift movements and deadly accuracy make it a formidable opponent, especially for lower level adventurers.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_2"
+    },
+    {
+      "x": 555.6801948466051,
+      "y": 376.0944084089782,
+      "level": 7,
+      "health": 7,
+      "max_health": 7,
+      "damage": 7,
+      "stats": "Name: Shadow Claws\n\nStats:\n- Type: Undead\n- Level: 7\n- Health: 150\n- Strength: 12\n- Dexterity: 15\n- Constitution: 14\n- Intelligence: 10\n- Wisdom: 8\n- Charisma: 6\n\nAbilities:\n1. Shadow Step: Can teleport short distances in a puff of shadow, allowing it to quickly close the gap with its prey.\n2. Eerie Presence: Causes fear in those who look directly into its glowing red eyes, imposing disadvantage on attack rolls.\n3. Life Drain: Upon a successful hit, the Shadow Claws can drain 10 hit points from its target, adding it to its own health pool.\n\nDescription:\nThe Shadow Claws is a menacing undead creature with sharp claws that are wreathed in shadows. It moves silently and swiftly, striking from the darkness with deadly precision. Its glowing red eyes instill fear in those who gaze upon it, making it a formidable opponent in combat. The Shadow Claws feeds on the life force of its victims, draining them of their vitality to sustain its own existence. Adventurers beware, for facing a Shadow Claws means stepping into the realm of nightmares and shadows.",
+      "is_miniboss": true,
+      "sprite_key": "monster_level_7"
+    },
+    {
+      "x": 315.59841302233326,
+      "y": 334.04668119422536,
+      "level": 4,
+      "health": 0.9999999999999996,
+      "max_health": 4,
+      "damage": 4,
+      "stats": "Name: Shadow Stalker\n\nType: Undead\n\nLevel: 4\n\nHealth: 60\n\nStrength: 15\n\nAgility: 18\n\nDefense: 12\n\nMagic: 10\n\nAbilities: \n1. Shadow Step: Can teleport short distances instantly to surprise its enemies.\n2. Shadow Cloak: Can become invisible for a short period of time, making it harder to hit.\n3. Life Drain: Drains the life force of its target to replenish its own health.\n\nLoot: Shadow Essence (can be used to enhance magical abilities)",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_4"
+    }
+  ],
+  "loot_items": [
+    {
+      "x": 866.1740981921951,
+      "y": 159.88730162779166,
+      "item_type": "potion",
+      "item_variant": "vial",
+      "sprite_key": "item_potion_vial_281889",
+      "is_sliding": false,
+      "target_x": 866.1740981921951,
+      "target_y": 159.88730162779166
+    },
+    {
+      "x": 547.6665222413712,
+      "y": 550.5588745030454,
+      "item_type": "potion",
+      "item_variant": "crystal",
+      "sprite_key": "item_potion_crystal_148743",
+      "is_sliding": false,
+      "target_x": 547.6665222413712,
+      "target_y": 550.5588745030454
+    },
+    {
+      "x": 588.6665222413712,
+      "y": 679.5588745030454,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_148757",
+      "is_sliding": false,
+      "target_x": 588.6665222413712,
+      "target_y": 679.5588745030454
+    }
+  ],
+  "death_sprites": []
+}
