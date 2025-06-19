@@ -1,0 +1,4703 @@
+{
+  "version": "2.0",
+  "timestamp": 1750355792.595482,
+  "level": 63,
+  "levels_completed": 62,
+  "deaths": 3,
+  "monster_levels_defeated": 79201,
+  "player": {
+    "x": 879.4291116568876,
+    "y": 264.93163697382494,
+    "inventory": {
+      "weapon": 433,
+      "armor": 434,
+      "potion": 296
+    }
+  },
+  "monsters": [
+    {
+      "x": 401.5,
+      "y": 714.5,
+      "level": 21,
+      "health": 21,
+      "max_health": 21,
+      "damage": 21,
+      "stats": "Name: Thelrax the Unyielding\n\nType: Demon Lord\n\nLevel: 21\n\nHealth Points: 4,200\n\nStrength: 90\n\nDexterity: 70\n\nConstitution: 110\n\nIntelligence: 80\n\nWisdom: 60\n\nCharisma: 50\n\nArmor Class: 28\n\nAttacks: Hellfire Breath (deals 150 fire damage in a cone), Soul Drain (deals 100 necrotic damage and heals Thelrax for half the amount), Claw Swipe (deals 50 physical damage and has a chance to cause bleeding)\n\nAbilities: \n1. Infernal Resilience: Thelrax has resistance to fire and necrotic damage.\n2. Aura of Fear: Enemies within a 30-foot radius must make a Wisdom saving throw or be Frightened for one round.\n3. Demonic Regeneration: Thelrax regenerates 50 health points per round.\n4. Dark Energy Blast: Thelrax can unleash a powerful blast of dark energy, dealing 200 necrotic damage to a single target.\n\nWeaknesses:\n1. Holy Magic: Thelrax is vulnerable to attacks made with holy magic, taking double damage from such sources.\n2. Light's Radiance: Thelrax is weakened when exposed to bright light, reducing his Constitution by half for a short duration.\n\nDescription: Thelrax, the Unyielding, is a fearsome demon lord whose presence instills terror in all who face him. Possessing immense strength and dark powers, Thelrax is a formidable foe to overcome. His hellfire breath can incinerate enemies, while his soul drain saps the life force of his victims to empower himself. Confronting Thelrax is a challenge that only the bravest and most skilled adventurers can hope to survive.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_21"
+    },
+    {
+      "x": 723.4411254969546,
+      "y": 121.94112549695456,
+      "level": 52,
+      "health": 52,
+      "max_health": 52,
+      "damage": 52,
+      "stats": "Name: Blightfang the Devourer\n\nStats:\n- Level: 52\n- Health: 10,000\n- Attack: 500\n- Defense: 400\n- Speed: 300\n- Special Ability: Venomous Bite - inflicts poison status on the target, causing damage over time.\n\nDescription:\nBlightfang the Devourer is a massive serpent-like monster that lurks in the depths of the dungeon, feeding on unsuspecting adventurers. Its sharp fangs are coated with a deadly venom that can incapacitate even the strongest of foes. With its lightning-fast strikes and powerful coils, Blightfang is a formidable opponent that should not be underestimated. Approach with caution, as this monster strikes with deadly precision and devours its victims without mercy.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_52"
+    },
+    {
+      "x": 296.0,
+      "y": 328.0,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 448.0,
+      "y": 136.5,
+      "level": 59,
+      "health": 59,
+      "max_health": 59,
+      "damage": 59,
+      "stats": "Name: Dreadclaw\nLevel: 59\nType: Demon\nHP: 17,500\nMP: 9,000\nStrength: 115\nDefense: 110\nSpeed: 100\nMagic: 90\nResistances: Fire, Physical\nWeaknesses: Light\nAbilities: \n1. Soul Drain - Drains HP from target and restores own HP\n2. Hellfire Breath - Breathes intense flames that inflict Fire damage on all enemies\n3. Shadow Cloak - Increases evasion and defense for a few turns\n4. Dark Nova - Unleashes a powerful dark energy wave that damages all enemies\n5. Fear Strike - Strikes fear into enemies, reducing their attack and defense temporarily",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_59"
+    },
+    {
+      "x": 128.5,
+      "y": 647.5,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 642.5,
+      "y": 313.0,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 880.0634918610417,
+      "y": 353.11269837220834,
+      "level": 63,
+      "health": 37.15833333333331,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 201.0,
+      "y": 683.5,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 276.0,
+      "y": 494.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 909.8690116645615,
+      "y": 383.63142161132475,
+      "level": 63,
+      "health": 35.31249999999997,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 75.0,
+      "y": 763.0,
+      "level": 17,
+      "health": 17,
+      "max_health": 17,
+      "damage": 17,
+      "stats": "Name: Vilebone the Dreadful\n\nStats:\n- Health: 2500\n- Strength: 90\n- Dexterity: 75\n- Intelligence: 60\n- Constitution: 100\n- Wisdom: 50\n- Charisma: 30\n\nAbilities:\n1. Soul Drain: Vilebone can drain the life force of its enemies, dealing 150 damage and healing itself for the same amount.\n2. Shadow Cloak: Vilebone can cloak itself in shadows, becoming immune to all physical attacks for 2 turns.\n3. Necrotic Blast: Vilebone unleashes a powerful blast of dark energy, dealing 200 damage to all enemies in a cone in front of it.\n4. Fear Aura: Vilebone emits an aura of fear, causing enemies within a 20-foot radius to become paralyzed with fear for 1 turn.\n5. Undying Resilience: Vilebone has a chance to resist deathblows, reviving with 50% health once per battle.\n\nEquipment:\n- Enchanted skeletal armor: Increases Vilebone's defense by 20%\n- Darksteel scythe: Deals 250 damage and has a chance to inflict bleeding on its target for 3 turns.\n\nVilebone the Dreadful is a formidable adversary, fearsome and relentless in its pursuit of souls to feed its dark power. Approach with caution, as this level 17 monster is a force to be reckoned with.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_17"
+    },
+    {
+      "x": 565.5,
+      "y": 715.0,
+      "level": 55,
+      "health": 55,
+      "max_health": 55,
+      "damage": 55,
+      "stats": "Name: Shadow Wraith\nLevel: 55\nType: Undead\nHealth: 10,000 HP\nStrength: 300\nDefense: 250\nSpeed: 400\nMagic: 350\n\nAbilities:\n1. Soul Drain: Drains the life force of the target, dealing 500 damage and healing the Shadow Wraith for 250 HP.\n2. Shadow Nova: Releases a burst of dark energy, dealing 400 damage to all enemies within range.\n3. Vanish: Disappears into the shadows, becoming immune to all attacks for 1 turn.\n4. Shadow Cloak: Wraps itself in a shroud of darkness, increasing defense by 50% for 3 turns.\n\nDescription: The Shadow Wraith is a formidable undead creature that lurks in the depths of dark dungeons. Its ethereal form and powerful dark magic make it a deadly foe for any adventurer brave enough to challenge it. Approach with caution, for its thirst for souls knows no bounds.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_55"
+    },
+    {
+      "x": 42.5,
+      "y": 330.0,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 738.5599205235729,
+      "y": 465.44007947642706,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 80.0,
+      "y": 47.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 485.5,
+      "y": 317.0,
+      "level": 42,
+      "health": 42,
+      "max_health": 42,
+      "damage": 42,
+      "stats": "Name: Ragnarak the Unyielding\n\nType: Ancient Dragon\n\nLevel: 42\n\nHealth: 1680\n\nAttack: 280\n\nDefense: 260\n\nSpeed: 200\n\nSpecial Ability: Inferno Breath - Ragnarak can unleash a devastating wave of fire that deals 400 damage to all enemies in a cone-shaped area in front of it. This ability has a cooldown of 3 turns.\n\nLoot Drop: Dragon Scale Armor (Legendary - Increases defense by 50%)\n\nDescription: Ragnarak the Unyielding is an ancient dragon of immense power, feared throughout the land for its fiery breath and unbreakable scales. Many brave adventurers have attempted to slay this formidable creature, but few have succeeded in overcoming its immense strength and cunning tactics.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_42"
+    },
+    {
+      "x": 355.0,
+      "y": 230.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 495.5,
+      "y": 414.5,
+      "level": 7,
+      "health": 7,
+      "max_health": 7,
+      "damage": 7,
+      "stats": "Name: Shadow Claws\n\nStats:\n- Type: Undead\n- Level: 7\n- Health: 150\n- Strength: 12\n- Dexterity: 15\n- Constitution: 14\n- Intelligence: 10\n- Wisdom: 8\n- Charisma: 6\n\nAbilities:\n1. Shadow Step: Can teleport short distances in a puff of shadow, allowing it to quickly close the gap with its prey.\n2. Eerie Presence: Causes fear in those who look directly into its glowing red eyes, imposing disadvantage on attack rolls.\n3. Life Drain: Upon a successful hit, the Shadow Claws can drain 10 hit points from its target, adding it to its own health pool.\n\nDescription:\nThe Shadow Claws is a menacing undead creature with sharp claws that are wreathed in shadows. It moves silently and swiftly, striking from the darkness with deadly precision. Its glowing red eyes instill fear in those who gaze upon it, making it a formidable opponent in combat. The Shadow Claws feeds on the life force of its victims, draining them of their vitality to sustain its own existence. Adventurers beware, for facing a Shadow Claws means stepping into the realm of nightmares and shadows.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_7"
+    },
+    {
+      "x": 364.5,
+      "y": 149.5,
+      "level": 24,
+      "health": 24,
+      "max_health": 24,
+      "damage": 24,
+      "stats": "Name: The Dread Behemoth\nLevel: 24\nHealth: 8400\nAttack: 200\nDefense: 180\nSpeed: 150\nSpecial Ability: Devouring Presence - The Dread Behemoth unleashes a terrifying aura that saps the strength and willpower of all nearby enemies, reducing their attack and defense by 25% for 3 turns.\nSpecial Attack: Void Slam - The Dread Behemoth channels dark energy into its massive claws and delivers a devastating slam attack that ignores enemy defense and deals 300 damage.\nWeakness: Light-based attacks\nResistance: Dark magic and status effects",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_24"
+    },
+    {
+      "x": 376.5,
+      "y": 379.0,
+      "level": 46,
+      "health": 46,
+      "max_health": 46,
+      "damage": 46,
+      "stats": "Name: Dreadlord Xerath\n\nLevel: 46\n\nStats:\n- Health: 85,000\n- Attack: 8,500\n- Defense: 7,000\n- Speed: 6,500\n- Magic: 9,000\n\nAbilities:\n1. Shadow Bolt: Unleashes a powerful dark energy bolt at a target, dealing high magical damage.\n2. Dark Armor: Increases defense by 30% for 3 turns.\n3. Drain Life: Drains the life force of a target, restoring health equal to the damage dealt.\n4. Shadow Step: Instantly teleports to a random location within the battlefield.\n5. Cursed Aura: Inflicts a curse on all enemies, reducing their attack and speed by 20% for 3 turns.\n\nLoot Drops:\n- Shadow Essence: A rare crafting material used in dark magic rituals.\n- Dreadlord's Crown: A legendary helm that grants increased magic power and defense when worn.\n\nDescription: Dreadlord Xerath is a formidable foe, a master of dark magic and shadow manipulation. Its mere presence instills fear in all who dare to challenge it. Only the bravest and most skilled adventurers have a chance of defeating this monstrous entity and claiming its valuable loot.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_46"
+    },
+    {
+      "x": 553.0,
+      "y": 314.5,
+      "level": 62,
+      "health": 62,
+      "max_health": 62,
+      "damage": 62,
+      "stats": "Name: Dreadlord Malakar\n\nType: Demon\n\nLevel: 62\n\nHealth: 10,000\n\nStrength: 500\n\nAgility: 400\n\nIntelligence: 600\n\nDefense: 450\n\nSkills:\n1. Shadow Bolt - Unleashes a powerful bolt of dark energy that deals 800 damage.\n2. Hellfire Rain - Calls down fiery meteors from the sky, dealing 600 damage to all enemies in the area.\n3. Soul Leech - Drains the life force from a target, healing Malakar for 500 health.\n4. Shadow Step - Instantly teleports behind a target, gaining a temporary damage buff.\n5. Void Shield - Creates a shield around Malakar that absorbs 50% of incoming damage for a short duration.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_62"
+    },
+    {
+      "x": 909.872149726144,
+      "y": 295.4583694396572,
+      "level": 324,
+      "health": 150.49166666666645,
+      "max_health": 324,
+      "damage": 324,
+      "stats": "Level 324 monster",
+      "is_miniboss": true,
+      "sprite_key": "monster_level_324"
+    },
+    {
+      "x": 190.5,
+      "y": 485.0,
+      "level": 26,
+      "health": 26,
+      "max_health": 26,
+      "damage": 26,
+      "stats": "Name: Vortesh the Vile\nLevel: 26\nHealth: 15,000\nStrength: 400\nDefense: 350\nDexterity: 300\nMagic: 450\nAbilities: Dark Invocation, Shadow Bolt, Soul Drain\nWeakness: Light-based attacks, Holy magic\nDescription: Vortesh the Vile is a fearsome demon with pitch-black scales and glowing red eyes. Its mere presence instills fear in the hearts of those who dare to challenge it. Known for its relentless pursuit of power, Vortesh is a master of dark magic and is often found lurking in the darkest corners of dungeons, preying on unsuspecting adventurers. Bold and cunning, Vortesh will stop at nothing to protect its lair and horde of treasures. Those who face Vortesh must be prepared for a battle of mind and magic, as this creature's powers are as formidable as they are malevolent.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_26"
+    },
+    {
+      "x": 909.6909088590114,
+      "y": 296.57864376268935,
+      "level": 248,
+      "health": 89.25833333333308,
+      "max_health": 248,
+      "damage": 248,
+      "stats": "Level 248 monster",
+      "is_miniboss": true,
+      "sprite_key": "monster_level_248"
+    },
+    {
+      "x": 596.5,
+      "y": 533.0,
+      "level": 41,
+      "health": 41,
+      "max_health": 41,
+      "damage": 41,
+      "stats": "Name: Vordak the Devourer\n\nLevel: 41\n\nHealth: 20,000 HP\n\nStrength: 850 \n\nDefense: 800 \n\nSpeed: 700 \n\nMagic: 500 \n\nAbilities:\n1. Devouring Bite: Vordak unleashes a powerful bite, dealing 1500 damage and draining the enemy's health by 10% of the damage dealt.\n2. Shadow Cloak: Vordak envelops itself in a dark cloak, increasing its defense by 30% for 3 turns.\n3. Mana Drain: Vordak saps the enemy's magic energy, reducing their magic power by 50%.\n4. Unholy Regeneration: Vordak passively regenerates 5% of its health every turn.\n\nStrategy: Vordak is a formidable opponent with high strength and defense, making it a tough adversary to defeat in physical combat. Its abilities focus on draining the enemy's health and magic, making it difficult for spellcasters to hold their ground. To counter Vordak, it is recommended to use high damage physical attacks and abilities that bypass defense to take down its massive health pool.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_41"
+    },
+    {
+      "x": 292.5,
+      "y": 138.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 1167.5391052434015,
+      "y": 780.9608947565985,
+      "level": 13,
+      "health": 13,
+      "max_health": 13,
+      "damage": 13,
+      "stats": "Name: Vexgor the Unstoppable\n\nLevel: 13\n\nType: Minotaur Barbarian\n\nStats:\n- Strength: 18 (+4)\n- Dexterity: 12 (+1)\n- Constitution: 16 (+3)\n- Intelligence: 8 (-1)\n- Wisdom: 10 (0)\n- Charisma: 9 (-1)\n\nHit Points: 150\n\nArmor Class: 18\n\nSpeed: 30 feet\n\nSkills:\n- Athletics: +9\n- Intimidation: +5\n\nTraits:\n- Relentless Endurance: When Vexgor is reduced to 0 hit points but not killed outright, he can drop to 1 hit point instead.\n- Reckless Attack: Vexgor can choose to attack recklessly, gaining advantage on melee weapon attack rolls but granting his opponents advantage against him until the start of his next turn.\n\nActions:\n- Multiattack: Vexgor can make two greataxe attacks.\n- Greataxe: Melee Weapon Attack, +9 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 4) slashing damage.\n\nReactions:\n- Retaliation: When a creature within 5 feet of Vexgor hits him with an attack, he can make a greataxe attack against that creature as a reaction.\n\nLegendary Resistance (3/Day): If Vexgor fails a saving throw, he can choose to succeed instead.\n\nChallenge Rating: 10 (5,900 XP)",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_13"
+    },
+    {
+      "x": 991.4070708874522,
+      "y": 490.40707088743557,
+      "level": 15,
+      "health": 15,
+      "max_health": 15,
+      "damage": 15,
+      "stats": "Name: Glargax the Soul Devourer\n\nLevel: 15\n\nClass: Demon\n\nHealth: 500\n\nStrength: 18\n\nDexterity: 15\n\nConstitution: 17\n\nIntelligence: 12\n\nWisdom: 10\n\nCharisma: 8\n\nArmor Class: 20\n\nSpecial Abilities:\n1. Soul Siphon: Glargax can drain the life force from its opponents, dealing 50 points of damage and healing itself for the same amount.\n2. Fiery Breath: Glargax can unleash a cone of fire, dealing 75 points of fire damage to all targets in its path.\n3. Shadow Step: Glargax can disappear into the shadows and reappear behind a target, gaining advantage on its next attack.\n4. Soul Corruption: Glargax can curse its opponents, causing them to suffer -2 penalty on all saving throws for 3 rounds.\n\nEquipment:\n- Fiery Sword of Damnation: Deals 50 points of fire damage on hit.\n- Infernal Plate Armor: Provides +5 bonus to Armor Class.\n\nNote: Glargax the Soul Devourer is a formidable adversary, with powerful offensive and defensive capabilities. Approach with caution.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_15"
+    },
+    {
+      "x": 41.5,
+      "y": 583.0,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 326.0,
+      "y": 691.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    },
+    {
+      "x": 258.5,
+      "y": 311.5,
+      "level": 63,
+      "health": 63,
+      "max_health": 63,
+      "damage": 63,
+      "stats": "Name: Shadow Doppelganger  \nLevel: 63  \nHP: 12,000  \nStrength: 700  \nDefense: 650  \nSpeed: 800  \nMagic: 500  \nSkills:  \n1. Shadow Strike - Deals dark magic damage to a single target.  \n2. Mirror Image - Creates a duplicate of itself to confuse enemies.  \n3. Soul Drain - Absorbs life force from enemies to restore HP.  \n4. Shadow Cloak - Grants temporary invisibility to avoid attacks.  \n5. Dark Resilience - Increases defense against light-based attacks.",
+      "is_miniboss": false,
+      "sprite_key": "monster_level_63"
+    }
+  ],
+  "loot_items": [
+    {
+      "x": 807.0553031655767,
+      "y": 195.47456736183233,
+      "item_type": "potion",
+      "item_variant": "flask",
+      "sprite_key": "item_potion_flask_827599",
+      "is_sliding": false,
+      "target_x": 807.0553031655767,
+      "target_y": 195.47456736183233
+    },
+    {
+      "x": 894.8065990318224,
+      "y": 277.9969345985176,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438768",
+      "is_sliding": true,
+      "target_x": 888.4291116568876,
+      "target_y": 247.93163697382494
+    },
+    {
+      "x": 892.4295574552406,
+      "y": 280.8799205220724,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438786",
+      "is_sliding": true,
+      "target_x": 837.4291116568876,
+      "target_y": 279.93163697382494
+    },
+    {
+      "x": 892.5664330151108,
+      "y": 281.82889445856097,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438789",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 301.93163697382494
+    },
+    {
+      "x": 898.0866062627281,
+      "y": 282.3236579578366,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438793",
+      "is_sliding": true,
+      "target_x": 916.4291116568876,
+      "target_y": 291.93163697382494
+    },
+    {
+      "x": 893.3966843926322,
+      "y": 283.1382722893022,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438796",
+      "is_sliding": true,
+      "target_x": 860.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 894.4571327322725,
+      "y": 278.0934585139489,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438799",
+      "is_sliding": true,
+      "target_x": 870.4291116568876,
+      "target_y": 207.93163697382494
+    },
+    {
+      "x": 895.8344512710876,
+      "y": 277.95914646969203,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438802",
+      "is_sliding": true,
+      "target_x": 901.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 892.9395839489072,
+      "y": 279.25764420466567,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438808",
+      "is_sliding": true,
+      "target_x": 837.4291116568876,
+      "target_y": 241.93163697382494
+    },
+    {
+      "x": 892.4873696298148,
+      "y": 280.3432885684104,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438813",
+      "is_sliding": true,
+      "target_x": 830.4291116568876,
+      "target_y": 267.93163697382494
+    },
+    {
+      "x": 893.9656475838927,
+      "y": 283.5504674202367,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438816",
+      "is_sliding": true,
+      "target_x": 876.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 893.8742065086076,
+      "y": 278.3660434791629,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_438818",
+      "is_sliding": true,
+      "target_x": 875.4291116568876,
+      "target_y": 247.93163697382494
+    },
+    {
+      "x": 895.5490157719343,
+      "y": 277.93403409765955,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438821",
+      "is_sliding": true,
+      "target_x": 898.4291116568876,
+      "target_y": 205.93163697382494
+    },
+    {
+      "x": 892.6201241241805,
+      "y": 279.87826664905975,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_438824",
+      "is_sliding": true,
+      "target_x": 863.4291116568876,
+      "target_y": 268.93163697382494
+    },
+    {
+      "x": 897.5067071414567,
+      "y": 278.7674750107321,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438826",
+      "is_sliding": true,
+      "target_x": 919.4291116568876,
+      "target_y": 255.93163697382494
+    },
+    {
+      "x": 898.1492749925532,
+      "y": 279.6664447246782,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438828",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 260.93163697382494
+    },
+    {
+      "x": 894.9813535798975,
+      "y": 277.9652397137652,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438830",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 896.7707524433874,
+      "y": 278.2483554008252,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438832",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 230.93163697382494
+    },
+    {
+      "x": 895.4291116568876,
+      "y": 277.93163697382494,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438834",
+      "is_sliding": true,
+      "target_x": 895.4291116568876,
+      "target_y": 203.93163697382494
+    },
+    {
+      "x": 897.9334296943596,
+      "y": 282.5834212113065,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438835",
+      "is_sliding": true,
+      "target_x": 942.4291116568876,
+      "target_y": 311.93163697382494
+    },
+    {
+      "x": 894.9077556551605,
+      "y": 277.9772862973711,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_438838",
+      "is_sliding": true,
+      "target_x": 889.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 893.3348112484989,
+      "y": 278.7836365549648,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438841",
+      "is_sliding": true,
+      "target_x": 856.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 893.1034067003358,
+      "y": 282.82665582731164,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_438842",
+      "is_sliding": true,
+      "target_x": 841.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 892.5948418211347,
+      "y": 281.91495508010655,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438845",
+      "is_sliding": true,
+      "target_x": 846.4291116568876,
+      "target_y": 297.93163697382494
+    },
+    {
+      "x": 893.486166396601,
+      "y": 278.6458190205466,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438847",
+      "is_sliding": true,
+      "target_x": 844.4291116568876,
+      "target_y": 220.93163697382494
+    },
+    {
+      "x": 893.9679067133,
+      "y": 278.31154535084016,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438849",
+      "is_sliding": true,
+      "target_x": 866.4291116568876,
+      "target_y": 228.93163697382494
+    },
+    {
+      "x": 892.5474188636439,
+      "y": 281.7658112034481,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438851",
+      "is_sliding": true,
+      "target_x": 819.4291116568876,
+      "target_y": 302.93163697382494
+    },
+    {
+      "x": 894.811080213738,
+      "y": 283.86728632878516,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438853",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 895.6162465153532,
+      "y": 277.9374792383763,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438855",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 200.93163697382494
+    },
+    {
+      "x": 898.2751615510391,
+      "y": 279.9829536757744,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438857",
+      "is_sliding": true,
+      "target_x": 922.4291116568876,
+      "target_y": 271.93163697382494
+    },
+    {
+      "x": 895.5173088116933,
+      "y": 277.9329337104319,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438860",
+      "is_sliding": true,
+      "target_x": 896.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 894.2052914703174,
+      "y": 283.6706631056724,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438862",
+      "is_sliding": true,
+      "target_x": 874.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 892.92037855473,
+      "y": 279.2865660871642,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_438865",
+      "is_sliding": true,
+      "target_x": 834.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 893.7159181922918,
+      "y": 278.4689213684685,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438866",
+      "is_sliding": true,
+      "target_x": 847.4291116568876,
+      "target_y": 211.93163697382494
+    },
+    {
+      "x": 892.6779014881279,
+      "y": 279.73545863958157,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438869",
+      "is_sliding": true,
+      "target_x": 826.4291116568876,
+      "target_y": 250.93163697382494
+    },
+    {
+      "x": 896.5320883250008,
+      "y": 283.72151913434675,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438871",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 323.93163697382494
+    },
+    {
+      "x": 897.9840866070012,
+      "y": 279.35934469683195,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438873",
+      "is_sliding": true,
+      "target_x": 908.4291116568876,
+      "target_y": 272.93163697382494
+    },
+    {
+      "x": 892.9504296284649,
+      "y": 279.2416264999004,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438876",
+      "is_sliding": true,
+      "target_x": 873.4291116568876,
+      "target_y": 265.93163697382494
+    },
+    {
+      "x": 893.6853970757303,
+      "y": 278.4904365602047,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_438878",
+      "is_sliding": true,
+      "target_x": 870.4291116568876,
+      "target_y": 245.93163697382494
+    },
+    {
+      "x": 895.4291116568876,
+      "y": 277.93163697382494,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438879",
+      "is_sliding": true,
+      "target_x": 895.4291116568876,
+      "target_y": 225.93163697382494
+    },
+    {
+      "x": 892.4775019265878,
+      "y": 280.394980659225,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438882",
+      "is_sliding": true,
+      "target_x": 829.4291116568876,
+      "target_y": 268.93163697382494
+    },
+    {
+      "x": 896.264299801309,
+      "y": 278.0502378755711,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438884",
+      "is_sliding": true,
+      "target_x": 915.4291116568876,
+      "target_y": 211.93163697382494
+    },
+    {
+      "x": 892.7019171882048,
+      "y": 282.1816011053046,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438886",
+      "is_sliding": true,
+      "target_x": 847.4291116568876,
+      "target_y": 302.93163697382494
+    },
+    {
+      "x": 898.4284328470587,
+      "y": 280.8678216293532,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_438887",
+      "is_sliding": true,
+      "target_x": 942.4291116568876,
+      "target_y": 279.93163697382494
+    },
+    {
+      "x": 897.4109953415636,
+      "y": 278.67949642305666,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438890",
+      "is_sliding": true,
+      "target_x": 917.4291116568876,
+      "target_y": 255.93163697382494
+    },
+    {
+      "x": 894.6261800655293,
+      "y": 278.0410832449351,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438892",
+      "is_sliding": true,
+      "target_x": 890.4291116568876,
+      "target_y": 262.93163697382494
+    },
+    {
+      "x": 893.4577060555903,
+      "y": 283.1929551635483,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438894",
+      "is_sliding": true,
+      "target_x": 861.4291116568876,
+      "target_y": 319.93163697382494
+    },
+    {
+      "x": 894.7683290425837,
+      "y": 278.0053139676218,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438896",
+      "is_sliding": true,
+      "target_x": 881.4291116568876,
+      "target_y": 218.93163697382494
+    },
+    {
+      "x": 898.4155980746694,
+      "y": 281.21606425170893,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438897",
+      "is_sliding": true,
+      "target_x": 937.4291116568876,
+      "target_y": 284.93163697382494
+    },
+    {
+      "x": 896.8903166004752,
+      "y": 278.31154535084016,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438900",
+      "is_sliding": true,
+      "target_x": 924.4291116568876,
+      "target_y": 228.93163697382494
+    },
+    {
+      "x": 893.5872898163428,
+      "y": 278.56358032169595,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438902",
+      "is_sliding": true,
+      "target_x": 881.4291116568876,
+      "target_y": 262.93163697382494
+    },
+    {
+      "x": 892.8602377312366,
+      "y": 282.48111648453505,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438904",
+      "is_sliding": true,
+      "target_x": 832.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 893.1868837008366,
+      "y": 278.9385454573352,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438906",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 216.93163697382494
+    },
+    {
+      "x": 893.2432286501815,
+      "y": 282.9863670001286,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438907",
+      "is_sliding": true,
+      "target_x": 845.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 898.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_438910",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 898.3708536839604,
+      "y": 281.5199853792395,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438912",
+      "is_sliding": true,
+      "target_x": 930.4291116568876,
+      "target_y": 287.93163697382494
+    },
+    {
+      "x": 892.6140823064362,
+      "y": 281.968753050307,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_438914",
+      "is_sliding": true,
+      "target_x": 876.4291116568876,
+      "target_y": 287.93163697382494
+    },
+    {
+      "x": 894.5420604726742,
+      "y": 283.79749464589895,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438916",
+      "is_sliding": true,
+      "target_x": 882.4291116568876,
+      "target_y": 322.93163697382494
+    },
+    {
+      "x": 896.9021508469958,
+      "y": 278.31818034621364,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438918",
+      "is_sliding": true,
+      "target_x": 926.4291116568876,
+      "target_y": 225.93163697382494
+    },
+    {
+      "x": 896.435668015757,
+      "y": 278.10553642776864,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438920",
+      "is_sliding": true,
+      "target_x": 921.4291116568876,
+      "target_y": 207.93163697382494
+    },
+    {
+      "x": 893.8184851803081,
+      "y": 283.46262143702126,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438922",
+      "is_sliding": true,
+      "target_x": 867.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 894.876246051737,
+      "y": 283.8802535346279,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438924",
+      "is_sliding": true,
+      "target_x": 889.4291116568876,
+      "target_y": 312.93163697382494
+    },
+    {
+      "x": 897.8589380215167,
+      "y": 282.69116641028046,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438927",
+      "is_sliding": true,
+      "target_x": 924.4291116568876,
+      "target_y": 301.93163697382494
+    },
+    {
+      "x": 893.0178854610964,
+      "y": 279.1467032964211,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438928",
+      "is_sliding": true,
+      "target_x": 818.4291116568876,
+      "target_y": 223.93163697382494
+    },
+    {
+      "x": 892.5395227528877,
+      "y": 280.1252400703831,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438931",
+      "is_sliding": true,
+      "target_x": 852.4291116568876,
+      "target_y": 268.93163697382494
+    },
+    {
+      "x": 896.9069063164429,
+      "y": 278.3208664086106,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438934",
+      "is_sliding": true,
+      "target_x": 925.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 894.546854110375,
+      "y": 278.0642999476591,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438936",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 254.93163697382494
+    },
+    {
+      "x": 897.6868417410083,
+      "y": 282.9071507974305,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438938",
+      "is_sliding": true,
+      "target_x": 903.4291116568876,
+      "target_y": 287.93163697382494
+    },
+    {
+      "x": 892.9215045534494,
+      "y": 279.2848502193282,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438939",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 892.4349539214389,
+      "y": 280.7445021153594,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438942",
+      "is_sliding": true,
+      "target_x": 831.4291116568876,
+      "target_y": 276.93163697382494
+    },
+    {
+      "x": 895.7678407210204,
+      "y": 283.9124527381941,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438944",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 896.882059305938,
+      "y": 278.30695734973386,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438946",
+      "is_sliding": true,
+      "target_x": 926.4291116568876,
+      "target_y": 224.93163697382494
+    },
+    {
+      "x": 892.7866384658406,
+      "y": 279.5113076336372,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_438948",
+      "is_sliding": true,
+      "target_x": 815.4291116568876,
+      "target_y": 237.93163697382494
+    },
+    {
+      "x": 892.9879112432674,
+      "y": 282.6753515549822,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438949",
+      "is_sliding": true,
+      "target_x": 839.4291116568876,
+      "target_y": 320.93163697382494
+    },
+    {
+      "x": 892.7912357572773,
+      "y": 279.5027875282027,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438952",
+      "is_sliding": true,
+      "target_x": 847.4291116568876,
+      "target_y": 254.93163697382494
+    },
+    {
+      "x": 896.5829578107338,
+      "y": 278.16240620459416,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_438954",
+      "is_sliding": true,
+      "target_x": 910.4291116568876,
+      "target_y": 244.93163697382494
+    },
+    {
+      "x": 896.6278679184294,
+      "y": 278.18154907969966,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438956",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 241.93163697382494
+    },
+    {
+      "x": 897.9500016015603,
+      "y": 279.3052563643587,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438958",
+      "is_sliding": true,
+      "target_x": 926.4291116568876,
+      "target_y": 260.93163697382494
+    },
+    {
+      "x": 894.0414136368025,
+      "y": 278.27188243532856,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438960",
+      "is_sliding": true,
+      "target_x": 883.4291116568876,
+      "target_y": 257.93163697382494
+    },
+    {
+      "x": 897.5504320004472,
+      "y": 278.8103166302653,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438962",
+      "is_sliding": true,
+      "target_x": 903.4291116568876,
+      "target_y": 272.93163697382494
+    },
+    {
+      "x": 892.6374138017954,
+      "y": 282.0300099004186,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_438964",
+      "is_sliding": true,
+      "target_x": 834.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 893.6125461594378,
+      "y": 278.5441508914624,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_438966",
+      "is_sliding": true,
+      "target_x": 860.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 892.9447832404798,
+      "y": 279.24993773810274,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438968",
+      "is_sliding": true,
+      "target_x": 830.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 894.4129532520693,
+      "y": 283.7542992094311,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438970",
+      "is_sliding": true,
+      "target_x": 886.4291116568876,
+      "target_y": 305.93163697382494
+    },
+    {
+      "x": 893.6291116568876,
+      "y": 283.3316369738249,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_438972",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 894.4804283588371,
+      "y": 278.0855870796734,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438974",
+      "is_sliding": true,
+      "target_x": 883.4291116568876,
+      "target_y": 244.93163697382494
+    },
+    {
+      "x": 894.0874708703877,
+      "y": 283.6149185468247,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_438976",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 296.93163697382494
+    },
+    {
+      "x": 893.9330290801986,
+      "y": 278.33130297148455,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438978",
+      "is_sliding": true,
+      "target_x": 853.4291116568876,
+      "target_y": 207.93163697382494
+    },
+    {
+      "x": 892.4699298853911,
+      "y": 281.424833935741,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_438980",
+      "is_sliding": true,
+      "target_x": 817.4291116568876,
+      "target_y": 293.93163697382494
+    },
+    {
+      "x": 892.4295898588513,
+      "y": 280.9851998630756,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_438981",
+      "is_sliding": true,
+      "target_x": 839.4291116568876,
+      "target_y": 281.93163697382494
+    },
+    {
+      "x": 895.9223086188036,
+      "y": 277.9724552023285,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_438984",
+      "is_sliding": true,
+      "target_x": 897.4291116568876,
+      "target_y": 268.93163697382494
+    },
+    {
+      "x": 893.5033016875095,
+      "y": 278.6313639548456,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438986",
+      "is_sliding": true,
+      "target_x": 859.4291116568876,
+      "target_y": 237.93163697382494
+    },
+    {
+      "x": 893.5756470010919,
+      "y": 278.57268195735764,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438988",
+      "is_sliding": true,
+      "target_x": 840.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 897.289818408986,
+      "y": 278.5783901991123,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438990",
+      "is_sliding": true,
+      "target_x": 929.4291116568876,
+      "target_y": 237.93163697382494
+    },
+    {
+      "x": 893.5293982861158,
+      "y": 278.60976507621496,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_438991",
+      "is_sliding": true,
+      "target_x": 859.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 892.621799677115,
+      "y": 281.98946467634795,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_438994",
+      "is_sliding": true,
+      "target_x": 826.4291116568876,
+      "target_y": 306.93163697382494
+    },
+    {
+      "x": 892.5830617627361,
+      "y": 279.9829536757744,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_438996",
+      "is_sliding": true,
+      "target_x": 835.4291116568876,
+      "target_y": 260.93163697382494
+    },
+    {
+      "x": 893.0131010052067,
+      "y": 279.15318468855986,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_438998",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 892.7538634336751,
+      "y": 279.5740483232395,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439000",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 892.9655452907012,
+      "y": 279.21966712613613,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439002",
+      "is_sliding": true,
+      "target_x": 836.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 893.293009134692,
+      "y": 278.82520254221544,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439004",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 209.93163697382494
+    },
+    {
+      "x": 897.2947580876923,
+      "y": 278.58230443133004,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439005",
+      "is_sliding": true,
+      "target_x": 922.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 892.4934623019274,
+      "y": 281.54966841697444,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439008",
+      "is_sliding": true,
+      "target_x": 876.4291116568876,
+      "target_y": 284.93163697382494
+    },
+    {
+      "x": 893.2061508025796,
+      "y": 278.91707869960834,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439010",
+      "is_sliding": true,
+      "target_x": 863.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 898.190104412263,
+      "y": 279.7582150527904,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439012",
+      "is_sliding": true,
+      "target_x": 935.4291116568876,
+      "target_y": 263.93163697382494
+    },
+    {
+      "x": 895.3896413892767,
+      "y": 277.9318966353998,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439014",
+      "is_sliding": true,
+      "target_x": 894.4291116568876,
+      "target_y": 204.93163697382494
+    },
+    {
+      "x": 898.2203368353389,
+      "y": 282.0312105289724,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439015",
+      "is_sliding": true,
+      "target_x": 928.4291116568876,
+      "target_y": 293.93163697382494
+    },
+    {
+      "x": 896.2911553135866,
+      "y": 278.0581581181615,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439018",
+      "is_sliding": true,
+      "target_x": 916.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 893.6048810235221,
+      "y": 278.55000253582,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439020",
+      "is_sliding": true,
+      "target_x": 859.4291116568876,
+      "target_y": 233.93163697382494
+    },
+    {
+      "x": 892.4405874850399,
+      "y": 280.6694857306804,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439022",
+      "is_sliding": true,
+      "target_x": 838.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 897.5809497994653,
+      "y": 283.02199402661466,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439024",
+      "is_sliding": true,
+      "target_x": 930.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 894.8241528948761,
+      "y": 283.8700081035949,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439026",
+      "is_sliding": true,
+      "target_x": 888.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 892.5304068380839,
+      "y": 280.15864902214395,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439028",
+      "is_sliding": true,
+      "target_x": 835.4291116568876,
+      "target_y": 264.93163697382494
+    },
+    {
+      "x": 894.7114421612627,
+      "y": 278.0187431386415,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439030",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 211.93163697382494
+    },
+    {
+      "x": 892.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439032",
+      "is_sliding": true,
+      "target_x": 855.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 892.4434260815276,
+      "y": 280.63892270173085,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439034",
+      "is_sliding": true,
+      "target_x": 844.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 896.1268312965527,
+      "y": 278.0139002988617,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439036",
+      "is_sliding": true,
+      "target_x": 906.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 892.4873696298148,
+      "y": 280.3432885684104,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439038",
+      "is_sliding": true,
+      "target_x": 815.4291116568876,
+      "target_y": 264.93163697382494
+    },
+    {
+      "x": 893.5967012940122,
+      "y": 278.5562902071345,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439040",
+      "is_sliding": true,
+      "target_x": 841.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 898.4283371635224,
+      "y": 280.86347275776507,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439042",
+      "is_sliding": true,
+      "target_x": 939.4291116568876,
+      "target_y": 279.93163697382494
+    },
+    {
+      "x": 896.9785911675978,
+      "y": 278.362763048174,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439044",
+      "is_sliding": true,
+      "target_x": 933.4291116568876,
+      "target_y": 217.93163697382494
+    },
+    {
+      "x": 896.6935712549139,
+      "y": 278.21113299019265,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439046",
+      "is_sliding": true,
+      "target_x": 928.4291116568876,
+      "target_y": 209.93163697382494
+    },
+    {
+      "x": 894.0874708703877,
+      "y": 283.6149185468247,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439048",
+      "is_sliding": true,
+      "target_x": 875.4291116568876,
+      "target_y": 320.93163697382494
+    },
+    {
+      "x": 892.7458300838879,
+      "y": 282.2732777603248,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439050",
+      "is_sliding": true,
+      "target_x": 871.4291116568876,
+      "target_y": 292.93163697382494
+    },
+    {
+      "x": 894.8887982481566,
+      "y": 277.98069451075565,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439052",
+      "is_sliding": true,
+      "target_x": 882.4291116568876,
+      "target_y": 209.93163697382494
+    },
+    {
+      "x": 893.3362616074236,
+      "y": 278.78222340951055,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439054",
+      "is_sliding": true,
+      "target_x": 821.4291116568876,
+      "target_y": 204.93163697382494
+    },
+    {
+      "x": 892.8981271936913,
+      "y": 282.5422634504044,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439056",
+      "is_sliding": true,
+      "target_x": 840.4291116568876,
+      "target_y": 315.93163697382494
+    },
+    {
+      "x": 892.4320702374889,
+      "y": 280.79843513296277,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439057",
+      "is_sliding": true,
+      "target_x": 850.4291116568876,
+      "target_y": 278.93163697382494
+    },
+    {
+      "x": 894.6349607115441,
+      "y": 278.0386585300736,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439059",
+      "is_sliding": true,
+      "target_x": 881.4291116568876,
+      "target_y": 229.93163697382494
+    },
+    {
+      "x": 894.1202911373294,
+      "y": 278.23219465223633,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439062",
+      "is_sliding": true,
+      "target_x": 863.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 892.4346061669941,
+      "y": 281.1131221550306,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439064",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 282.93163697382494
+    },
+    {
+      "x": 892.6164130016577,
+      "y": 281.9750574427005,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439066",
+      "is_sliding": true,
+      "target_x": 833.4291116568876,
+      "target_y": 303.93163697382494
+    },
+    {
+      "x": 892.4446092292937,
+      "y": 280.62709590978477,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439067",
+      "is_sliding": true,
+      "target_x": 846.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 898.1705463027483,
+      "y": 279.7132215756646,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439070",
+      "is_sliding": true,
+      "target_x": 904.4291116568876,
+      "target_y": 276.93163697382494
+    },
+    {
+      "x": 896.9889524975748,
+      "y": 278.3690413069816,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439072",
+      "is_sliding": true,
+      "target_x": 923.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 893.0905848525076,
+      "y": 282.8108102987731,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439074",
+      "is_sliding": true,
+      "target_x": 839.4291116568876,
+      "target_y": 325.93163697382494
+    },
+    {
+      "x": 893.7087246237976,
+      "y": 278.4739412122678,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439076",
+      "is_sliding": true,
+      "target_x": 860.4291116568876,
+      "target_y": 230.93163697382494
+    },
+    {
+      "x": 897.022517226155,
+      "y": 278.3897757085652,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439077",
+      "is_sliding": true,
+      "target_x": 937.4291116568876,
+      "target_y": 213.93163697382494
+    },
+    {
+      "x": 894.6049482731954,
+      "y": 278.04706513090247,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439080",
+      "is_sliding": true,
+      "target_x": 893.4291116568876,
+      "target_y": 273.93163697382494
+    },
+    {
+      "x": 892.7146555502846,
+      "y": 282.2090280828146,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439082",
+      "is_sliding": true,
+      "target_x": 861.4291116568876,
+      "target_y": 296.93163697382494
+    },
+    {
+      "x": 897.0494794143107,
+      "y": 278.40687790993314,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439084",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 213.93163697382494
+    },
+    {
+      "x": 895.4291116568876,
+      "y": 277.93163697382494,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439086",
+      "is_sliding": true,
+      "target_x": 895.4291116568876,
+      "target_y": 254.93163697382494
+    },
+    {
+      "x": 893.8161138320355,
+      "y": 278.40216311212515,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439088",
+      "is_sliding": true,
+      "target_x": 851.4291116568876,
+      "target_y": 211.93163697382494
+    },
+    {
+      "x": 892.9903730689714,
+      "y": 282.6787929771082,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439090",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 892.9219952177838,
+      "y": 279.2841033138424,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439092",
+      "is_sliding": true,
+      "target_x": 825.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 897.320889532171,
+      "y": 283.25997897417375,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439094",
+      "is_sliding": true,
+      "target_x": 934.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 896.798774545583,
+      "y": 278.2625503189314,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439096",
+      "is_sliding": true,
+      "target_x": 934.4291116568876,
+      "target_y": 204.93163697382494
+    },
+    {
+      "x": 896.3993280980033,
+      "y": 278.09285553500496,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439098",
+      "is_sliding": true,
+      "target_x": 922.4291116568876,
+      "target_y": 201.93163697382494
+    },
+    {
+      "x": 897.5504320004472,
+      "y": 278.8103166302653,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439099",
+      "is_sliding": true,
+      "target_x": 901.4291116568876,
+      "target_y": 274.93163697382494
+    },
+    {
+      "x": 893.0368925000806,
+      "y": 279.12130896326835,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439102",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 252.93163697382494
+    },
+    {
+      "x": 898.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439103",
+      "is_sliding": true,
+      "target_x": 927.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 898.4178334214746,
+      "y": 281.19152582291946,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439114",
+      "is_sliding": true,
+      "target_x": 918.4291116568876,
+      "target_y": 282.93163697382494
+    },
+    {
+      "x": 897.838405741589,
+      "y": 279.14409620130454,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439117",
+      "is_sliding": true,
+      "target_x": 926.4291116568876,
+      "target_y": 257.93163697382494
+    },
+    {
+      "x": 892.4639965639358,
+      "y": 281.38780852658675,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439119",
+      "is_sliding": true,
+      "target_x": 869.4291116568876,
+      "target_y": 284.93163697382494
+    },
+    {
+      "x": 893.3533955671808,
+      "y": 278.76567235847864,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439121",
+      "is_sliding": true,
+      "target_x": 872.4291116568876,
+      "target_y": 256.93163697382494
+    },
+    {
+      "x": 895.2122888751521,
+      "y": 277.93948258587625,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439123",
+      "is_sliding": true,
+      "target_x": 890.4291116568876,
+      "target_y": 211.93163697382494
+    },
+    {
+      "x": 894.3891612342727,
+      "y": 278.11765347733757,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439125",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 892.5285981903813,
+      "y": 280.16546360531385,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439127",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 266.93163697382494
+    },
+    {
+      "x": 896.8149149133985,
+      "y": 283.5923792263259,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439130",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 892.4342885373626,
+      "y": 280.7554709079705,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439133",
+      "is_sliding": true,
+      "target_x": 827.4291116568876,
+      "target_y": 276.93163697382494
+    },
+    {
+      "x": 892.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439135",
+      "is_sliding": true,
+      "target_x": 836.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 897.4673357513825,
+      "y": 283.13291899587944,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439137",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 307.93163697382494
+    },
+    {
+      "x": 893.4944988392582,
+      "y": 278.63876252330124,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439139",
+      "is_sliding": true,
+      "target_x": 868.4291116568876,
+      "target_y": 248.93163697382494
+    },
+    {
+      "x": 893.651940305455,
+      "y": 283.3485900117732,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439141",
+      "is_sliding": true,
+      "target_x": 870.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 895.8785277951715,
+      "y": 277.96549046115064,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439143",
+      "is_sliding": true,
+      "target_x": 905.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 895.8012158606552,
+      "y": 277.9548033436839,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439144",
+      "is_sliding": true,
+      "target_x": 905.4291116568876,
+      "target_y": 200.93163697382494
+    },
+    {
+      "x": 892.650834577579,
+      "y": 282.06352763576547,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439147",
+      "is_sliding": true,
+      "target_x": 868.4291116568876,
+      "target_y": 291.93163697382494
+    },
+    {
+      "x": 892.5220680509065,
+      "y": 281.67264808907504,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439149",
+      "is_sliding": true,
+      "target_x": 844.4291116568876,
+      "target_y": 293.93163697382494
+    },
+    {
+      "x": 896.9902221749139,
+      "y": 278.36981458526884,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439151",
+      "is_sliding": true,
+      "target_x": 934.4291116568876,
+      "target_y": 216.93163697382494
+    },
+    {
+      "x": 893.2611860854445,
+      "y": 278.85796903592285,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439153",
+      "is_sliding": true,
+      "target_x": 826.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 892.4440000862576,
+      "y": 280.63312581676195,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439154",
+      "is_sliding": true,
+      "target_x": 845.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 896.7707524433874,
+      "y": 283.6149185468247,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439157",
+      "is_sliding": true,
+      "target_x": 909.4291116568876,
+      "target_y": 308.93163697382494
+    },
+    {
+      "x": 893.5956247159529,
+      "y": 278.5571210994998,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439159",
+      "is_sliding": true,
+      "target_x": 834.4291116568876,
+      "target_y": 201.93163697382494
+    },
+    {
+      "x": 897.253342290253,
+      "y": 283.3132714118299,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439162",
+      "is_sliding": true,
+      "target_x": 931.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 893.1963848058036,
+      "y": 278.92790774849317,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439164",
+      "is_sliding": true,
+      "target_x": 817.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 894.6336422078244,
+      "y": 283.8242531522363,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439166",
+      "is_sliding": true,
+      "target_x": 884.4291116568876,
+      "target_y": 320.93163697382494
+    },
+    {
+      "x": 896.8373944630779,
+      "y": 278.28272407646705,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439168",
+      "is_sliding": true,
+      "target_x": 937.4291116568876,
+      "target_y": 201.93163697382494
+    },
+    {
+      "x": 896.3113692034002,
+      "y": 278.0642999476591,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439170",
+      "is_sliding": true,
+      "target_x": 915.4291116568876,
+      "target_y": 215.93163697382494
+    },
+    {
+      "x": 898.0705249566541,
+      "y": 279.5093375047199,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439172",
+      "is_sliding": true,
+      "target_x": 921.4291116568876,
+      "target_y": 266.93163697382494
+    },
+    {
+      "x": 898.350635286113,
+      "y": 280.24994812700567,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439174",
+      "is_sliding": true,
+      "target_x": 925.4291116568876,
+      "target_y": 273.93163697382494
+    },
+    {
+      "x": 897.6431980928944,
+      "y": 278.9073293751901,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439175",
+      "is_sliding": true,
+      "target_x": 930.4291116568876,
+      "target_y": 248.93163697382494
+    },
+    {
+      "x": 895.7431660104418,
+      "y": 277.9481206150607,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439178",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 242.93163697382494
+    },
+    {
+      "x": 893.2800652279055,
+      "y": 278.8384099326086,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439180",
+      "is_sliding": true,
+      "target_x": 818.4291116568876,
+      "target_y": 205.93163697382494
+    },
+    {
+      "x": 897.7653733841374,
+      "y": 279.049648360207,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439182",
+      "is_sliding": true,
+      "target_x": 931.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 893.0665966538648,
+      "y": 279.0827121888506,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439185",
+      "is_sliding": true,
+      "target_x": 849.4291116568876,
+      "target_y": 244.93163697382494
+    },
+    {
+      "x": 894.5399140122702,
+      "y": 278.0664445633912,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439185",
+      "is_sliding": true,
+      "target_x": 886.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 893.5658667429144,
+      "y": 278.5803993442874,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439188",
+      "is_sliding": true,
+      "target_x": 853.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 895.8533757255996,
+      "y": 283.90148545480844,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439190",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 308.93163697382494
+    },
+    {
+      "x": 895.4291116568876,
+      "y": 277.93163697382494,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439193",
+      "is_sliding": true,
+      "target_x": 895.4291116568876,
+      "target_y": 232.93163697382494
+    },
+    {
+      "x": 896.7707524433874,
+      "y": 278.2483554008252,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439195",
+      "is_sliding": true,
+      "target_x": 927.4291116568876,
+      "target_y": 216.93163697382494
+    },
+    {
+      "x": 897.6648355974629,
+      "y": 278.93125239541547,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439196",
+      "is_sliding": true,
+      "target_x": 933.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 897.2363323746232,
+      "y": 278.5370695228252,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439199",
+      "is_sliding": true,
+      "target_x": 935.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 892.8566328797499,
+      "y": 279.38814970754237,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439201",
+      "is_sliding": true,
+      "target_x": 840.4291116568876,
+      "target_y": 247.93163697382494
+    },
+    {
+      "x": 894.4804283588371,
+      "y": 283.77768686797646,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439203",
+      "is_sliding": true,
+      "target_x": 891.4291116568876,
+      "target_y": 292.93163697382494
+    },
+    {
+      "x": 892.662528511402,
+      "y": 279.77145694507294,
+      "item_type": "armor",
+      "item_variant": "boots",
+      "sprite_key": "item_armor_boots_439205",
+      "is_sliding": true,
+      "target_x": 864.4291116568876,
+      "target_y": 267.93163697382494
+    },
+    {
+      "x": 892.453262318076,
+      "y": 281.31153263409874,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439206",
+      "is_sliding": true,
+      "target_x": 848.4291116568876,
+      "target_y": 286.93163697382494
+    },
+    {
+      "x": 896.318309301505,
+      "y": 278.0664445633912,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439209",
+      "is_sliding": true,
+      "target_x": 904.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 893.4497081372423,
+      "y": 278.67731629867336,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439211",
+      "is_sliding": true,
+      "target_x": 859.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 895.8106046048437,
+      "y": 277.95599197976736,
+      "item_type": "armor",
+      "item_variant": "cloak",
+      "sprite_key": "item_armor_cloak_439213",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 241.93163697382494
+    },
+    {
+      "x": 896.936363750507,
+      "y": 278.3377612778287,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439215",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 206.93163697382494
+    },
+    {
+      "x": 896.9860460596129,
+      "y": 278.36727442815976,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439216",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 252.93163697382494
+    },
+    {
+      "x": 895.1306004998246,
+      "y": 277.946525403195,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439219",
+      "is_sliding": true,
+      "target_x": 891.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 893.736183970945,
+      "y": 278.45494647031643,
+      "item_type": "armor",
+      "item_variant": "mask",
+      "sprite_key": "item_armor_mask_439221",
+      "is_sliding": true,
+      "target_x": 841.4291116568876,
+      "target_y": 201.93163697382494
+    },
+    {
+      "x": 892.4304881194514,
+      "y": 281.02250435374725,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439223",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 281.93163697382494
+    },
+    {
+      "x": 896.6059699429334,
+      "y": 278.1721071996487,
+      "item_type": "armor",
+      "item_variant": "vest",
+      "sprite_key": "item_armor_vest_439225",
+      "is_sliding": true,
+      "target_x": 924.4291116568876,
+      "target_y": 212.93163697382494
+    },
+    {
+      "x": 892.948332150679,
+      "y": 282.61856703804676,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439226",
+      "is_sliding": true,
+      "target_x": 845.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 892.6850518446033,
+      "y": 279.71914542886213,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439229",
+      "is_sliding": true,
+      "target_x": 852.4291116568876,
+      "target_y": 261.93163697382494
+    },
+    {
+      "x": 893.4163716849802,
+      "y": 283.15624431119625,
+      "item_type": "armor",
+      "item_variant": "helmet",
+      "sprite_key": "item_armor_helmet_439231",
+      "is_sliding": true,
+      "target_x": 857.4291116568876,
+      "target_y": 322.93163697382494
+    },
+    {
+      "x": 892.437726862933,
+      "y": 280.7044431920056,
+      "item_type": "armor",
+      "item_variant": "shield",
+      "sprite_key": "item_armor_shield_439233",
+      "is_sliding": true,
+      "target_x": 816.4291116568876,
+      "target_y": 274.93163697382494
+    },
+    {
+      "x": 896.89121013468,
+      "y": 278.3120438677802,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439235",
+      "is_sliding": true,
+      "target_x": 919.4291116568876,
+      "target_y": 237.93163697382494
+    },
+    {
+      "x": 893.0291116568876,
+      "y": 279.1316369738249,
+      "item_type": "armor",
+      "item_variant": "pauldrons",
+      "sprite_key": "item_armor_pauldrons_439237",
+      "is_sliding": true,
+      "target_x": 871.4291116568876,
+      "target_y": 262.93163697382494
+    },
+    {
+      "x": 892.6343787984324,
+      "y": 282.0222644307831,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439239",
+      "is_sliding": true,
+      "target_x": 854.4291116568876,
+      "target_y": 296.93163697382494
+    },
+    {
+      "x": 896.2972801607166,
+      "y": 283.80327125572074,
+      "item_type": "armor",
+      "item_variant": "bracers",
+      "sprite_key": "item_armor_bracers_439241",
+      "is_sliding": true,
+      "target_x": 908.4291116568876,
+      "target_y": 323.93163697382494
+    },
+    {
+      "x": 894.6049482731954,
+      "y": 283.8162088167474,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439243",
+      "is_sliding": true,
+      "target_x": 889.4291116568876,
+      "target_y": 301.93163697382494
+    },
+    {
+      "x": 893.3942713486883,
+      "y": 278.7272266399425,
+      "item_type": "armor",
+      "item_variant": "chestplate",
+      "sprite_key": "item_armor_chestplate_439245",
+      "is_sliding": true,
+      "target_x": 883.4291116568876,
+      "target_y": 267.93163697382494
+    },
+    {
+      "x": 892.6838530986896,
+      "y": 279.721862015975,
+      "item_type": "armor",
+      "item_variant": "greaves",
+      "sprite_key": "item_armor_greaves_439247",
+      "is_sliding": true,
+      "target_x": 836.4291116568876,
+      "target_y": 254.93163697382494
+    },
+    {
+      "x": 894.2820562787086,
+      "y": 278.15958647655924,
+      "item_type": "armor",
+      "item_variant": "gauntlets",
+      "sprite_key": "item_armor_gauntlets_439248",
+      "is_sliding": true,
+      "target_x": 883.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 897.7337754956798,
+      "y": 282.8521901728184,
+      "item_type": "armor",
+      "item_variant": "belt",
+      "sprite_key": "item_armor_belt_439251",
+      "is_sliding": true,
+      "target_x": 901.4291116568876,
+      "target_y": 285.93163697382494
+    },
+    {
+      "x": 898.4134559727207,
+      "y": 281.23772357032067,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439254",
+      "is_sliding": true,
+      "target_x": 934.4291116568876,
+      "target_y": 284.93163697382494
+    },
+    {
+      "x": 897.0640767086738,
+      "y": 283.44696782272683,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439256",
+      "is_sliding": true,
+      "target_x": 908.4291116568876,
+      "target_y": 300.93163697382494
+    },
+    {
+      "x": 892.5872685593615,
+      "y": 279.970425337897,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439258",
+      "is_sliding": true,
+      "target_x": 827.4291116568876,
+      "target_y": 257.93163697382494
+    },
+    {
+      "x": 894.4804283588371,
+      "y": 278.0855870796734,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439260",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 229.93163697382494
+    },
+    {
+      "x": 896.7944448362549,
+      "y": 283.6029410204132,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439262",
+      "is_sliding": true,
+      "target_x": 918.4291116568876,
+      "target_y": 325.93163697382494
+    },
+    {
+      "x": 893.3497855081322,
+      "y": 278.7691377791194,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439264",
+      "is_sliding": true,
+      "target_x": 870.4291116568876,
+      "target_y": 254.93163697382494
+    },
+    {
+      "x": 893.8271326827237,
+      "y": 278.39517026473203,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439266",
+      "is_sliding": true,
+      "target_x": 847.4291116568876,
+      "target_y": 204.93163697382494
+    },
+    {
+      "x": 893.5670028237909,
+      "y": 283.28377444721025,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439268",
+      "is_sliding": true,
+      "target_x": 857.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 893.3638327267936,
+      "y": 278.7557181010473,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439269",
+      "is_sliding": true,
+      "target_x": 839.4291116568876,
+      "target_y": 221.93163697382494
+    },
+    {
+      "x": 892.4365231015813,
+      "y": 280.72089130091604,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439272",
+      "is_sliding": true,
+      "target_x": 824.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 896.7065027658772,
+      "y": 278.21718086722194,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439274",
+      "is_sliding": true,
+      "target_x": 919.4291116568876,
+      "target_y": 229.93163697382494
+    },
+    {
+      "x": 892.5348201931744,
+      "y": 281.7209891912013,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439276",
+      "is_sliding": true,
+      "target_x": 840.4291116568876,
+      "target_y": 295.93163697382494
+    },
+    {
+      "x": 897.161505818768,
+      "y": 278.48239005530434,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439278",
+      "is_sliding": true,
+      "target_x": 924.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 896.6340961421428,
+      "y": 278.1842723474431,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439280",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 223.93163697382494
+    },
+    {
+      "x": 893.885624390605,
+      "y": 278.3591581966873,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439282",
+      "is_sliding": true,
+      "target_x": 880.4291116568876,
+      "target_y": 255.93163697382494
+    },
+    {
+      "x": 893.3077913133279,
+      "y": 278.8103166302653,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439286",
+      "is_sliding": true,
+      "target_x": 821.4291116568876,
+      "target_y": 206.93163697382494
+    },
+    {
+      "x": 893.5261618218535,
+      "y": 278.6124168623772,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439288",
+      "is_sliding": true,
+      "target_x": 831.4291116568876,
+      "target_y": 202.93163697382494
+    },
+    {
+      "x": 896.0369284689955,
+      "y": 277.99385571530365,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439290",
+      "is_sliding": true,
+      "target_x": 901.4291116568876,
+      "target_y": 251.93163697382494
+    },
+    {
+      "x": 893.610982011099,
+      "y": 283.31793213392245,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439292",
+      "is_sliding": true,
+      "target_x": 879.4291116568876,
+      "target_y": 301.93163697382494
+    },
+    {
+      "x": 893.0679439114336,
+      "y": 282.78228196350506,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439293",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 309.93163697382494
+    },
+    {
+      "x": 897.3453777838481,
+      "y": 278.62340732089524,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439296",
+      "is_sliding": true,
+      "target_x": 939.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 892.4530104692267,
+      "y": 280.5537193626934,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439298",
+      "is_sliding": true,
+      "target_x": 832.4291116568876,
+      "target_y": 272.93163697382494
+    },
+    {
+      "x": 895.6731976852523,
+      "y": 277.9415831263571,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439300",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 231.93163697382494
+    },
+    {
+      "x": 895.6428528068514,
+      "y": 277.9392608743327,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439302",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 893.1474181502819,
+      "y": 282.8794241136103,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439303",
+      "is_sliding": true,
+      "target_x": 854.4291116568876,
+      "target_y": 315.93163697382494
+    },
+    {
+      "x": 894.6358116218693,
+      "y": 278.038425081405,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439306",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 218.93163697382494
+    },
+    {
+      "x": 892.4307228277879,
+      "y": 281.0299448042872,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439308",
+      "is_sliding": true,
+      "target_x": 834.4291116568876,
+      "target_y": 282.93163697382494
+    },
+    {
+      "x": 892.461034250793,
+      "y": 280.4951550023404,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439310",
+      "is_sliding": true,
+      "target_x": 827.4291116568876,
+      "target_y": 270.93163697382494
+    },
+    {
+      "x": 892.4502712773793,
+      "y": 280.5759545404508,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439312",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 272.93163697382494
+    },
+    {
+      "x": 893.4188023785371,
+      "y": 278.7048328501136,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439314",
+      "is_sliding": true,
+      "target_x": 830.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 894.3047441303953,
+      "y": 283.7129671709374,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439316",
+      "is_sliding": true,
+      "target_x": 876.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 896.0631100344702,
+      "y": 277.99939447750535,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439318",
+      "is_sliding": true,
+      "target_x": 911.4291116568876,
+      "target_y": 206.93163697382494
+    },
+    {
+      "x": 892.820053911179,
+      "y": 279.4508204154498,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439320",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 259.93163697382494
+    },
+    {
+      "x": 898.4175012069637,
+      "y": 280.6679555429359,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439322",
+      "is_sliding": true,
+      "target_x": 929.4291116568876,
+      "target_y": 277.93163697382494
+    },
+    {
+      "x": 892.8824209300253,
+      "y": 279.34596161558994,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439324",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 247.93163697382494
+    },
+    {
+      "x": 893.7179242284016,
+      "y": 283.39574687084485,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439326",
+      "is_sliding": true,
+      "target_x": 870.4291116568876,
+      "target_y": 316.93163697382494
+    },
+    {
+      "x": 892.4354165690731,
+      "y": 280.7372411889019,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439328",
+      "is_sliding": true,
+      "target_x": 818.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 893.8015353624606,
+      "y": 283.45175510713125,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439330",
+      "is_sliding": true,
+      "target_x": 864.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 897.6786252229829,
+      "y": 282.9165018850855,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439332",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 295.93163697382494
+    },
+    {
+      "x": 892.8311642832131,
+      "y": 279.4314138425481,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439334",
+      "is_sliding": true,
+      "target_x": 824.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 892.9549251013497,
+      "y": 279.2350519071704,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439335",
+      "is_sliding": true,
+      "target_x": 825.4291116568876,
+      "target_y": 232.93163697382494
+    },
+    {
+      "x": 893.3077913133279,
+      "y": 278.8103166302653,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439338",
+      "is_sliding": true,
+      "target_x": 815.4291116568876,
+      "target_y": 200.93163697382494
+    },
+    {
+      "x": 894.4155173960672,
+      "y": 278.10805296153984,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439340",
+      "is_sliding": true,
+      "target_x": 867.4291116568876,
+      "target_y": 202.93163697382494
+    },
+    {
+      "x": 896.6705204897911,
+      "y": 278.20053754143714,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439342",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 269.93163697382494
+    },
+    {
+      "x": 893.5150580626366,
+      "y": 278.62157229110824,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439344",
+      "is_sliding": true,
+      "target_x": 837.4291116568876,
+      "target_y": 210.93163697382494
+    },
+    {
+      "x": 897.6256718713769,
+      "y": 278.8883251463931,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439345",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 893.4511422794939,
+      "y": 278.6760578592531,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439348",
+      "is_sliding": true,
+      "target_x": 838.4291116568876,
+      "target_y": 215.93163697382494
+    },
+    {
+      "x": 896.5432836859499,
+      "y": 278.14620690116914,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439350",
+      "is_sliding": true,
+      "target_x": 909.4291116568876,
+      "target_y": 245.93163697382494
+    },
+    {
+      "x": 898.3638140321949,
+      "y": 280.3091243487597,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439352",
+      "is_sliding": true,
+      "target_x": 928.4291116568876,
+      "target_y": 273.93163697382494
+    },
+    {
+      "x": 898.4059452870285,
+      "y": 280.55953277005733,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439354",
+      "is_sliding": true,
+      "target_x": 927.4291116568876,
+      "target_y": 276.93163697382494
+    },
+    {
+      "x": 892.4330486664578,
+      "y": 281.0852812297444,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439355",
+      "is_sliding": true,
+      "target_x": 856.4291116568876,
+      "target_y": 282.93163697382494
+    },
+    {
+      "x": 897.2880445226247,
+      "y": 278.5769886772247,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439358",
+      "is_sliding": true,
+      "target_x": 925.4291116568876,
+      "target_y": 242.93163697382494
+    },
+    {
+      "x": 896.7707524433874,
+      "y": 283.6149185468247,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439360",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 896.9322204685127,
+      "y": 278.33535811738153,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439362",
+      "is_sliding": true,
+      "target_x": 939.4291116568876,
+      "target_y": 204.93163697382494
+    },
+    {
+      "x": 892.5830617627361,
+      "y": 281.88032027187546,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439364",
+      "is_sliding": true,
+      "target_x": 871.4291116568876,
+      "target_y": 288.93163697382494
+    },
+    {
+      "x": 894.6679735917928,
+      "y": 278.02979810065096,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439365",
+      "is_sliding": true,
+      "target_x": 879.4291116568876,
+      "target_y": 219.93163697382494
+    },
+    {
+      "x": 896.8656680489293,
+      "y": 278.2979502550818,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439368",
+      "is_sliding": true,
+      "target_x": 931.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 893.6291116568876,
+      "y": 278.53163697382496,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439370",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 892.9842456831814,
+      "y": 282.67020833290496,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439372",
+      "is_sliding": true,
+      "target_x": 850.4291116568876,
+      "target_y": 312.93163697382494
+    },
+    {
+      "x": 892.6980122244997,
+      "y": 279.69022814092136,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439374",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 265.93163697382494
+    },
+    {
+      "x": 898.2943040673213,
+      "y": 281.8208346184423,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439376",
+      "is_sliding": true,
+      "target_x": 924.4291116568876,
+      "target_y": 289.93163697382494
+    },
+    {
+      "x": 894.7223115800231,
+      "y": 283.84718729089104,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439378",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 313.93163697382494
+    },
+    {
+      "x": 894.1202911373294,
+      "y": 283.63107929541354,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439380",
+      "is_sliding": true,
+      "target_x": 879.4291116568876,
+      "target_y": 313.93163697382494
+    },
+    {
+      "x": 897.5048277465944,
+      "y": 283.09760158917123,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439382",
+      "is_sliding": true,
+      "target_x": 918.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 893.8257300149714,
+      "y": 278.3960567028877,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439384",
+      "is_sliding": true,
+      "target_x": 852.4291116568876,
+      "target_y": 212.93163697382494
+    },
+    {
+      "x": 896.0394510273449,
+      "y": 277.9943787534994,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439386",
+      "is_sliding": true,
+      "target_x": 911.4291116568876,
+      "target_y": 203.93163697382494
+    },
+    {
+      "x": 894.9119706616308,
+      "y": 283.886728375292,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439387",
+      "is_sliding": true,
+      "target_x": 888.4291116568876,
+      "target_y": 320.93163697382494
+    },
+    {
+      "x": 896.285541416688,
+      "y": 283.8067940245837,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439392",
+      "is_sliding": true,
+      "target_x": 909.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 892.440819717963,
+      "y": 280.6668516121481,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439394",
+      "is_sliding": true,
+      "target_x": 816.4291116568876,
+      "target_y": 273.93163697382494
+    },
+    {
+      "x": 892.760410602457,
+      "y": 279.5612229188471,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439396",
+      "is_sliding": true,
+      "target_x": 821.4291116568876,
+      "target_y": 242.93163697382494
+    },
+    {
+      "x": 896.9175284719581,
+      "y": 278.3269075474516,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439397",
+      "is_sliding": true,
+      "target_x": 903.4291116568876,
+      "target_y": 266.93163697382494
+    },
+    {
+      "x": 897.1286981255488,
+      "y": 278.45951120122686,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439399",
+      "is_sliding": true,
+      "target_x": 917.4291116568876,
+      "target_y": 248.93163697382494
+    },
+    {
+      "x": 893.1389528007802,
+      "y": 278.9938102494264,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439401",
+      "is_sliding": true,
+      "target_x": 817.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 894.2649406567132,
+      "y": 283.69654309923914,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439404",
+      "is_sliding": true,
+      "target_x": 887.4291116568876,
+      "target_y": 299.93163697382494
+    },
+    {
+      "x": 892.6876770110268,
+      "y": 279.7132215756646,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439405",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 248.93163697382494
+    },
+    {
+      "x": 896.1567185319966,
+      "y": 283.84206447426095,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439408",
+      "is_sliding": true,
+      "target_x": 906.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 897.0191084768971,
+      "y": 278.3876420618097,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439410",
+      "is_sliding": true,
+      "target_x": 910.4291116568876,
+      "target_y": 256.93163697382494
+    },
+    {
+      "x": 896.9635632361907,
+      "y": 283.50951562705404,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439412",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 322.93163697382494
+    },
+    {
+      "x": 894.7015047817786,
+      "y": 278.0212094733889,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439414",
+      "is_sliding": true,
+      "target_x": 877.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 895.3409145020819,
+      "y": 277.9329337104319,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439416",
+      "is_sliding": true,
+      "target_x": 893.4291116568876,
+      "target_y": 212.93163697382494
+    },
+    {
+      "x": 896.8860404504235,
+      "y": 283.55410880218955,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439418",
+      "is_sliding": true,
+      "target_x": 915.4291116568876,
+      "target_y": 316.93163697382494
+    },
+    {
+      "x": 894.559089471039,
+      "y": 278.06056376052453,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439420",
+      "is_sliding": true,
+      "target_x": 875.4291116568876,
+      "target_y": 214.93163697382494
+    },
+    {
+      "x": 892.542183447566,
+      "y": 280.1157659581471,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439422",
+      "is_sliding": true,
+      "target_x": 849.4291116568876,
+      "target_y": 267.93163697382494
+    },
+    {
+      "x": 898.0276684150334,
+      "y": 282.43080433429367,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439424",
+      "is_sliding": true,
+      "target_x": 921.4291116568876,
+      "target_y": 295.93163697382494
+    },
+    {
+      "x": 893.2425674406056,
+      "y": 278.8776105888328,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439426",
+      "is_sliding": true,
+      "target_x": 829.4291116568876,
+      "target_y": 218.93163697382494
+    },
+    {
+      "x": 898.4122783964249,
+      "y": 281.2489951376055,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439428",
+      "is_sliding": true,
+      "target_x": 942.4291116568876,
+      "target_y": 285.93163697382494
+    },
+    {
+      "x": 897.8291116568876,
+      "y": 279.1316369738249,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439430",
+      "is_sliding": true,
+      "target_x": 915.4291116568876,
+      "target_y": 265.93163697382494
+    },
+    {
+      "x": 892.4917101444873,
+      "y": 281.5412863443231,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439432",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 291.93163697382494
+    },
+    {
+      "x": 898.1983424261183,
+      "y": 279.7777908199788,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439434",
+      "is_sliding": true,
+      "target_x": 907.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 892.9104011854312,
+      "y": 279.3018831393531,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439436",
+      "is_sliding": true,
+      "target_x": 827.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 897.2032026477701,
+      "y": 283.35085196139204,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439438",
+      "is_sliding": true,
+      "target_x": 928.4291116568876,
+      "target_y": 325.93163697382494
+    },
+    {
+      "x": 892.8981271936913,
+      "y": 282.5422634504044,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439441",
+      "is_sliding": true,
+      "target_x": 851.4291116568876,
+      "target_y": 308.93163697382494
+    },
+    {
+      "x": 897.4139765681481,
+      "y": 278.68212340772965,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439442",
+      "is_sliding": true,
+      "target_x": 925.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 894.3149396278253,
+      "y": 278.14620690116914,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439445",
+      "is_sliding": true,
+      "target_x": 879.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 892.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439447",
+      "is_sliding": true,
+      "target_x": 890.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 892.6617886919837,
+      "y": 279.77322270944654,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439449",
+      "is_sliding": true,
+      "target_x": 852.4291116568876,
+      "target_y": 262.93163697382494
+    },
+    {
+      "x": 895.4808281086401,
+      "y": 277.9320827721779,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439451",
+      "is_sliding": true,
+      "target_x": 896.4291116568876,
+      "target_y": 222.93163697382494
+    },
+    {
+      "x": 896.8579611025099,
+      "y": 283.56951287343526,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439452",
+      "is_sliding": true,
+      "target_x": 908.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 892.9816472310347,
+      "y": 279.19672548208115,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439453",
+      "is_sliding": true,
+      "target_x": 816.4291116568876,
+      "target_y": 224.93163697382494
+    },
+    {
+      "x": 896.6542098370624,
+      "y": 278.1931822181402,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439456",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 242.93163697382494
+    },
+    {
+      "x": 892.6502254540234,
+      "y": 282.06203136143074,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439458",
+      "is_sliding": true,
+      "target_x": 836.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 893.922705104728,
+      "y": 278.33727013399465,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439460",
+      "is_sliding": true,
+      "target_x": 877.4291116568876,
+      "target_y": 249.93163697382494
+    },
+    {
+      "x": 897.6256718713769,
+      "y": 278.8883251463931,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439462",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 240.93163697382494
+    },
+    {
+      "x": 892.8605486736908,
+      "y": 282.4816318774782,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439463",
+      "is_sliding": true,
+      "target_x": 837.4291116568876,
+      "target_y": 315.93163697382494
+    },
+    {
+      "x": 896.0799030303435,
+      "y": 278.00307579327307,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439466",
+      "is_sliding": true,
+      "target_x": 911.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 893.3643303611306,
+      "y": 283.1080280693526,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439468",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 319.93163697382494
+    },
+    {
+      "x": 894.1347451649756,
+      "y": 283.63803963873187,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439470",
+      "is_sliding": true,
+      "target_x": 873.4291116568876,
+      "target_y": 326.93163697382494
+    },
+    {
+      "x": 892.8827743864782,
+      "y": 282.5178798635881,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439472",
+      "is_sliding": true,
+      "target_x": 834.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 895.1930042006276,
+      "y": 283.92233141978534,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439473",
+      "is_sliding": true,
+      "target_x": 892.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 896.9175284719581,
+      "y": 278.3269075474516,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439476",
+      "is_sliding": true,
+      "target_x": 907.4291116568876,
+      "target_y": 259.93163697382494
+    },
+    {
+      "x": 894.4306513036822,
+      "y": 278.1026659730763,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439478",
+      "is_sliding": true,
+      "target_x": 877.4291116568876,
+      "target_y": 229.93163697382494
+    },
+    {
+      "x": 894.6629382883765,
+      "y": 278.0311235073186,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439480",
+      "is_sliding": true,
+      "target_x": 881.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 896.6315681589467,
+      "y": 283.6801089785315,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439482",
+      "is_sliding": true,
+      "target_x": 916.4291116568876,
+      "target_y": 328.93163697382494
+    },
+    {
+      "x": 893.4171700230816,
+      "y": 278.7063075909789,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439484",
+      "is_sliding": true,
+      "target_x": 829.4291116568876,
+      "target_y": 207.93163697382494
+    },
+    {
+      "x": 896.574392120147,
+      "y": 278.15885269435483,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439486",
+      "is_sliding": true,
+      "target_x": 914.4291116568876,
+      "target_y": 234.93163697382494
+    },
+    {
+      "x": 892.7328063199559,
+      "y": 282.2469078698892,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439488",
+      "is_sliding": true,
+      "target_x": 854.4291116568876,
+      "target_y": 300.93163697382494
+    },
+    {
+      "x": 897.6335219907701,
+      "y": 278.89679666562574,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439489",
+      "is_sliding": true,
+      "target_x": 908.4291116568876,
+      "target_y": 268.93163697382494
+    },
+    {
+      "x": 893.2908891726042,
+      "y": 278.82735452897464,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439491",
+      "is_sliding": true,
+      "target_x": 832.4291116568876,
+      "target_y": 218.93163697382494
+    },
+    {
+      "x": 892.4561343656566,
+      "y": 281.3333906618291,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439493",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 285.93163697382494
+    },
+    {
+      "x": 894.278978641963,
+      "y": 278.1608619833249,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439494",
+      "is_sliding": true,
+      "target_x": 873.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 897.646700668712,
+      "y": 282.95210696237604,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439497",
+      "is_sliding": true,
+      "target_x": 940.4291116568876,
+      "target_y": 321.93163697382494
+    },
+    {
+      "x": 894.840763251473,
+      "y": 283.87337900089767,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439499",
+      "is_sliding": true,
+      "target_x": 894.4291116568876,
+      "target_y": 285.93163697382494
+    },
+    {
+      "x": 892.5544546166838,
+      "y": 280.0735303946596,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439501",
+      "is_sliding": true,
+      "target_x": 828.4291116568876,
+      "target_y": 260.93163697382494
+    },
+    {
+      "x": 897.4190341998351,
+      "y": 278.6865961561405,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439503",
+      "is_sliding": true,
+      "target_x": 934.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 893.4072256943209,
+      "y": 278.715338899473,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439504",
+      "is_sliding": true,
+      "target_x": 843.4291116568876,
+      "target_y": 223.93163697382494
+    },
+    {
+      "x": 894.8212948447797,
+      "y": 277.99385571530365,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439507",
+      "is_sliding": true,
+      "target_x": 883.4291116568876,
+      "target_y": 222.93163697382494
+    },
+    {
+      "x": 893.8917391284498,
+      "y": 278.3554992234698,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439509",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 218.93163697382494
+    },
+    {
+      "x": 898.2145417295434,
+      "y": 282.04580900288727,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439511",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 290.93163697382494
+    },
+    {
+      "x": 893.0952881162764,
+      "y": 279.04662565256206,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439513",
+      "is_sliding": true,
+      "target_x": 869.4291116568876,
+      "target_y": 259.93163697382494
+    },
+    {
+      "x": 893.0744633602873,
+      "y": 279.07270410808786,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439515",
+      "is_sliding": true,
+      "target_x": 819.4291116568876,
+      "target_y": 220.93163697382494
+    },
+    {
+      "x": 892.9040294100905,
+      "y": 282.5515010566759,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439517",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 314.93163697382494
+    },
+    {
+      "x": 893.4847557683025,
+      "y": 283.2162551429124,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439519",
+      "is_sliding": true,
+      "target_x": 855.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 897.3288250276594,
+      "y": 283.2535088714349,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439521",
+      "is_sliding": true,
+      "target_x": 922.4291116568876,
+      "target_y": 313.93163697382494
+    },
+    {
+      "x": 893.3077913133279,
+      "y": 278.8103166302653,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439522",
+      "is_sliding": true,
+      "target_x": 874.4291116568876,
+      "target_y": 259.93163697382494
+    },
+    {
+      "x": 892.5635255544632,
+      "y": 281.81956506190005,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439524",
+      "is_sliding": true,
+      "target_x": 824.4291116568876,
+      "target_y": 302.93163697382494
+    },
+    {
+      "x": 897.1539482070262,
+      "y": 278.4770618832429,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439525",
+      "is_sliding": true,
+      "target_x": 921.4291116568876,
+      "target_y": 243.93163697382494
+    },
+    {
+      "x": 898.4278149202806,
+      "y": 281.01983412863063,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439528",
+      "is_sliding": true,
+      "target_x": 929.4291116568876,
+      "target_y": 281.93163697382494
+    },
+    {
+      "x": 892.8851167448723,
+      "y": 279.3416401538154,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439532",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 235.93163697382494
+    },
+    {
+      "x": 894.2266551548284,
+      "y": 278.18316496911837,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439535",
+      "is_sliding": true,
+      "target_x": 860.4291116568876,
+      "target_y": 200.93163697382494
+    },
+    {
+      "x": 892.6502254540234,
+      "y": 282.06203136143074,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439536",
+      "is_sliding": true,
+      "target_x": 836.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 895.0164065430636,
+      "y": 277.96016015429166,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439539",
+      "is_sliding": true,
+      "target_x": 890.4291116568876,
+      "target_y": 244.93163697382494
+    },
+    {
+      "x": 897.7971683090166,
+      "y": 282.7734588143697,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439541",
+      "is_sliding": true,
+      "target_x": 931.4291116568876,
+      "target_y": 308.93163697382494
+    },
+    {
+      "x": 894.2173136203738,
+      "y": 278.18727083230857,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439545",
+      "is_sliding": true,
+      "target_x": 861.4291116568876,
+      "target_y": 203.93163697382494
+    },
+    {
+      "x": 896.4824819816528,
+      "y": 283.7406245065321,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439546",
+      "is_sliding": true,
+      "target_x": 904.4291116568876,
+      "target_y": 304.93163697382494
+    },
+    {
+      "x": 892.4291116568876,
+      "y": 280.93163697382494,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439549",
+      "is_sliding": true,
+      "target_x": 844.4291116568876,
+      "target_y": 280.93163697382494
+    },
+    {
+      "x": 894.0693716277585,
+      "y": 278.25748158320454,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439551",
+      "is_sliding": true,
+      "target_x": 865.4291116568876,
+      "target_y": 221.93163697382494
+    },
+    {
+      "x": 893.27439098852,
+      "y": 283.01902262130596,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439553",
+      "is_sliding": true,
+      "target_x": 863.4291116568876,
+      "target_y": 311.93163697382494
+    },
+    {
+      "x": 893.1677934671642,
+      "y": 278.96023137252763,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439555",
+      "is_sliding": true,
+      "target_x": 856.4291116568876,
+      "target_y": 246.93163697382494
+    },
+    {
+      "x": 898.3682564537353,
+      "y": 281.53282568227104,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439557",
+      "is_sliding": true,
+      "target_x": 939.4291116568876,
+      "target_y": 289.93163697382494
+    },
+    {
+      "x": 895.3624614450322,
+      "y": 277.93237744033013,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439559",
+      "is_sliding": true,
+      "target_x": 894.4291116568876,
+      "target_y": 235.93163697382494
+    },
+    {
+      "x": 897.2291116568875,
+      "y": 278.53163697382496,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439561",
+      "is_sliding": true,
+      "target_x": 922.4291116568876,
+      "target_y": 244.93163697382494
+    },
+    {
+      "x": 892.8283927477149,
+      "y": 282.4270503465992,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439563",
+      "is_sliding": true,
+      "target_x": 855.4291116568876,
+      "target_y": 303.93163697382494
+    },
+    {
+      "x": 892.4784701581915,
+      "y": 280.38968241283993,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439564",
+      "is_sliding": true,
+      "target_x": 846.4291116568876,
+      "target_y": 271.93163697382494
+    },
+    {
+      "x": 898.1602110892754,
+      "y": 279.69022814092136,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439566",
+      "is_sliding": true,
+      "target_x": 906.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 892.8473816084156,
+      "y": 282.4595996555737,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439567",
+      "is_sliding": true,
+      "target_x": 846.4291116568876,
+      "target_y": 309.93163697382494
+    },
+    {
+      "x": 892.4293930959801,
+      "y": 280.97272900890584,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439570",
+      "is_sliding": true,
+      "target_x": 822.4291116568876,
+      "target_y": 281.93163697382494
+    },
+    {
+      "x": 892.8534818496871,
+      "y": 279.3934136167469,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439571",
+      "is_sliding": true,
+      "target_x": 823.4291116568876,
+      "target_y": 237.93163697382494
+    },
+    {
+      "x": 896.8011556947499,
+      "y": 283.5995003807794,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439574",
+      "is_sliding": true,
+      "target_x": 913.4291116568876,
+      "target_y": 315.93163697382494
+    },
+    {
+      "x": 892.5510151521738,
+      "y": 280.0851380018503,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439576",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 895.6254113845696,
+      "y": 277.938066126674,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439578",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 219.93163697382494
+    },
+    {
+      "x": 898.3108044501313,
+      "y": 280.0974627442018,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439580",
+      "is_sliding": true,
+      "target_x": 933.4291116568876,
+      "target_y": 269.93163697382494
+    },
+    {
+      "x": 894.4380603827033,
+      "y": 283.763212042923,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439581",
+      "is_sliding": true,
+      "target_x": 888.4291116568876,
+      "target_y": 300.93163697382494
+    },
+    {
+      "x": 897.1266391476248,
+      "y": 278.4580969158935,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439584",
+      "is_sliding": true,
+      "target_x": 930.4291116568876,
+      "target_y": 229.93163697382494
+    },
+    {
+      "x": 896.1712613926851,
+      "y": 278.0248838419515,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439586",
+      "is_sliding": true,
+      "target_x": 907.4291116568876,
+      "target_y": 233.93163697382494
+    },
+    {
+      "x": 892.9122277958046,
+      "y": 279.29906365852787,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439588",
+      "is_sliding": true,
+      "target_x": 858.4291116568876,
+      "target_y": 256.93163697382494
+    },
+    {
+      "x": 896.1162296580642,
+      "y": 278.0113854688242,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439590",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 263.93163697382494
+    },
+    {
+      "x": 892.8500603306131,
+      "y": 282.4641167474083,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439592",
+      "is_sliding": true,
+      "target_x": 826.4291116568876,
+      "target_y": 321.93163697382494
+    },
+    {
+      "x": 893.2868931394538,
+      "y": 278.83142274104677,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439594",
+      "is_sliding": true,
+      "target_x": 844.4291116568876,
+      "target_y": 230.93163697382494
+    },
+    {
+      "x": 894.4346536718499,
+      "y": 278.10125655487155,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439596",
+      "is_sliding": true,
+      "target_x": 869.4291116568876,
+      "target_y": 206.93163697382494
+    },
+    {
+      "x": 897.1160417211095,
+      "y": 278.45085746761634,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439597",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 255.93163697382494
+    },
+    {
+      "x": 896.1908060421239,
+      "y": 278.02994407768665,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439599",
+      "is_sliding": true,
+      "target_x": 916.4291116568876,
+      "target_y": 200.93163697382494
+    },
+    {
+      "x": 895.694731027739,
+      "y": 283.919854895903,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439601",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 325.93163697382494
+    },
+    {
+      "x": 892.8392212745304,
+      "y": 282.4457267358184,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439602",
+      "is_sliding": true,
+      "target_x": 830.4291116568876,
+      "target_y": 318.93163697382494
+    },
+    {
+      "x": 897.0932122455632,
+      "y": 278.4354860908114,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439605",
+      "is_sliding": true,
+      "target_x": 909.4291116568876,
+      "target_y": 259.93163697382494
+    },
+    {
+      "x": 892.4792656419341,
+      "y": 281.4779047543719,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439607",
+      "is_sliding": true,
+      "target_x": 841.4291116568876,
+      "target_y": 290.93163697382494
+    },
+    {
+      "x": 895.6731976852523,
+      "y": 277.9415831263571,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439609",
+      "is_sliding": true,
+      "target_x": 899.4291116568876,
+      "target_y": 231.93163697382494
+    },
+    {
+      "x": 893.4360201403978,
+      "y": 283.1738649298759,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439611",
+      "is_sliding": true,
+      "target_x": 871.4291116568876,
+      "target_y": 307.93163697382494
+    },
+    {
+      "x": 898.3475303009437,
+      "y": 280.2367753919068,
+      "item_type": "weapon",
+      "item_variant": "spear",
+      "sprite_key": "item_weapon_spear_439612",
+      "is_sliding": true,
+      "target_x": 916.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 892.6797516695657,
+      "y": 279.73121219062807,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439615",
+      "is_sliding": true,
+      "target_x": 824.4291116568876,
+      "target_y": 249.93163697382494
+    },
+    {
+      "x": 894.0874708703877,
+      "y": 283.6149185468247,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439617",
+      "is_sliding": true,
+      "target_x": 892.4291116568876,
+      "target_y": 286.93163697382494
+    },
+    {
+      "x": 892.4405874850399,
+      "y": 281.1937882169695,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439619",
+      "is_sliding": true,
+      "target_x": 838.4291116568876,
+      "target_y": 285.93163697382494
+    },
+    {
+      "x": 894.6202218803277,
+      "y": 283.8205290329675,
+      "item_type": "weapon",
+      "item_variant": "hammer",
+      "sprite_key": "item_weapon_hammer_439621",
+      "is_sliding": true,
+      "target_x": 888.4291116568876,
+      "target_y": 305.93163697382494
+    },
+    {
+      "x": 892.523632859097,
+      "y": 280.18451385439306,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439623",
+      "is_sliding": true,
+      "target_x": 825.4291116568876,
+      "target_y": 262.93163697382494
+    },
+    {
+      "x": 892.4379482003828,
+      "y": 281.16172647047915,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439625",
+      "is_sliding": true,
+      "target_x": 869.4291116568876,
+      "target_y": 282.93163697382494
+    },
+    {
+      "x": 892.969237405878,
+      "y": 279.2143662702899,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439627",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 243.93163697382494
+    },
+    {
+      "x": 898.2661714548021,
+      "y": 281.9068762793581,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439629",
+      "is_sliding": true,
+      "target_x": 927.4291116568876,
+      "target_y": 291.93163697382494
+    },
+    {
+      "x": 897.0191084768971,
+      "y": 278.3876420618097,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439631",
+      "is_sliding": true,
+      "target_x": 940.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 898.0866062627281,
+      "y": 279.5396159898133,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439633",
+      "is_sliding": true,
+      "target_x": 937.4291116568876,
+      "target_y": 258.93163697382494
+    },
+    {
+      "x": 894.0542442573026,
+      "y": 278.2652274715995,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439635",
+      "is_sliding": true,
+      "target_x": 862.4291116568876,
+      "target_y": 216.93163697382494
+    },
+    {
+      "x": 895.8090073171614,
+      "y": 283.9074863126365,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439637",
+      "is_sliding": true,
+      "target_x": 901.4291116568876,
+      "target_y": 327.93163697382494
+    },
+    {
+      "x": 893.002903403978,
+      "y": 282.69615206685006,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439639",
+      "is_sliding": true,
+      "target_x": 873.4291116568876,
+      "target_y": 296.93163697382494
+    },
+    {
+      "x": 896.9909339296815,
+      "y": 278.3702484464428,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439641",
+      "is_sliding": true,
+      "target_x": 920.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 898.1501385601329,
+      "y": 282.19497089318884,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439643",
+      "is_sliding": true,
+      "target_x": 923.4291116568876,
+      "target_y": 293.93163697382494
+    },
+    {
+      "x": 894.0874708703877,
+      "y": 278.2483554008252,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439643",
+      "is_sliding": true,
+      "target_x": 874.4291116568876,
+      "target_y": 238.93163697382494
+    },
+    {
+      "x": 894.7642483461207,
+      "y": 283.8570355411993,
+      "item_type": "weapon",
+      "item_variant": "bow",
+      "sprite_key": "item_weapon_bow_439646",
+      "is_sliding": true,
+      "target_x": 885.4291116568876,
+      "target_y": 324.93163697382494
+    },
+    {
+      "x": 894.2699575080178,
+      "y": 278.16462384426484,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439650",
+      "is_sliding": true,
+      "target_x": 864.4291116568876,
+      "target_y": 206.93163697382494
+    },
+    {
+      "x": 893.3692410579964,
+      "y": 283.11267643147437,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439653",
+      "is_sliding": true,
+      "target_x": 878.4291116568876,
+      "target_y": 298.93163697382494
+    },
+    {
+      "x": 898.1602110892754,
+      "y": 279.69022814092136,
+      "item_type": "weapon",
+      "item_variant": "sword",
+      "sprite_key": "item_weapon_sword_439653",
+      "is_sliding": true,
+      "target_x": 906.4291116568876,
+      "target_y": 275.93163697382494
+    },
+    {
+      "x": 897.9400204988082,
+      "y": 282.57338506277307,
+      "item_type": "weapon",
+      "item_variant": "axe",
+      "sprite_key": "item_weapon_axe_439657",
+      "is_sliding": true,
+      "target_x": 921.4291116568876,
+      "target_y": 297.93163697382494
+    },
+    {
+      "x": 898.0604004604121,
+      "y": 282.3725808424217,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439658",
+      "is_sliding": true,
+      "target_x": 937.4291116568876,
+      "target_y": 303.93163697382494
+    },
+    {
+      "x": 895.4291116568876,
+      "y": 277.93163697382494,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439660",
+      "is_sliding": true,
+      "target_x": 895.4291116568876,
+      "target_y": 239.93163697382494
+    },
+    {
+      "x": 892.6055276446025,
+      "y": 279.91804271300464,
+      "item_type": "weapon",
+      "item_variant": "staff",
+      "sprite_key": "item_weapon_staff_439662",
+      "is_sliding": true,
+      "target_x": 856.4291116568876,
+      "target_y": 266.93163697382494
+    },
+    {
+      "x": 895.6369444529225,
+      "y": 277.9388447109219,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439664",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 893.2339469441278,
+      "y": 278.88682600851445,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439666",
+      "is_sliding": true,
+      "target_x": 822.4291116568876,
+      "target_y": 212.93163697382494
+    },
+    {
+      "x": 893.4110932748987,
+      "y": 278.7118167536371,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439668",
+      "is_sliding": true,
+      "target_x": 855.4291116568876,
+      "target_y": 236.93163697382494
+    },
+    {
+      "x": 896.0174600623021,
+      "y": 283.87337900089767,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439670",
+      "is_sliding": true,
+      "target_x": 900.4291116568876,
+      "target_y": 305.93163697382494
+    },
+    {
+      "x": 893.765011068212,
+      "y": 278.4354860908114,
+      "item_type": "weapon",
+      "item_variant": "crossbow",
+      "sprite_key": "item_weapon_crossbow_439672",
+      "is_sliding": true,
+      "target_x": 891.4291116568876,
+      "target_y": 274.93163697382494
+    },
+    {
+      "x": 898.0744655826917,
+      "y": 279.5166802228135,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439674",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 257.93163697382494
+    },
+    {
+      "x": 893.4767375365196,
+      "y": 278.65386716672907,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439675",
+      "is_sliding": true,
+      "target_x": 847.4291116568876,
+      "target_y": 224.93163697382494
+    },
+    {
+      "x": 897.5504320004472,
+      "y": 283.0529573173846,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439678",
+      "is_sliding": true,
+      "target_x": 938.4291116568876,
+      "target_y": 323.93163697382494
+    },
+    {
+      "x": 892.9055762307579,
+      "y": 282.55390974776543,
+      "item_type": "weapon",
+      "item_variant": "mace",
+      "sprite_key": "item_weapon_mace_439680",
+      "is_sliding": true,
+      "target_x": 825.4291116568876,
+      "target_y": 325.93163697382494
+    },
+    {
+      "x": 893.6506593716225,
+      "y": 278.51562632214404,
+      "item_type": "weapon",
+      "item_variant": "dagger",
+      "sprite_key": "item_weapon_dagger_439682",
+      "is_sliding": true,
+      "target_x": 842.4291116568876,
+      "target_y": 208.93163697382494
+    },
+    {
+      "x": 896.3453943199655,
+      "y": 278.074991024229,
+      "item_type": "weapon",
+      "item_variant": "whip",
+      "sprite_key": "item_weapon_whip_439683",
+      "is_sliding": true,
+      "target_x": 912.4291116568876,
+      "target_y": 227.93163697382494
+    },
+    {
+      "x": 892.4334072600773,
+      "y": 280.7711528097101,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439685",
+      "is_sliding": true,
+      "target_x": 839.4291116568876,
+      "target_y": 277.93163697382494
+    },
+    {
+      "x": 895.2603651586707,
+      "y": 277.9363866304747,
+      "item_type": "weapon",
+      "item_variant": "club",
+      "sprite_key": "item_weapon_club_439688",
+      "is_sliding": true,
+      "target_x": 891.4291116568876,
+      "target_y": 209.93163697382494
+    },
+    {
+      "x": 893.0865052285585,
+      "y": 282.8057221164882,
+      "item_type": "weapon",
+      "item_variant": "scythe",
+      "sprite_key": "item_weapon_scythe_439689",
+      "is_sliding": true,
+      "target_x": 875.4291116568876,
+      "target_y": 296.93163697382494
+    }
+  ],
+  "death_sprites": []
+}

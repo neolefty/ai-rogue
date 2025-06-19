@@ -514,6 +514,7 @@ class GameState:
             "player": {
                 "x": self.player.x,
                 "y": self.player.y,
+                "health": self.player.health,
                 "inventory": inventory_counts
             },
             "monsters": [],
@@ -604,10 +605,18 @@ class GameState:
                 self.deaths = save_data.get("deaths", 0)
                 self.monster_levels_defeated = save_data.get("monster_levels_defeated", 0)
                 
-                # Restore player position
+                # Restore player position and health
                 player_data = save_data["player"]
                 self.player.x = player_data["x"]
                 self.player.y = player_data["y"]
+                # Restore current health if saved, otherwise use max health for backward compatibility
+                saved_health = player_data.get("health")
+                if saved_health is not None:
+                    self.player.health = saved_health
+                else:
+                    # Backward compatibility: calculate max health from armor
+                    armor_count = player_data["inventory"].get("armor", 0)
+                    self.player.health = PLAYER_BASE_HEALTH + armor_count * ARMOR_HEALTH_BONUS
                 
                 # Reconstruct inventory from counts
                 inventory_counts = player_data["inventory"]
@@ -622,7 +631,7 @@ class GameState:
                 armor_count = inventory_counts.get("armor", 0)
                 weapon_count = inventory_counts.get("weapon", 0)
                 
-                self.player.health = PLAYER_BASE_HEALTH + armor_count * ARMOR_HEALTH_BONUS
+                # Set attack power based on weapon count
                 self.player.attack_power = PLAYER_BASE_ATTACK + weapon_count * WEAPON_ATTACK_BONUS
                 
                 # Calculate derived game stats
