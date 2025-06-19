@@ -114,6 +114,9 @@ class GameState:
             monster = Monster(monster_level, monster_stats, x, y, monster_sprite, is_miniboss, self.level, player_damage)
             monster.sprite_key = monster_key  # Store key for sprite updates
             self.monsters.append(monster)
+        
+        # Update big boss status for all monsters based on player health
+        self._update_monster_boss_statuses()
     
     def _generate_monster_level_mix(self, total_monsters):
         """Generate a mix of monster levels for the current dungeon level."""
@@ -148,6 +151,13 @@ class GameState:
         # Shuffle the list so monsters aren't grouped by level
         random.shuffle(monster_levels)
         return monster_levels
+    
+    def _update_monster_boss_statuses(self):
+        """Update big boss status for all monsters based on player's max health."""
+        if self.player:
+            player_max_health = self.player.get_max_health()
+            for monster in self.monsters:
+                monster.update_boss_status(player_max_health)
     
     def _find_safe_monster_spawn_position(self):
         """Find a position for monster that's not too close to player."""

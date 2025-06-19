@@ -121,6 +121,10 @@ class Monster(Entity):
         self.player_damage = player_damage
         self.is_miniboss = is_miniboss
         
+        # Boss categories (subset of mini-bosses)
+        self.is_boss = level >= dungeon_level * 2  # At least 2x dungeon level
+        self.is_big_boss = False  # Will be set later when player health is known
+        
         # Regular monsters are those within 1 level of dungeon level (but not mini-bosses)
         self.is_regular_monster = (dungeon_level - 1 <= level <= dungeon_level + 1) and not is_miniboss
         self.health = MONSTER_HEALTH_MULTIPLIER * level
@@ -173,6 +177,10 @@ class Monster(Entity):
         if not hasattr(self, 'render_info') or self.render_info is None:
             self.update_render_info()
         return self.render_info
+    
+    def update_boss_status(self, player_max_health):
+        """Update big boss status based on player's max health."""
+        self.is_big_boss = self.damage >= player_max_health
 
 
 class Player(Entity):

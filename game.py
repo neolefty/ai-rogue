@@ -175,6 +175,9 @@ class Game:
                 # Update monster scales if weapon was picked up
                 if loot_item.item_type == 'weapon':
                     self.game_state.update_monster_scales()
+                # Update boss statuses if armor was picked up (changes max health)
+                elif loot_item.item_type == 'armor':
+                    self.game_state._update_monster_boss_statuses()
                 
                 # Show pickup message
                 self.game_state.set_message(f"Picked up {loot_item.item_type}! {effect_msg}", 180)

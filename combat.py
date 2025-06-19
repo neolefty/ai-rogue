@@ -95,9 +95,11 @@ class CombatSystem:
         player_max_health = self.game_state.player.get_max_health()
         player_level = self.game_state.level
         
-        # Check if this monster can one-shot the player (extremely dangerous)
-        if monster.damage >= player_max_health:
-            loot_count = 10  # Massive reward for surviving one-shot monsters
+        # Check monster type and assign appropriate loot count
+        if monster.is_big_boss:
+            loot_count = 10  # Massive reward for surviving big bosses (one-shot monsters)
+        elif monster.is_boss:
+            loot_count = 6   # High reward for defeating bosses (2x dungeon level)
         elif monster.is_miniboss:
             loot_count = 3   # Standard mini-boss reward
         elif monster.level < player_level - 1:
