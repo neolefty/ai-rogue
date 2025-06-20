@@ -145,12 +145,24 @@ class GameState:
         older_levels_count = total_monsters - current_level_count - previous_level_count - higher_level_count
 
         # Add higher level monsters (minibosses)
-        for _ in range(higher_level_count):
+        # Limit to 4 unique mini-boss types to reduce sprite generation
+        max_unique_miniboss_types = 4
+        unique_miniboss_levels = []
+        
+        # Generate up to 4 unique mini-boss levels
+        num_unique_types = min(higher_level_count, max_unique_miniboss_types)
+        for _ in range(num_unique_types):
             higher_level = random.randint(
                 self.level + 2, 
                 self.level + 2 + int(self.level * self.level * 0.1)
             )
-            monster_levels.append(higher_level)
+            unique_miniboss_levels.append(higher_level)
+        
+        # Distribute mini-bosses across the unique types
+        for i in range(higher_level_count):
+            # Cycle through the unique types
+            level_index = i % len(unique_miniboss_levels)
+            monster_levels.append(unique_miniboss_levels[level_index])
 
         # Add current level monsters
         monster_levels.extend([self.level] * current_level_count)
