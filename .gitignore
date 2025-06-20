@@ -5,6 +5,7 @@ venv
 __pycache__/
 preferences.json
 savegame.json
+logs/
 
 # Test files
 *_test.json
