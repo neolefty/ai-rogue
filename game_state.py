@@ -94,9 +94,18 @@ class GameState:
         if self.level == 1 and self.deaths == 0:
             self.set_message("Use arrow keys to move. Don't get too close to monsters!", 300)
         
+        # Calculate dynamic monster cap based on level
+        base_cap = MAX_MONSTER_COUNT
+        if self.level >= 30:
+            # Add 1 to cap for every 10 levels starting at 30
+            cap_bonus = (self.level - 20) // 10
+            dynamic_cap = base_cap + cap_bonus
+        else:
+            dynamic_cap = base_cap
+        
         total_monsters = min(
             INITIAL_MONSTER_COUNT + (self.level - 1) * MONSTER_INCREMENT,
-            MAX_MONSTER_COUNT
+            dynamic_cap
         )
         
         # Create a mix of monster levels for variety
@@ -123,7 +132,14 @@ class GameState:
         monster_levels = []
         
         # Calculate monster distribution
-        higher_level_count = max(1, int(total_monsters * 0.05))
+        base_miniboss_count = max(1, int(total_monsters * 0.05))
+        
+        # Add extra mini-bosses every 10 levels starting at 30
+        extra_minibosses = 0
+        if self.level >= 30:
+            extra_minibosses = (self.level - 20) // 10
+        
+        higher_level_count = base_miniboss_count + extra_minibosses
         current_level_count = max(1, int(total_monsters * 0.35))
         previous_level_count = max(0, int(total_monsters * 0.15))
         older_levels_count = total_monsters - current_level_count - previous_level_count - higher_level_count
