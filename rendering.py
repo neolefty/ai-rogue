@@ -14,6 +14,9 @@ class RenderSystem:
     
     def render_game(self, game_state):
         """Render the complete game state."""
+        # Store game state for access in rendering methods
+        self._current_game_state = game_state
+        
         # Always render the game world
         self.screen.fill(BACKGROUND_COLOR)
         self._render_player(game_state.player)
@@ -106,9 +109,13 @@ class RenderSystem:
         alpha = 0
         
         if entity.damage_flash_timer > 0:
-            # Red: Entity took damage (highest priority)
-            color = RED
-            alpha = 100
+            # Red flash for player, white flash for monsters (visible against threat colors)
+            if hasattr(entity, 'attack_power'):  # Player
+                color = RED
+                alpha = 100
+            else:  # Monster
+                color = WHITE
+                alpha = 120
         elif entity.attack_flash_timer > 0:
             # Cyan: Entity just dealt damage
             color = CYAN
@@ -126,9 +133,50 @@ class RenderSystem:
                 can_attack = time_since_attack >= cooldown
                 
                 if can_attack:
-                    # Light green: Ready to attack (subtle)
-                    color = GREEN
-                    alpha = 35
+                    # For monsters, use threat-based colors when ready to attack
+                    if hasattr(entity, 'damage'):  # Monster
+                        # Get player's current health from game state
+                        game_state = getattr(self, '_current_game_state', None)
+                        if game_state and game_state.player:
+                            player_current_health = game_state.player.health
+                            threat_ratio = entity.damage / player_current_health if player_current_health > 0 else 1.0
+                            
+                            if hasattr(entity, 'level') and entity.level > player_current_health:
+                                # Magenta: Monster level exceeds player's current health (extreme danger)
+                                color = (255, 0, 255)  # Magenta
+                                alpha = 90
+                            elif threat_ratio >= 1.0:
+                                # Full red: Can one-shot the player
+                                color = RED
+                                alpha = 80
+                            elif threat_ratio <= 0.05:
+                                # Gray: Very weak monster (5% or less of player health)
+                                color = GRAY  # Use lighter gray for better visibility
+                                alpha = 60
+                            else:
+                                # Interpolate between gray and red based on threat level
+                                # threat_ratio is between 0.05 and 1.0
+                                # Normalize to 0-1 range for interpolation
+                                normalized_threat = (threat_ratio - 0.05) / 0.95
+                                
+                                # Interpolate RGB values
+                                gray_r, gray_g, gray_b = GRAY  # Use lighter gray
+                                red_r, red_g, red_b = RED
+                                
+                                interp_r = int(gray_r + (red_r - gray_r) * normalized_threat)
+                                interp_g = int(gray_g + (red_g - gray_g) * normalized_threat)
+                                interp_b = int(gray_b + (red_b - gray_b) * normalized_threat)
+                                
+                                color = (interp_r, interp_g, interp_b)
+                                alpha = 60 + int(20 * normalized_threat)  # Alpha 60-80
+                        else:
+                            # Fallback if no game state available
+                            color = DARK_GRAY
+                            alpha = 35
+                    else:  # Player
+                        # Light green: Ready to attack (subtle)
+                        color = GREEN
+                        alpha = 50
                 else:
                     # Dark gray: Attack cooldown
                     color = DARK_GRAY
