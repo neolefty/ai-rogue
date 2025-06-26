@@ -357,9 +357,13 @@ class GameState:
         # Get stairway sprite (placeholder initially)
         stairway_sprite = self.sprite_manager.get_sprite('stairway', 'stairway', priority=2)
         
+        # Scale stairway sprite to be more prominent
+        scaled_size = int(TILE_SIZE * STAIRWAY_SCALE)
+        scaled_sprite = pygame.transform.scale(stairway_sprite, (scaled_size, scaled_size))
+        
         # Find a safe position for the stairway
         stairway_x, stairway_y = self._find_safe_stairway_position()
-        self.stairway = Stairway(stairway_x, stairway_y, stairway_sprite)
+        self.stairway = Stairway(stairway_x, stairway_y, scaled_sprite)
         self.stairway.sprite_key = 'stairway'  # Store key for sprite updates
         
         self.set_message("Level cleared! Collect loot, then find the stairway!", 240)
@@ -368,25 +372,26 @@ class GameState:
         """Find a position for stairway that doesn't conflict with player or loot."""
         attempts = 0
         max_attempts = 20
+        stairway_size = int(TILE_SIZE * STAIRWAY_SCALE)
         
         while attempts < max_attempts:
-            # Try random positions
-            x = random.randint(TILE_SIZE * 2, WINDOW_WIDTH - TILE_SIZE * 3)
-            y = random.randint(TILE_SIZE * 2, WINDOW_HEIGHT - TILE_SIZE * 3)
+            # Try random positions (accounting for larger stairway size)
+            x = random.randint(TILE_SIZE * 2, WINDOW_WIDTH - stairway_size - TILE_SIZE)
+            y = random.randint(TILE_SIZE * 2, WINDOW_HEIGHT - stairway_size - TILE_SIZE)
             
-            # Check distance from player (at least 3 tiles away)
+            # Check distance from player (at least 3 tiles away from stairway edge)
             dx = abs(self.player.x - x)
             dy = abs(self.player.y - y)
-            if dx <= TILE_SIZE * 3 and dy <= TILE_SIZE * 3:
+            if dx <= TILE_SIZE * 3 + stairway_size//2 and dy <= TILE_SIZE * 3 + stairway_size//2:
                 attempts += 1
                 continue
                 
-            # Check distance from any loot items (at least 2 tiles away)
+            # Check distance from any loot items (at least 2 tiles away from stairway edge)
             too_close_to_loot = False
             for loot_item in self.loot_items:
                 dx = abs(loot_item.x - x)
                 dy = abs(loot_item.y - y)
-                if dx <= TILE_SIZE * 2 and dy <= TILE_SIZE * 2:
+                if dx <= TILE_SIZE * 2 + stairway_size//2 and dy <= TILE_SIZE * 2 + stairway_size//2:
                     too_close_to_loot = True
                     break
             
@@ -395,8 +400,8 @@ class GameState:
             
             attempts += 1
         
-        # Fallback: top-right corner if no good position found
-        return WINDOW_WIDTH - TILE_SIZE * 2, TILE_SIZE * 2
+        # Fallback: top-right corner if no good position found (with room for larger stairway)
+        return WINDOW_WIDTH - stairway_size - TILE_SIZE, TILE_SIZE * 2
     
     def advance_level(self):
         """Advance to the next level."""
@@ -911,7 +916,10 @@ class GameState:
             if save_data.get("stairway"):
                 stairway_data = save_data["stairway"]
                 sprite = self.sprite_manager.get_sprite('stairway', 'stairway')
-                self.stairway = Stairway(stairway_data["x"], stairway_data["y"], sprite)
+                # Scale stairway sprite to be more prominent
+                scaled_size = int(TILE_SIZE * STAIRWAY_SCALE)
+                scaled_sprite = pygame.transform.scale(sprite, (scaled_size, scaled_size))
+                self.stairway = Stairway(stairway_data["x"], stairway_data["y"], scaled_sprite)
                 self.stairway.sprite_key = stairway_data.get("sprite_key", "stairway")
             
             # Restore death sprites

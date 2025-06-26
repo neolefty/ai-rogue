@@ -63,7 +63,7 @@ MONSTER_DISPERSION_CHANCE = 0.5  # 50% chance to apply dispersion when clustered
 DEATH_SPRITE_LIFETIME = 90  # Frames - 1.5 seconds at 60 FPS
 DEATH_SPRITE_MINIBOSS_LIFETIME = 180  # Frames - 3 seconds for mini-bosses
 DEATH_SPRITE_MINIBOSS_SCALE = 1.5  # Scale factor for mini-boss death sprites
-STAIRWAY_SCALE = 2.0  # Scale factor for stairway sprites
+STAIRWAY_SCALE = 2.5  # Scale factor for stairway sprites
 
 # Monster scale factors based on hits-to-kill (using player damage vs monster max HP)
 LOW_LEVEL_SCALE_FACTOR = 0.6   # For monsters killed in ≤2 hits (weak enemies)

@@ -194,9 +194,14 @@ class Game:
         player = self.game_state.player
         stairway = self.game_state.stairway
         
+        # Use scaled stairway size for interaction
+        stairway_size = int(TILE_SIZE * STAIRWAY_SCALE)
+        
+        # Check if player overlaps with the larger stairway hitbox
+        # Account for both player and stairway sizes
         dx = abs(player.x - stairway.x)
         dy = abs(player.y - stairway.y)
-        if dx <= TILE_SIZE and dy <= TILE_SIZE:
+        if dx <= stairway_size - TILE_SIZE//2 and dy <= stairway_size - TILE_SIZE//2:
             self.game_state.advance_level()
     
     def _handle_mouse_click(self, mouse_pos):
