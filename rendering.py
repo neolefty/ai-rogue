@@ -440,9 +440,22 @@ class RenderSystem:
         
         # Instructions
         instructions_y = stats_y + len([s for s in stats if s]) * line_height + 60
-        instruction_text = self.font.render("Press SPACE to play again or ESC to quit", True, YELLOW)
+        
+        # Calculate legacy loot count
+        legacy_loot = game_state.get_legacy_loot_count()
+        
+        # Primary instruction
+        if legacy_loot > 0:
+            instruction_text = self.font.render(f"Press R to retry level or SPACE to start over with {legacy_loot} loot", True, YELLOW)
+        else:
+            instruction_text = self.font.render("Press R to retry level or SPACE to start over", True, YELLOW)
         instruction_rect = instruction_text.get_rect(center=(WINDOW_WIDTH // 2, instructions_y))
         overlay.blit(instruction_text, instruction_rect)
+        
+        # Secondary instruction
+        quit_text = self.small_font.render("Press ESC to quit", True, (200, 200, 200))
+        quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, instructions_y + 35))
+        overlay.blit(quit_text, quit_rect)
         
         # Blit the overlay to the screen
         self.screen.blit(overlay, (0, 0))

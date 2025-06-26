@@ -30,6 +30,9 @@ class GameState:
         self.deaths = 0
         self.monster_levels_defeated = 0
         
+        # Level snapshot for retry functionality
+        self.level_start_snapshot = None
+        
         # Entities
         self.player = None
         self.monsters = []
@@ -126,6 +129,67 @@ class GameState:
         
         # Update big boss status for all monsters based on player health
         self._update_monster_boss_statuses()
+        
+        # Capture level start snapshot after level is fully generated
+        self._capture_level_snapshot()
+    
+    def _capture_level_snapshot(self):
+        """Capture a snapshot of the game state at the start of a level."""
+        # Count inventory items for compact storage
+        inventory_counts = {"weapon": 0, "armor": 0, "potion": 0}
+        for item in self.player.inventory:
+            inventory_counts[item.item_type] += 1
+        
+        snapshot = {
+            "level": self.level,
+            "levels_completed": self.levels_completed,
+            "deaths": self.deaths,
+            "monster_levels_defeated": self.monster_levels_defeated,
+            "monsters_defeated": self.monsters_defeated,
+            "items_collected": self.items_collected,
+            "player": {
+                "x": self.player.x,
+                "y": self.player.y,
+                "health": self.player.health,
+                "max_health": self.player.get_max_health(),
+                "attack_power": self.player.attack_power,
+                "inventory": inventory_counts
+            },
+            "monsters": [],
+            "loot_items": []
+        }
+        
+        # Save monsters
+        for monster in self.monsters:
+            monster_data = {
+                "x": monster.x,
+                "y": monster.y,
+                "level": monster.level,
+                "health": monster.health,
+                "max_health": monster.max_health,
+                "damage": monster.damage,
+                "stats": monster.stats,
+                "is_miniboss": monster.is_miniboss,
+                "sprite_key": getattr(monster, 'sprite_key', f"monster_level_{monster.level}")
+            }
+            snapshot["monsters"].append(monster_data)
+        
+        # Save existing loot items (from previous levels)
+        for loot_item in self.loot_items:
+            loot_data = {
+                "x": loot_item.x,
+                "y": loot_item.y,
+                "item_type": loot_item.item_type,
+                "item_variant": getattr(loot_item, 'item_variant', loot_item.item_type),
+                "sprite_key": getattr(loot_item, 'sprite_key', f"item_{loot_item.item_type}"),
+                "is_sliding": False,  # At level start, items are static
+                "target_x": loot_item.x,
+                "target_y": loot_item.y
+            }
+            snapshot["loot_items"].append(loot_data)
+        
+        self.level_start_snapshot = snapshot
+        print(f"Captured level {self.level} start snapshot")
     
     def _generate_monster_level_mix(self, total_monsters):
         """Generate a mix of monster levels for the current dungeon level."""
@@ -386,6 +450,27 @@ class GameState:
         self.message = message
         self.message_timer = duration
     
+    def get_legacy_loot_count(self):
+        """Calculate how much loot would be dropped on death."""
+        if not self.player:
+            return 0
+        
+        # Calculate how many armor and weapon pieces the player had collected
+        armor_pieces = self.player.get_max_health() - PLAYER_BASE_HEALTH
+        weapon_pieces = round((self.player.attack_power - PLAYER_BASE_ATTACK) / WEAPON_ATTACK_BONUS)
+        
+        # Drop half of each (rounded down)
+        armor_to_drop = armor_pieces // 2
+        weapons_to_drop = weapon_pieces // 2
+        
+        # Ensure at least 1 drop if player had any of that type
+        if armor_pieces > 0 and armor_to_drop == 0:
+            armor_to_drop = 1
+        if weapon_pieces > 0 and weapons_to_drop == 0:
+            weapons_to_drop = 1
+        
+        return armor_to_drop + weapons_to_drop
+    
     def update_timers(self):
         """Update all game timers."""
         if self.message_timer > 0:
@@ -522,6 +607,89 @@ class GameState:
         # Generate first level
         self.generate_level()
     
+    def retry_level(self):
+        """Retry the current level from the beginning using the saved snapshot."""
+        if not self.level_start_snapshot:
+            print("No level snapshot available to retry")
+            self.restart_game()
+            return
+        
+        snapshot = self.level_start_snapshot
+        
+        # Reset game over state
+        self.game_over = False
+        self.paused = False
+        
+        # Restore game statistics from snapshot
+        self.level = snapshot["level"]
+        self.levels_completed = snapshot["levels_completed"]
+        self.deaths = snapshot["deaths"]
+        self.monster_levels_defeated = snapshot["monster_levels_defeated"]
+        self.monsters_defeated = snapshot["monsters_defeated"]
+        self.items_collected = snapshot["items_collected"]
+        
+        # Restore player state
+        player_data = snapshot["player"]
+        self.player.x = player_data["x"]
+        self.player.y = player_data["y"]
+        self.player.health = player_data["health"]
+        self.player.attack_power = player_data["attack_power"]
+        
+        # Restore inventory
+        self.player.inventory = []
+        inventory_counts = player_data["inventory"]
+        for item_type, count in inventory_counts.items():
+            for _ in range(count):
+                dummy_item = type('Item', (), {'item_type': item_type})()
+                self.player.inventory.append(dummy_item)
+        
+        # Clear entities
+        self.monsters = []
+        self.loot_items = []
+        self.stairway = None
+        self.death_sprites = []
+        
+        # Restore monsters
+        for monster_data in snapshot["monsters"]:
+            sprite = self.sprite_manager.get_sprite(
+                monster_data["sprite_key"], 'monster', 
+                {'level': monster_data["level"]}
+            )
+            player_damage = self.player.attack_power
+            monster = Monster(
+                monster_data["level"], monster_data["stats"],
+                monster_data["x"], monster_data["y"], sprite,
+                monster_data["is_miniboss"], self.level, player_damage
+            )
+            monster.health = monster_data["health"]
+            monster.max_health = monster_data["max_health"]
+            monster.damage = monster_data["damage"]
+            monster.sprite_key = monster_data["sprite_key"]
+            self.monsters.append(monster)
+        
+        # Restore loot items
+        for loot_data in snapshot["loot_items"]:
+            sprite = self.sprite_manager.get_sprite(
+                loot_data["sprite_key"], 'item',
+                {'item_type': loot_data["item_type"], 'item_variant': loot_data["item_variant"]}
+            )
+            loot_item = LootItem(
+                loot_data["item_type"], loot_data["x"], loot_data["y"], sprite
+            )
+            loot_item.sprite_key = loot_data["sprite_key"]
+            loot_item.item_variant = loot_data["item_variant"]
+            self.loot_items.append(loot_item)
+        
+        # Update boss statuses
+        self._update_monster_boss_statuses()
+        
+        # Clear UI state
+        self.message = ""
+        self.message_timer = 0
+        
+        print(f"Retrying level {self.level}")
+        self.set_message(f"Retrying Level {self.level}!", 120)
+    
     def save_game(self, filename="savegame.json"):
         """Save complete game state to file."""
         import json
@@ -533,7 +701,7 @@ class GameState:
             inventory_counts[item.item_type] += 1
         
         save_data = {
-            "version": "2.0",  # Updated version for compact format
+            "version": "2.1",  # Updated version to include level snapshot
             "timestamp": time.time(),
             "level": self.level,
             "levels_completed": self.levels_completed,
@@ -547,7 +715,8 @@ class GameState:
             },
             "monsters": [],
             "loot_items": [],
-            "death_sprites": []
+            "death_sprites": [],
+            "level_start_snapshot": self.level_start_snapshot  # Save the snapshot
         }
         
         # Save monsters (preserve positions and state)
@@ -626,7 +795,7 @@ class GameState:
             # Check version for backward compatibility
             version = save_data.get("version", "1.0")
             
-            if version == "2.0":
+            if version in ["2.0", "2.1"]:
                 # New compact format
                 self.level = save_data["level"]
                 self.levels_completed = save_data["levels_completed"]
@@ -758,6 +927,13 @@ class GameState:
                 death_sprite.sprite_key = 'death'
                 self.death_sprites.append(death_sprite)
             
+            # Load level snapshot if available (version 2.1+)
+            if version == "2.1" and "level_start_snapshot" in save_data:
+                self.level_start_snapshot = save_data["level_start_snapshot"]
+            else:
+                # For older saves, capture a snapshot of the current state
+                self._capture_level_snapshot()
+            
             print(f"Game loaded: Level {self.level}, {len(self.monsters)} monsters, {len(self.loot_items)} loot items")
             return True
             
@@ -844,6 +1020,9 @@ class GameState:
         self.regeneration_entity = None
         self.regeneration_type = None
         self.reset_confirmation_dialog = False
+        
+        # Clear level snapshot
+        self.level_start_snapshot = None
         
         # Reinitialize player with base stats
         self._initialize_player()

@@ -89,6 +89,9 @@ class Game:
                         self.game_state.paused = not self.game_state.paused
                         pause_state = "paused" if self.game_state.paused else "resumed"
                         print(f"Game {pause_state}")
+                elif event.key == pygame.K_r and self.game_state.game_over:
+                    # Retry the current level
+                    self.game_state.retry_level()
                 elif event.key == pygame.K_d:
                     # Debug sprite queue
                     self.game_state.sprite_manager.debug_queue_state()
